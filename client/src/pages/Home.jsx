@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../features/products/productsSlice.js";
 import { FiSearch, FiCalendar, FiTruck } from "react-icons/fi";
 
 import MAINIMG from "../assets/homeImg.png";
@@ -5,6 +8,11 @@ import FURNITURE from "../assets/furniture.png";
 import APPLIANCES from "../assets/appliances.jpg";
 
 const Home = () => {
+  const dispatch = useDispatch();
+
+  const { items, loading, error } = useSelector((state) => state.products);
+  console.log(items);
+
   const category = [
     { imgage: FURNITURE, title: "Furnitures", link: "Explore Collection ➜" },
     { imgage: APPLIANCES, title: "Appliances", link: "View appliances ➜" },
@@ -38,6 +46,13 @@ const Home = () => {
       tuner: "12 mo tuner",
     },
   ];
+
+  useEffect(() => {
+    dispatch(fetchProducts({ page: 1, limit: 6 }));
+  }, [dispatch]);
+
+  if (loading) return <h2>Loading...</h2>;
+  if (error) return <h2>Error: {error}</h2>;
 
   const guide = [
     {
