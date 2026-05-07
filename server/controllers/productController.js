@@ -147,9 +147,9 @@ export const getProducts = async (req, res) => {
 // GET /api/products/:id
 export const getProductById = async (req, res) => {
     try{
-        const {id} = req.params;
-
-        const product = Product.findById(id).lean();
+        const id = req.params.id;
+        
+        const product = await Product.findById(id).lean(); 
 
         if(!product) {
             return res.status(400).json({
