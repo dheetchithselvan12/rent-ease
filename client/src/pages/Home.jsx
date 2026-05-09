@@ -60,7 +60,6 @@ const Home = () => {
     dispatch(fetchProducts({ page: 1, limit: 6 }));
   }, [dispatch]);
 
-  if (loading) return <h2>Loading...</h2>;
   if (error) return <h2>Error: {error}</h2>;
 
   const guide = [
