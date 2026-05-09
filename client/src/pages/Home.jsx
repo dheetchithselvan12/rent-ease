@@ -54,8 +54,6 @@ const Home = () => {
     }
   };
 
-  if (error) return <h2 className="text-center mt-10">Error: {error}</h2>;
-
   useEffect(() => {
     dispatch(fetchProducts({ page: 1, limit: 4 }));
   }, [dispatch]);
