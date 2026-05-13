@@ -252,27 +252,6 @@ const ProductDetails = () => {
           )}
         </div>
       </section>
-
-      {/* Similar items */}
-      <section className="px-15 py-10 bg-gray-50">
-        <div>
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold mb-6">Similar Items</h1>
-            <a className="text-blue-500 hover:text-blue-600 cursor-pointer">
-              View All
-            </a>
-          </div>
-          {similarProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {similarProducts.map((item) => (
-                <ProductCard key={item._id} product={item} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500">No similar products found.</p>
-          )}
-        </div>
-      </section>
     </>
   );
 };
