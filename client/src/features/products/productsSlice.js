@@ -6,7 +6,7 @@ export const fetchProducts = createAsyncThunk(
     "products/fetchProducts",
     async (params, {rejectWithValue}) => {
         try{
-            const data = fetchProductAPI(params);
+            const data = await fetchProductAPI(params);
             return data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

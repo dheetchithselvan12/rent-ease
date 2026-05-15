@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { FiShoppingCart, FiInfo } from "react-icons/fi";
 import ProductCard from "../components/ProductCard";
@@ -226,6 +226,30 @@ const ProductDetails = () => {
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Similar items */}
+      <section className="px-15 py-10 bg-gray-50">
+        <div>
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold mb-6">Similar Items</h1>
+            <Link
+              to="/products"
+              className="text-blue-500 hover:text-blue-600 cursor-pointer"
+            >
+              View All
+            </Link>
+          </div>
+          {similarProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {similarProducts.map((item) => (
+                <ProductCard key={item._id} product={item} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No similar products found.</p>
+          )}
         </div>
       </section>
 

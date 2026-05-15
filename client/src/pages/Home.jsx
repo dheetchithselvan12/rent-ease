@@ -8,6 +8,7 @@ import MAINIMG from "../assets/homeImg.png";
 import FURNITURE from "../assets/furniture.png";
 import APPLIANCES from "../assets/appliances.jpg";
 import ProductCard from "../components/ProductCard.jsx";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,6 @@ const Home = () => {
   );
   console.log("Product Items : ", items);
 
-  const [category, setCategory] = useState("all");
   const [page, setPage] = useState(1);
   const limit = 4;
 
@@ -32,17 +32,8 @@ const Home = () => {
       limit,
     };
 
-    if (category !== "all") {
-      params.category = category;
-    }
-
     dispatch(fetchProducts(params));
-  }, [dispatch, category, page]);
-
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-    setPage(1);
-  };
+  }, [dispatch, page]);
 
   const handlePrev = () => {
     if (page > 1) setPage((prev) => prev - 1);
@@ -141,22 +132,12 @@ const Home = () => {
         <section className="px-15 my-10">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">Products</h1>
-
-            {/* Category Filter */}
-            <div className="relative w-30">
-              <select
-                value={category}
-                onChange={handleCategoryChange}
-                className="appearance-none w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-700  cursor-pointer focus:outline-none "
-              >
-                <option value="all">All</option>
-                <option value="furniture">Furniture</option>
-                <option value="appliance">Appliances</option>
-              </select>
-              <div className="absolute text-gray-500 inset-y-0 right-3 flex items-center pointer-events-none">
-                ▼
-              </div>
-            </div>
+            <Link
+              to="/products"
+              className="text-blue-500 hover:text-blue-600 text-sm font-medium cursor-pointer"
+            >
+              View All
+            </Link>
           </div>
 
           {/* product cards */}
