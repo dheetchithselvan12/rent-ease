@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { FiShoppingCart, FiInfo } from "react-icons/fi";
 import ProductCard from "../components/ProductCard";
@@ -234,9 +234,12 @@ const ProductDetails = () => {
         <div>
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold mb-6">Similar Items</h1>
-            <a className="text-blue-500 hover:text-blue-600 cursor-pointer">
+            <Link
+              to="/products"
+              className="text-blue-500 hover:text-blue-600 cursor-pointer"
+            >
               View All
-            </a>
+            </Link>
           </div>
           {similarProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
