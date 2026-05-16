@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiShoppingCart, FiUser, FiSearch, FiXCircle } from "react-icons/fi";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   const [search, setSearch] = useState("");
   const NAVLINKS = [
@@ -64,11 +65,13 @@ const Navbar = () => {
 
         {/* Nav Icons */}
         <div className="flex gap-4 bg-gray-600/10 px-3 py-2 rounded-md ">
-          <FiShoppingCart
-            size={"20px"}
-            color="blue"
-            className="cursor-pointer hover:scale-125 duration-300 "
-          />
+          <Link to="/cart">
+            <FiShoppingCart
+              size={"20px"}
+              color="blue"
+              className="cursor-pointer hover:scale-125 duration-300 "
+            />
+          </Link>
           <FiUser
             size={"20px"}
             color="blue"
