@@ -3,9 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { FiShoppingCart, FiInfo } from "react-icons/fi";
 import ProductCard from "../components/ProductCard";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/cartSlice";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -45,6 +48,21 @@ const ProductDetails = () => {
 
     fetchProductAndSimilar();
   }, [id]);
+
+  // Add to cart
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        productId: product._id,
+        title: product.name,
+        image: product.images[0],
+        tenure: selectedPlan.duration,
+        price: selectedPlan.totalPrice,
+        securityDeposit: product.securityDeposit,
+      }),
+    );
+    console.log("Cart Added");
+  };
 
   if (loading) {
     return <h2 className="p-6">Loading...</h2>;
@@ -221,7 +239,10 @@ const ProductDetails = () => {
               >
                 Rent Now
               </button>
-              <button className="flex items-center gap-3 justify-center bg-blue-500 w-full text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer">
+              <button
+                onClick={handleAddToCart}
+                className="flex items-center gap-3 justify-center bg-blue-500 w-full text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
+              >
                 <FiShoppingCart size={20} /> Add to Cart
               </button>
             </div>
