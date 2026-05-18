@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { removeFromCart } from "../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
@@ -12,10 +13,28 @@ const Cart = () => {
   const { cartItem } = useSelector((state) => state.cart);
   console.log("CartIems: ", cartItem);
   const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState();
+  console.log("Quantity: ", quantity);
+
+  // Lifted state for delivery forms
+  const [deliveryDetails, setDeliveryDetails] = useState({
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+  });
+  const [deliverySchedule, setDeliverySchedule] = useState({
+    deliveryDate: "",
+    preferredTime: "",
+  });
 
   const handleRemoveCart = (productId) => {
     dispatch(removeFromCart(productId));
     console.log("product removed : ", productId);
+  };
+
+  const handleQuantity = (value) => {
+    setQuantity(value);
   };
 
   return (
@@ -45,6 +64,7 @@ const Cart = () => {
                     key={item.productId}
                     item={item}
                     handleRemoveCart={handleRemoveCart}
+                    quantity={handleQuantity}
                   />
                 ))}
               </div>
@@ -53,13 +73,32 @@ const Cart = () => {
 
           {/* bottom */}
           <div className="flex flex-col gap-6 h-fit">
-            <DeliveryDetailesForm />
-            <DeliveryScheduleForm />
+            <DeliveryDetailesForm
+              formData={deliveryDetails}
+              handleChange={(e) =>
+                setDeliveryDetails((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }))
+              }
+            />
+            <DeliveryScheduleForm
+              scheduleData={deliverySchedule}
+              handleChange={(e) =>
+                setDeliverySchedule((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }))
+              }
+            />
           </div>
         </div>
 
         {/* right side */}
-        <CartPayment />
+        <CartPayment
+          deliveryDetails={deliveryDetails}
+          deliverySchedule={deliverySchedule}
+        />
       </section>
     </div>
   );

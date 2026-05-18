@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-const CartPayment = () => {
+const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
   const { cartItem } = useSelector((state) => state.cart);
 
   // Calculate order summary totals
@@ -12,6 +12,23 @@ const CartPayment = () => {
       0,
     ) || 0;
   const dueToday = monthlyRent + securityDeposit;
+  const totalItems = cartItem?.length || 0;
+
+  const handlePayment = () => {
+    const orderPayload = {
+      items: cartItem,
+      summary: {
+        monthlyRent,
+        securityDeposit,
+        dueToday,
+        totalItems,
+      },
+      deliveryDetails,
+      deliverySchedule,
+    };
+    console.log("Payment Data ready for API:", orderPayload);
+    // Add your API call here (e.g., axios.post('/api/orders', orderPayload))
+  };
 
   return (
     <div className="border border-gray-200 rounded-xl h-fit p-10 w-[40%] bg-white shadow-sm flex flex-col gap-6 sticky top-3">
@@ -20,6 +37,10 @@ const CartPayment = () => {
       </h2>
 
       <div className="flex flex-col gap-4 text-gray-600 border-b border-gray-300 pb-5">
+        <div className="flex justify-between items-center">
+          <p>Total Items</p>
+          <span className="font-medium text-gray-800">{totalItems}</span>
+        </div>
         <div className="flex justify-between items-center">
           <p>Monthly Rent</p>
           <span className="font-medium text-gray-800">
@@ -54,7 +75,11 @@ const CartPayment = () => {
           </p>
         </div>
 
-        <button className="w-full bg-blue-600 text-white py-3.5 rounded-lg hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/30 font-medium mt-2 cursor-pointer">
+        <button
+          onClick={handlePayment}
+          disabled={cartItem.length === 0}
+          className={`w-full bg-blue-600 text-white py-3.5 rounded-lg hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/30 font-medium mt-2  ${cartItem.length === 0 ? "opacity-20 cursor-not-allowed" : "cursor-pointer"}`}
+        >
           Proceed to Payment
         </button>
         <p className="text-xs text-center text-gray-400">
