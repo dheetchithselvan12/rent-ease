@@ -1,18 +1,4 @@
-import { useState } from "react";
-
-export const DeliveryDetailesForm = () => {
-  const [formData, setFormData] = useState({
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
+export const DeliveryDetailesForm = ({ formData, handleChange }) => {
   return (
     <form className="flex flex-col gap-4 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
       <h3 className="text-lg font-semibold text-gray-800 ">Delivery Details</h3>
@@ -90,17 +76,7 @@ export const DeliveryDetailesForm = () => {
   );
 };
 
-export const DeliveryScheduleForm = () => {
-  const [scheduleData, setScheduleData] = useState({
-    deliveryDate: "",
-    preferredTime: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setScheduleData((prev) => ({ ...prev, [name]: value }));
-  };
-
+export const DeliveryScheduleForm = ({ scheduleData, handleChange }) => {
   return (
     <form className="flex flex-col gap-4 mt-2 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
       <h3 className="text-lg font-semibold text-gray-800">Delivery Schedule</h3>
