@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
+const CartPayment = ({ deliveryDetails, deliverySchedule, countQuantity }) => {
   const { cartItem } = useSelector((state) => state.cart);
 
   // Calculate order summary totals
@@ -11,17 +11,18 @@ const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
       (acc, item) => acc + (Number(item.securityDeposit) || 0),
       0,
     ) || 0;
-  const dueToday = monthlyRent + securityDeposit;
+  // const subTotal = countQuantity
+  const dueToday = monthlyRent * countQuantity + securityDeposit;
   const totalItems = cartItem?.length || 0;
 
   const handlePayment = () => {
     const orderPayload = {
       items: cartItem,
       summary: {
+        totalItems,
         monthlyRent,
         securityDeposit,
-        dueToday,
-        totalItems,
+        totalPrice: dueToday,
       },
       deliveryDetails,
       deliverySchedule,
@@ -44,7 +45,7 @@ const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
         <div className="flex justify-between items-center">
           <p>Monthly Rent</p>
           <span className="font-medium text-gray-800">
-            ₹{monthlyRent.toFixed(2)}
+            ₹{countQuantity * monthlyRent.toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between items-center">
