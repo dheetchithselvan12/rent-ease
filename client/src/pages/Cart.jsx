@@ -2,22 +2,36 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { removeFromCart } from "../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import CartCard from "../components/cart/CartCard";
+import CartPayment from "../components/cart/CartPayment";
 import {
   DeliveryDetailesForm,
   DeliveryScheduleForm,
 } from "../components/cart/DeliveryDetailesForm";
-import CartCard from "../components/cart/CartCard";
-import CartPayment from "../components/cart/CartPayment";
 
 const Cart = () => {
+  const [countQuantity, setCountQuantity] = useState(1);
   const { cartItem } = useSelector((state) => state.cart);
-  console.log("CartIems: ", cartItem);
   const dispatch = useDispatch();
-  const [quantity, setQuantity] = useState();
-  console.log("Quantity: ", quantity);
+
+  // Cart Quantity Manage
+  const countPlus = () => {
+    setCountQuantity(countQuantity + 1);
+  };
+  const countMinus = () => {
+    if (countQuantity > 1) {
+      setCountQuantity(countQuantity - 1);
+    }
+  };
+  console.log("CartIems: ", cartItem);
+  console.log("Price: ", countQuantity * cartItem[0]?.price);
+  console.log("Quantity: ", countQuantity);
 
   // Lifted state for delivery forms
   const [deliveryDetails, setDeliveryDetails] = useState({
+    name: "",
+    phone: "",
     address: "",
     city: "",
     state: "",
@@ -28,13 +42,11 @@ const Cart = () => {
     preferredTime: "",
   });
 
+  console.log("DeliveryDetailesForm: ", deliveryDetails);
+
   const handleRemoveCart = (productId) => {
     dispatch(removeFromCart(productId));
     console.log("product removed : ", productId);
-  };
-
-  const handleQuantity = (value) => {
-    setQuantity(value);
   };
 
   return (
@@ -56,6 +68,12 @@ const Cart = () => {
             {cartItem?.length === 0 ? (
               <div className="text-center text-gray-500 py-10">
                 Your cart is empty.
+                <Link
+                  to="/products"
+                  className="text-blue-500 mx-1 px-3 py-2 text-sm  bg-gray-200 rounded-md hover:bg-gray-100 transition-colors"
+                >
+                  Continue Shopping
+                </Link>
               </div>
             ) : (
               <div className="flex flex-col gap-6 ">
@@ -64,7 +82,9 @@ const Cart = () => {
                     key={item.productId}
                     item={item}
                     handleRemoveCart={handleRemoveCart}
-                    quantity={handleQuantity}
+                    countPlus={countPlus}
+                    countMinus={countMinus}
+                    countQuantity={countQuantity}
                   />
                 ))}
               </div>
@@ -98,6 +118,7 @@ const Cart = () => {
         <CartPayment
           deliveryDetails={deliveryDetails}
           deliverySchedule={deliverySchedule}
+          countQuantity={countQuantity}
         />
       </section>
     </div>

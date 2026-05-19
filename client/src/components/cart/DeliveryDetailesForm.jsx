@@ -3,6 +3,43 @@ export const DeliveryDetailesForm = ({ formData, handleChange }) => {
     <form className="flex flex-col gap-4 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
       <h3 className="text-lg font-semibold text-gray-800 ">Delivery Details</h3>
 
+      <div className="flex gap-4">
+        <div className="flex flex-col gap-1 w-1/2">
+          <label htmlFor="name" className="text-sm font-medium text-gray-700">
+            Your Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="John Doe"
+            className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-1 w-1/2">
+          <label htmlFor="phone" className="text-sm font-medium text-gray-700">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            name="phone"
+            id="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="123-456-7890"
+            className=" border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            minLength={10}
+            maxLength={10}
+            required
+          />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-1">
         <label htmlFor="address" className="text-sm font-medium text-gray-700">
           Street Address
