@@ -3,18 +3,21 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { FiShoppingCart, FiInfo } from "react-icons/fi";
 import ProductCard from "../components/ProductCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { cartItem } = useSelector((state) => state.cart);
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [similarProducts, setSimilarProducts] = useState([]);
+
+  const isInCart = cartItem.some((item) => item.productId === product?._id);
 
   useEffect(() => {
     const fetchProductAndSimilar = async () => {
@@ -240,10 +243,11 @@ const ProductDetails = () => {
                 Rent Now
               </button>
               <button
-                onClick={handleAddToCart}
-                className="flex items-center gap-3 justify-center bg-blue-500 w-full text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
+                onClick={isInCart ? undefined : handleAddToCart}
+                disabled={isInCart}
+                className={`flex items-center gap-3 justify-center w-full text-white px-4 py-2 rounded-lg transition ${isInCart ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 cursor-pointer"}`}
               >
-                <FiShoppingCart size={20} /> Add to Cart
+                <FiShoppingCart size={20} /> {isInCart ? "Already in Cart" : "Add to Cart"}
               </button>
             </div>
           </div>
