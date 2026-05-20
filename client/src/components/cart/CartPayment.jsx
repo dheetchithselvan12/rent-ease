@@ -1,19 +1,19 @@
 import { useSelector } from "react-redux";
 
-const CartPayment = ({ deliveryDetails, deliverySchedule, countQuantity }) => {
+const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
   const { cartItem } = useSelector((state) => state.cart);
 
   // Calculate order summary totals
   const monthlyRent =
-    cartItem?.reduce((acc, item) => acc + (Number(item.price) || 0), 0) || 0;
+    cartItem?.reduce((acc, item) => acc + (Number(item.price) || 0) * (Number(item.quantity) || 1), 0) || 0;
   const securityDeposit =
     cartItem?.reduce(
-      (acc, item) => acc + (Number(item.securityDeposit) || 0),
+      (acc, item) => acc + (Number(item.securityDeposit) || 0) * (Number(item.quantity) || 1),
       0,
     ) || 0;
-  // const subTotal = countQuantity
-  const dueToday = monthlyRent * countQuantity + securityDeposit;
-  const totalItems = cartItem?.length || 0;
+    
+  const dueToday = monthlyRent + securityDeposit;
+  const totalItems = cartItem?.reduce((acc, item) => acc + (Number(item.quantity) || 1), 0) || 0;
 
   const handlePayment = () => {
     const orderPayload = {
@@ -45,7 +45,7 @@ const CartPayment = ({ deliveryDetails, deliverySchedule, countQuantity }) => {
         <div className="flex justify-between items-center">
           <p>Monthly Rent</p>
           <span className="font-medium text-gray-800">
-            ₹{countQuantity * monthlyRent.toFixed(2)}
+            ₹{monthlyRent.toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between items-center">

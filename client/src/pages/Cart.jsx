@@ -11,22 +11,10 @@ import {
 } from "../components/cart/DeliveryDetailesForm";
 
 const Cart = () => {
-  const [countQuantity, setCountQuantity] = useState(1);
   const { cartItem } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  // Cart Quantity Manage
-  const countPlus = () => {
-    setCountQuantity(countQuantity + 1);
-  };
-  const countMinus = () => {
-    if (countQuantity > 1) {
-      setCountQuantity(countQuantity - 1);
-    }
-  };
   console.log("CartIems: ", cartItem);
-  console.log("Price: ", countQuantity * cartItem[0]?.price);
-  console.log("Quantity: ", countQuantity);
 
   // Lifted state for delivery forms
   const [deliveryDetails, setDeliveryDetails] = useState({
@@ -82,9 +70,6 @@ const Cart = () => {
                     key={item.productId}
                     item={item}
                     handleRemoveCart={handleRemoveCart}
-                    countPlus={countPlus}
-                    countMinus={countMinus}
-                    countQuantity={countQuantity}
                   />
                 ))}
               </div>
@@ -118,7 +103,6 @@ const Cart = () => {
         <CartPayment
           deliveryDetails={deliveryDetails}
           deliverySchedule={deliverySchedule}
-          countQuantity={countQuantity}
         />
       </section>
     </div>
