@@ -11,6 +11,7 @@ export const createProduct = async (req, res) => {
             availableQuantity,
             tenurePlans,
             images,
+            title,
             description
         } = req.body;
 
@@ -23,6 +24,7 @@ export const createProduct = async (req, res) => {
             !availableQuantity ||
             !tenurePlans ||
             !images ||
+            !title ||
             !description 
         ){
             return res.status(400).json({
@@ -82,6 +84,7 @@ export const createProduct = async (req, res) => {
             availableQuantity,
             tenurePlans,
             images,
+            title,
             description,
         });
 
@@ -101,7 +104,7 @@ export const createProduct = async (req, res) => {
 // Get /api/products
 export const getProducts = async (req, res) => {
     try{
-        const {category, page = 1, limit = 10} = req.query;
+        const {category, categories, maxPrice, tenures, page = 1, limit = 10} = req.query;
 
         // filter object
         const filter = {}
@@ -109,29 +112,63 @@ export const getProducts = async (req, res) => {
             filter.category = category.toLowerCase();
         }
 
+        if (categories) {
+            const catsArray = categories.split(',').filter(Boolean).map(c => c.toLowerCase());
+            if (catsArray.length > 0) {
+                filter.category = { $in: catsArray };
+            }
+        }
+
+        if (maxPrice) {
+            filter["tenurePlans.0.pricePerMonth"] = { $lte: Number(maxPrice) };
+        }
+
+        if (tenures) {
+            const tenuresArray = tenures.split(',').filter(Boolean).map(Number);
+            if (tenuresArray.length > 0) {
+                filter["tenurePlans.duration"] = { $in: tenuresArray };
+            }
+        }
+
         // pagination calc
         const pageNum = parseInt(page, 10);
-        const limitNUm = parseInt(limit, 10);
-        const skip = (pageNum - 1) * limitNUm;
+        const limitNum = parseInt(limit, 10);
+        const skip = (pageNum - 1) * limitNum;
+
+        let query = Product.find(filter).sort({createdAt: -1});
+        if (limitNum > 0) {
+            query = query.skip(skip).limit(limitNum);
+        }
 
         // Query DB
-        const [products, total] = await Promise.all([
-            Product.find(filter)
-                .sort({createdAt: -1})
-                .skip(skip)
-                .limit(limitNUm)
-                .lean(),
+        const [products, total, metadata] = await Promise.all([
+            query.lean(),
             Product.countDocuments(filter),
+            Product.aggregate([
+                { $unwind: "$tenurePlans" },
+                {
+                    $group: {
+                        _id: null,
+                        highestPrice: { $max: "$tenurePlans.pricePerMonth" },
+                        categories: { $addToSet: "$category" }
+                    }
+                }
+            ])
         ]);
+
+        const highestPrice = metadata[0]?.highestPrice || 10000;
+        const allCategories = metadata[0]?.categories || ["furniture", "appliance"];
 
         // Response
         res.status(200).json({
             success: true,
             meta: {
                 page: pageNum,
-                limit: limitNUm,
+                limit: limitNum,
                 total,
-                pages: Math.ceil(total / limitNUm)
+                pages: limitNum > 0 ? Math.ceil(total / limitNum) : 1,
+                highestPrice,
+                allCategories
             },
             data: products,
         });

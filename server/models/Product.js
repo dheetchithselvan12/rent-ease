@@ -29,6 +29,7 @@ const productSchema = new mongoose.Schema(
         availableQuantity: { type: Number, required: true},
         tenurePlans: [tenureSchema],
         images: [String],
+        title: String,
         description: String,
     },
     { timestamps: true}
