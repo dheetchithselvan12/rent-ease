@@ -33,8 +33,12 @@ const productSlice = createSlice({
             // success
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.loading = false;
-                state.items = action.payload.data;
-                state.meta = action.payload.meta
+                if (action.meta.arg?.append) {
+                    state.items = [...state.items, ...action.payload.data];
+                } else {
+                    state.items = action.payload.data;
+                }
+                state.meta = action.payload.meta;
             })
             // error
             .addCase(fetchProducts.rejected, (state, action) => {

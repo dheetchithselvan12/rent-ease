@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../features/products/productsSlice";
 import ProductCard from "../components/ProductCard";
@@ -8,69 +8,42 @@ const AllProducts = () => {
   const dispatch = useDispatch();
   const {
     items: product,
+    meta,
     loading,
     error,
   } = useSelector((state) => state.products);
+  
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [userMaxPrice, setUserMaxPrice] = useState(null);
   const [selectedTenures, setSelectedTenures] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(8);
-
-  const getItemPrice = (item) =>
-    item.price || item.tenurePlans?.[0]?.pricePerMonth || 0;
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    const params = {
+      page,
+      limit,
+      categories: selectedCategories.join(","),
+      tenures: selectedTenures.join(","),
+      append: page > 1,
+    };
+    if (userMaxPrice !== null) {
+      params.maxPrice = userMaxPrice;
+    }
+    dispatch(fetchProducts(params));
+  }, [dispatch, page, selectedCategories, selectedTenures, userMaxPrice]);
 
-  // Extract unique categories available from the products
-  const allCategories = useMemo(() => {
-    return [...new Set(product.map((p) => p.category).filter(Boolean))];
-  }, [product]);
-
-  // Find highest price to set the range slider boundary
-  const highestPrice = useMemo(() => {
-    if (!product || product.length === 0) return 10000;
-    return Math.max(...product.map(getItemPrice));
-  }, [product]);
-
-  // Determine current max price for filtering
+  const allCategories = meta?.allCategories || ["furniture", "appliance"];
+  const highestPrice = meta?.highestPrice || 10000;
   const maxPrice = userMaxPrice !== null ? userMaxPrice : highestPrice;
-
-  // Filter products based on selected filters
-  const filteredProducts = useMemo(() => {
-    return product.filter((item) => {
-      // Category filter
-      if (
-        selectedCategories.length > 0 &&
-        !selectedCategories.includes(item.category)
-      )
-        return false;
-
-      // Price filter
-      if (getItemPrice(item) > maxPrice) return false;
-
-      // Tenure filter
-      if (selectedTenures.length > 0) {
-        const itemTenures =
-          item.tenurePlans?.map((plan) => plan.duration) || [];
-        const hasMatchingTenure = selectedTenures.some((t) =>
-          itemTenures.includes(t),
-        );
-        if (!hasMatchingTenure) return false;
-      }
-
-      return true;
-    });
-  }, [product, selectedCategories, maxPrice, selectedTenures]);
-
-  const visibleProducts = filteredProducts.slice(0, visibleCount);
+  const totalItems = meta?.total || 0;
+  const hasMore = meta?.pages ? page < meta.pages : false;
 
   const toggleCategory = (cat) => {
     setSelectedCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
     );
-    setVisibleCount(8);
+    setPage(1);
   };
 
   const toggleTenure = (tenure) => {
@@ -79,7 +52,19 @@ const AllProducts = () => {
         ? prev.filter((t) => t !== tenure)
         : [...prev, tenure],
     );
-    setVisibleCount(8);
+    setPage(1);
+  };
+  
+  const handlePriceChange = (e) => {
+    setUserMaxPrice(Number(e.target.value));
+    setPage(1);
+  };
+  
+  const clearAllFilters = () => {
+    setSelectedCategories([]);
+    setUserMaxPrice(null);
+    setSelectedTenures([]);
+    setPage(1);
   };
 
   return (
@@ -89,7 +74,7 @@ const AllProducts = () => {
         <div className="mb-3">
           <p className="text-xl font-medium text-black">Filters</p>
           <p className="text-sm my-1">
-            {filteredProducts.length} items available
+            {totalItems} items available
           </p>
           <hr className="text-gray-300 mt-4" />
         </div>
@@ -122,10 +107,7 @@ const AllProducts = () => {
             min="0"
             max={highestPrice}
             value={maxPrice}
-            onChange={(e) => {
-              setUserMaxPrice(Number(e.target.value));
-              setVisibleCount(8);
-            }}
+            onChange={handlePriceChange}
             className="w-full  mt-2 cursor-pointer accent-blue-500"
           />
           <div className="flex justify-between text-xs mt-1">
@@ -174,13 +156,13 @@ const AllProducts = () => {
               </button>
             </span>
           ))}
-          {maxPrice < highestPrice && (
+          {userMaxPrice !== null && userMaxPrice < highestPrice && (
             <span className="px-2 py-1 bg-white border border-gray-300 rounded-full text-xs flex items-center gap-1 shadow-sm">
               Up to ₹{maxPrice}{" "}
               <button
                 onClick={() => {
                   setUserMaxPrice(null);
-                  setVisibleCount(8);
+                  setPage(1);
                 }}
                 className="text-blue-500 font-bold ml-1 cursor-pointer hover:text-blue-600"
               >
@@ -203,15 +185,10 @@ const AllProducts = () => {
             </span>
           ))}
           {(selectedCategories.length > 0 ||
-            maxPrice < highestPrice ||
+            (userMaxPrice !== null && userMaxPrice < highestPrice) ||
             selectedTenures.length > 0) && (
             <button
-              onClick={() => {
-                setSelectedCategories([]);
-                setUserMaxPrice(null);
-                setSelectedTenures([]);
-                setVisibleCount(8);
-              }}
+              onClick={clearAllFilters}
               className="text-sm text-blue-500 hover:text-blue-600 hover:underline cursor-pointer"
             >
               Clear All
@@ -221,28 +198,30 @@ const AllProducts = () => {
 
         <div className="grid grid-cols-4 gap-4 ">
           {/* product Items */}
-          {loading ? (
-            [...Array(visibleCount)].map((_, index) => (
-              <ProductSkeleton key={index} />
-            ))
-          ) : error ? (
-            <div className="col-span-4 text-center text-red-500 py-10">
-              {error}
-            </div>
-          ) : visibleProducts.length > 0 ? (
-            visibleProducts.map((item) => (
+          {product.length > 0 ? (
+            product.map((item) => (
               <ProductCard key={item._id} product={item} />
             ))
-          ) : (
+          ) : !loading ? (
             <div className="col-span-4 text-xl flex justify-center items-center bg-gray-100 rounded-md h-130 text-gray-500 py-10">
               No products match your filters.
             </div>
+          ) : null}
+          {loading && (
+            [...Array(limit)].map((_, index) => (
+              <ProductSkeleton key={`skeleton-${index}`} />
+            ))
+          )}
+          {error && (
+            <div className="col-span-4 text-center text-red-500 py-10">
+              {error}
+            </div>
           )}
         </div>
-        {!loading && !error && visibleCount < filteredProducts.length && (
+        {!loading && !error && hasMore && (
           <div className="flex justify-center">
             <button
-              onClick={() => setVisibleCount((prev) => prev + 8)}
+              onClick={() => setPage((prev) => prev + 1)}
               className=" mt-10 px-3 py-2 bg-blue-500 hover:bg-blue-600 transition-colors cursor-pointer rounded-md text-center text-white"
             >
               Load More
