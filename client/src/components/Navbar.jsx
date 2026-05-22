@@ -19,14 +19,17 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className=" px-15 py-4 flex justify-between items-center">
+      <nav className="sticky top-0 z-50 bg-white shadow-lg px-15 py-4 flex justify-between items-center">
         {/* Logo */}
-        <a className="flex gap-1 hover:scale-105 duration-500 cursor-pointer">
+        <Link
+          to="/"
+          className="flex gap-1 hover:scale-105 duration-500 cursor-pointer"
+        >
           <span className="bg-blue-500 text-lg text-white px-3  font-bold rounded-sm ">
             R
           </span>
           <p className="text-2xl font-semibold text-blue-500">RentEase</p>
-        </a>
+        </Link>
 
         {/* Nav links */}
         <div className="flex text-lg font-medium gap-7 cursor-pointer ">
