@@ -78,9 +78,10 @@ const Cart = () => {
           </div>
 
           {/* bottom */}
-          <div className="flex flex-col gap-6 h-fit">
-            <SimilarCartItems />
-            {/* <DeliveryDetailesForm
+          {cartItem?.length > 0 && (
+            <div className="flex flex-col gap-6 h-fit">
+              <SimilarCartItems />
+              {/* <DeliveryDetailesForm
               formData={deliveryDetails}
               handleChange={(e) =>
                 setDeliveryDetails((prev) => ({
@@ -98,7 +99,8 @@ const Cart = () => {
                 }))
               }
             /> */}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* right side */}

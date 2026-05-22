@@ -2,13 +2,15 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { incrementQuantity, decrementQuantity } from "../../features/cart/cartSlice";
+import {
+  incrementQuantity,
+  decrementQuantity,
+} from "../../features/cart/cartSlice";
 
-const CartCard = ({
-  item,
-  handleRemoveCart,
-}) => {
+const CartCard = ({ item, handleRemoveCart }) => {
   const dispatch = useDispatch();
+
+  console.log("cartItem Name: ", item);
 
   return (
     <div className="flex justify-between border-b border-gray-300 last:border-b-0 pb-6 last:pb-0">
@@ -20,7 +22,7 @@ const CartCard = ({
                 item.image ||
                 "https://images.unsplash.com/photo-1551288049-bebda4e38f71"
               }
-              alt={item.title}
+              alt={item.name}
               className="object-cover w-25 h-25 rounded-lg border border-gray-200 hover:scale-105 duration-200 hover:bg-gray-100"
             />
           </Link>
@@ -36,7 +38,10 @@ const CartCard = ({
             <span className="border border-gray-300 rounded-sm px-4 py-1 mx-2">
               {item.quantity}
             </span>
-            <button onClick={() => dispatch(incrementQuantity(item.productId))} className="cursor-pointer text-xl">
+            <button
+              onClick={() => dispatch(incrementQuantity(item.productId))}
+              className="cursor-pointer text-xl"
+            >
               +
             </button>
           </div>
@@ -47,14 +52,15 @@ const CartCard = ({
               <h6 className="text-lg font-medium text-gray-800">
                 {item.title}
               </h6>
-              <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-semibold w-fit mt-1">
-                Living Room
+              <span className="bg-blue-500/20 px-2 font-medium rounded-full inline-block my-1 text-xs text-black">
+                {item?.name}
               </span>
+              <p className=" text-xs text-gray-500">{item?.description}</p>
             </div>
 
             <button
               onClick={() => handleRemoveCart(item?.productId)}
-              className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-colors cursor-pointer"
+              className="text-red-400 hover:text-red-600 hover:bg-red-50 h-fit p-2 rounded-full transition-colors cursor-pointer"
             >
               <RiDeleteBinLine size={20} />
             </button>
