@@ -6,10 +6,6 @@ import { Link } from "react-router-dom";
 import CartCard from "../components/cart/CartItems";
 import CartPayment from "../components/cart/CartPayment";
 import SimilarCartItems from "../components/cart/SimilarCartItems";
-// import {
-//   DeliveryDetailesForm,
-//   DeliveryScheduleForm,
-// } from "../components/cart/DeliveryDetailesForm";
 
 const Cart = () => {
   const { cartItem } = useSelector((state) => state.cart);
