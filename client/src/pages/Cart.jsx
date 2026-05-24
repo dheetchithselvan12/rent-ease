@@ -13,22 +13,6 @@ const Cart = () => {
 
   console.log("CartIems: ", cartItem);
 
-  // Lifted state for delivery forms
-  // const [deliveryDetails, setDeliveryDetails] = useState({
-  //   name: "",
-  //   phone: "",
-  //   address: "",
-  //   city: "",
-  //   state: "",
-  //   zipCode: "",
-  // });
-  // const [deliverySchedule, setDeliverySchedule] = useState({
-  //   deliveryDate: "",
-  //   preferredTime: "",
-  // });
-
-  // console.log("DeliveryDetailesForm: ", deliveryDetails);
-
   const handleRemoveCart = (productId) => {
     dispatch(removeFromCart(productId));
     console.log("product removed : ", productId);
@@ -77,24 +61,6 @@ const Cart = () => {
           {cartItem?.length > 0 && (
             <div className="flex flex-col gap-6 h-fit">
               <SimilarCartItems />
-              {/* <DeliveryDetailesForm
-              formData={deliveryDetails}
-              handleChange={(e) =>
-                setDeliveryDetails((prev) => ({
-                  ...prev,
-                  [e.target.name]: e.target.value,
-                }))
-              }
-            />
-            <DeliveryScheduleForm
-              scheduleData={deliverySchedule}
-              handleChange={(e) =>
-                setDeliverySchedule((prev) => ({
-                  ...prev,
-                  [e.target.name]: e.target.value,
-                }))
-              }
-            /> */}
             </div>
           )}
         </div>
