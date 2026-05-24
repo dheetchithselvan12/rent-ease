@@ -1,8 +1,11 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setCheckoutData } from "../../features/checkout/checkoutSlice.js";
 import { RiLock2Fill } from "react-icons/ri";
-import { Link } from "react-router-dom";
 
-const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
+const CartPayment = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cartItem } = useSelector((state) => state.cart);
 
   // Calculate order summary totals
@@ -25,6 +28,8 @@ const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
     cartItem?.reduce((acc, item) => acc + (Number(item.quantity) || 1), 0) || 0;
 
   const handlePayment = () => {
+    if (cartItem.length === 0) return;
+
     const orderPayload = {
       items: cartItem,
       summary: {
@@ -33,9 +38,10 @@ const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
         securityDeposit,
         totalPrice: dueToday,
       },
-      deliveryDetails,
-      deliverySchedule,
     };
+
+    dispatch(setCheckoutData(orderPayload));
+    navigate("/checkout");
     console.log("Payment Data ready for API:", orderPayload);
     // Add your API call here (e.g., axios.post('/api/orders', orderPayload))
   };
@@ -63,7 +69,7 @@ const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
             <span className="text-xs text-gray-400"> (Refundable)</span>
           </p>
           <span className="font-medium text-gray-800">
-            + ₹{securityDeposit.toFixed(2)}
+            ₹{securityDeposit.toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between items-center">
@@ -85,16 +91,14 @@ const CartPayment = ({ deliveryDetails, deliverySchedule }) => {
           </p>
         </div>
 
-        <Link to="/checkout">
-          <button
-            onClick={handlePayment}
-            disabled={cartItem.length === 0}
-            className={`w-full bg-blue-600 text-white py-3.5 rounded-lg hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/30 font-medium mt-2 flex items-center gap-2 justify-center ${cartItem.length === 0 ? "opacity-20 cursor-not-allowed" : "cursor-pointer"}`}
-          >
-            <RiLock2Fill size={20} />
-            Proceed to Payment
-          </button>
-        </Link>
+        <button
+          onClick={handlePayment}
+          disabled={cartItem.length === 0}
+          className={`w-full bg-blue-600 text-white py-3.5 rounded-lg hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/30 font-medium mt-2 flex items-center gap-2 justify-center ${cartItem.length === 0 ? "opacity-20 cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          <RiLock2Fill size={20} />
+          Proceed to Payment
+        </button>
         <p className="text-xs text-center text-gray-400">
           You won't be charged until the next step.
         </p>
