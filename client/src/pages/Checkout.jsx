@@ -25,11 +25,26 @@ const Checkout = () => {
     deliveryDate: "",
     preferredTime: "",
   });
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Checkout form is empty or not and it returns boolean value
-  const isFormEmpty = Object.values(deliveryDetails && deliverySchedule).every(
-    (value) => value === "",
-  );
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    setDeliveryDetails({
+      name: formData.get("name") || "",
+      email: formData.get("email") || "",
+      phone: formData.get("phone") || "",
+      address: formData.get("address") || "",
+      city: formData.get("city") || "",
+      state: formData.get("state") || "",
+      zipCode: formData.get("zipCode") || "",
+    });
+    setDeliverySchedule({
+      deliveryDate: formData.get("deliveryDate") || "",
+      preferredTime: formData.get("preferredTime") || "",
+    });
+    setIsSubmitted(true);
+  };
 
   console.log("DeliveryDetailesForm: ", deliveryDetails);
 
@@ -50,7 +65,7 @@ const Checkout = () => {
       <div className="grid grid-cols-3 gap-8">
         <div className="col-span-2">
           {/* Delivery Details */}
-          {!isFormEmpty ? (
+          {isSubmitted ? (
             <div className="my-4 border border-green-200 rounded-lg p-5">
               <h2 className="text-xl font-semibold mb-4">Delivery Details</h2>
               <div className="space-y-2 text-gray-700">
@@ -79,26 +94,19 @@ const Checkout = () => {
           <CartCheckoutItems items={items} />
 
           {/* DeliveryDetail Form */}
-          <div className="flex flex-col gap-4 mt-8">
-            <DeliveryDetailesForm
-              formData={deliveryDetails}
-              handleChange={(e) =>
-                setDeliveryDetails((prev) => ({
-                  ...prev,
-                  [e.target.name]: e.target.value,
-                }))
-              }
-            />
-            <DeliveryScheduleForm
-              scheduleData={deliverySchedule}
-              handleChange={(e) =>
-                setDeliverySchedule((prev) => ({
-                  ...prev,
-                  [e.target.name]: e.target.value,
-                }))
-              }
-            />
-          </div>
+          <form
+            className="flex flex-col gap-4 mt-8"
+            onSubmit={handleFormSubmit}
+          >
+            <DeliveryDetailesForm />
+            <DeliveryScheduleForm />
+            <button
+              type="submit"
+              className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition-colors self-end font-semibold shadow-sm cursor-pointer"
+            >
+              submmit
+            </button>
+          </form>
         </div>
 
         {/* Order Summary */}
