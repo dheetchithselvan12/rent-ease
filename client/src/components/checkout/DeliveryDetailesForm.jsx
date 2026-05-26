@@ -1,6 +1,6 @@
-export const DeliveryDetailesForm = ({ formData, handleChange }) => {
+export const DeliveryDetailesForm = () => {
   return (
-    <form className="flex flex-col gap-4 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
+    <div className="flex flex-col gap-4 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
       <h3 className="text-lg font-semibold text-gray-800 ">Delivery Details</h3>
 
       <div className="flex gap-4">
@@ -12,8 +12,6 @@ export const DeliveryDetailesForm = ({ formData, handleChange }) => {
             type="text"
             id="name"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
             placeholder="John Doe"
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
@@ -28,11 +26,8 @@ export const DeliveryDetailesForm = ({ formData, handleChange }) => {
             type="tel"
             name="phone"
             id="phone"
-            value={formData.phone}
-            onChange={handleChange}
             placeholder="123-456-7890"
             className=" border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             minLength={10}
             maxLength={10}
             required
@@ -48,8 +43,6 @@ export const DeliveryDetailesForm = ({ formData, handleChange }) => {
           type="text"
           id="address"
           name="address"
-          value={formData.address}
-          onChange={handleChange}
           placeholder="123 Main St"
           className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
           required
@@ -65,8 +58,6 @@ export const DeliveryDetailesForm = ({ formData, handleChange }) => {
             type="text"
             id="city"
             name="city"
-            value={formData.city}
-            onChange={handleChange}
             placeholder="City"
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
@@ -80,8 +71,6 @@ export const DeliveryDetailesForm = ({ formData, handleChange }) => {
             type="text"
             id="state"
             name="state"
-            value={formData.state}
-            onChange={handleChange}
             placeholder="State"
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
@@ -101,21 +90,19 @@ export const DeliveryDetailesForm = ({ formData, handleChange }) => {
             type="text"
             id="zipCode"
             name="zipCode"
-            value={formData.zipCode}
-            onChange={handleChange}
             placeholder="Zip Code"
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
           />
         </div>
       </div>
-    </form>
+    </div>
   );
 };
 
-export const DeliveryScheduleForm = ({ scheduleData, handleChange }) => {
+export const DeliveryScheduleForm = () => {
   return (
-    <form className="flex flex-col gap-4 mt-2 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
+    <div className="flex flex-col gap-4 mt-2 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
       <h3 className="text-lg font-semibold text-gray-800">Delivery Schedule</h3>
 
       <div className="flex gap-4">
@@ -130,8 +117,6 @@ export const DeliveryScheduleForm = ({ scheduleData, handleChange }) => {
             type="date"
             id="deliveryDate"
             name="deliveryDate"
-            value={scheduleData.deliveryDate}
-            onChange={handleChange}
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
           />
@@ -147,13 +132,11 @@ export const DeliveryScheduleForm = ({ scheduleData, handleChange }) => {
             type="time"
             id="preferredTime"
             name="preferredTime"
-            value={scheduleData.preferredTime}
-            onChange={handleChange}
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
           />
         </div>
       </div>
-    </form>
+    </div>
   );
 };
