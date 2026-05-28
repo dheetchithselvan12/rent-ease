@@ -11,8 +11,6 @@ const Cart = () => {
   const { cartItem } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  console.log("CartIems: ", cartItem);
-
   const handleRemoveCart = (productId) => {
     dispatch(removeFromCart(productId));
     console.log("product removed : ", productId);
@@ -66,10 +64,7 @@ const Cart = () => {
         </div>
 
         {/* right side */}
-        <CartPayment
-        // deliveryDetails={deliveryDetails}
-        // deliverySchedule={deliverySchedule}
-        />
+        <CartPayment />
       </section>
     </div>
   );

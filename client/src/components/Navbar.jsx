@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiShoppingCart, FiUser, FiSearch, FiXCircle } from "react-icons/fi";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const [search, setSearch] = useState("");
@@ -8,6 +9,9 @@ const Navbar = () => {
     { name: "Carts" },
     { name: "Dashboard" },
   ];
+
+  const { cartItem } = useSelector((state) => state.cart);
+  const totalCart = cartItem.length;
 
   const handleChange = (e) => {
     setSearch(e.target.value);
@@ -68,12 +72,17 @@ const Navbar = () => {
 
         {/* Nav Icons */}
         <div className="flex gap-4 bg-gray-600/10 px-3 py-2 rounded-md ">
-          <Link to="/cart">
+          <Link to="/cart" className="relative z-10">
             <FiShoppingCart
               size={"20px"}
               color="blue"
               className="cursor-pointer hover:scale-125 duration-300 "
             />
+            {totalCart > 0 && (
+              <span className="absolute -z-10 -top-3 -right-2 w-2 h-2 flex justify-center items-center bg-red-400 p-2 rounded-full text-xs text-white">
+                {totalCart}
+              </span>
+            )}
           </Link>
           <FiUser
             size={"20px"}

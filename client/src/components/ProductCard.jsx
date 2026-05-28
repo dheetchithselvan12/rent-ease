@@ -11,10 +11,7 @@ const ProductCard = ({ product }) => {
     >
       {/* Image */}
       <img
-        src={
-          product.images?.[0] ||
-          "https://images.unsplash.com/photo-1551288049-bebda4e38f71"
-        }
+        src={product.images?.[0] || "https://picsum.photos/200/300"}
         alt={product.name}
         className="w-full h-40 object-cover rounded-xl"
       />
