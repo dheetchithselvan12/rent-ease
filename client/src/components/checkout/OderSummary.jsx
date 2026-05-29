@@ -1,6 +1,6 @@
 import PaymentButton from "./PaymentButton";
 
-const OderSummary = ({ summary }) => {
+const OderSummary = ({ summary, apiOrderData }) => {
   return (
     <>
       <div className="border border-gray-200 rounded-lg p-5 h-fit sticky top-20">
@@ -30,7 +30,7 @@ const OderSummary = ({ summary }) => {
           </div>
         </div>
         {/* Button */}
-        <PaymentButton />
+        <PaymentButton apiOrderData={apiOrderData} />
       </div>
     </>
   );

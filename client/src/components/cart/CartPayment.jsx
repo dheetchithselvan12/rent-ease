@@ -42,8 +42,7 @@ const CartPayment = () => {
 
     dispatch(setCheckoutData(orderPayload));
     navigate("/checkout");
-    console.log("Payment Data ready for API:", orderPayload);
-    // Add your API call here (e.g., axios.post('/api/orders', orderPayload))
+    // console.log("Payment Data ready for API:", orderPayload);
   };
 
   return (
