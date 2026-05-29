@@ -32,7 +32,6 @@ const Checkout = () => {
     const formData = new FormData(e.target);
     setDeliveryDetails({
       name: formData.get("name") || "",
-      email: formData.get("email") || "",
       phone: formData.get("phone") || "",
       address: formData.get("address") || "",
       city: formData.get("city") || "",
@@ -46,8 +45,6 @@ const Checkout = () => {
     setIsSubmitted(true);
   };
 
-  console.log("DeliveryDetailesForm: ", deliveryDetails);
-
   if (!orderData) {
     return (
       <div className="p-10 text-center">
@@ -57,6 +54,16 @@ const Checkout = () => {
   }
 
   const { items, summary } = orderData;
+  const apiOrderData = {
+    orderItems: items,
+    deliveryDetails,
+    deliverySchedule,
+    paymentMethod: "Cash On Delivery",
+    itemPrice: summary.monthlyRent,
+    securityDeposit: summary.securityDeposit,
+    totalPrice: summary.totalPrice,
+  };
+  console.log("API call is redady: ", apiOrderData);
 
   return (
     <div className="p-10">
@@ -110,7 +117,7 @@ const Checkout = () => {
         </div>
 
         {/* Order Summary */}
-        <OderSummary summary={summary} />
+        <OderSummary summary={summary} apiOrderData={apiOrderData} />
       </div>
     </div>
   );
