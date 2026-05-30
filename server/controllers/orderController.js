@@ -1,4 +1,6 @@
-export const createOrder =  (req, res) => {
+import Order from "../models/Order.js";
+
+export const createOrder = async (req, res) => {
     try{
         const apiOrderData =  req.body;
         console.log("apiOrderData:", apiOrderData);
@@ -9,9 +11,14 @@ export const createOrder =  (req, res) => {
                 message: "Missing order data"
             });
         } 
+
+        const order = new Order(apiOrderData);
+        await order.save();
+
+
          res.status(201).json({
             success: true,
-            data: apiOrderData
+            data: order
         });
 
     } catch (error) {
