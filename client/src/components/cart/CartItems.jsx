@@ -69,10 +69,15 @@ const CartCard = ({ item, handleRemoveCart }) => {
             <p className="flex items-center gap-2 text-gray-500 text-sm mt-auto">
               <FaRegCalendarAlt /> {item.tenure} Months Tenure
             </p>
-            <p className="text-2xl font-bold text-gray-800">
-              ₹{item.price * item.quantity}
-              <span className="text-sm text-gray-500 font-medium">/mo</span>
-            </p>
+            <div>
+              <p className="text-2xl font-bold text-gray-800">
+                ₹{item.price * item.quantity}
+              </p>
+              <p className="text-sm text-gray-500 font-medium">
+                ₹{item.price}/mo
+              </p>
+              <p className="inline text-sm text-gray-500 font-medium"></p>
+            </div>
           </div>
         </div>
       </div>
