@@ -1,8 +1,13 @@
 import axios from "axios";
+import { useDispatch } from "react-redux";
 import { RiLock2Fill } from "react-icons/ri";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearCart } from "../../features/cart/cartSlice";
 const PaymentButton = ({ apiOrderData }) => {
   const { orderData } = useSelector((state) => state.checkout);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   console.log("oderPayload", orderData);
 
   const handleClick = async () => {
@@ -11,7 +16,13 @@ const PaymentButton = ({ apiOrderData }) => {
         "http://localhost:5000/api/orders",
         apiOrderData,
       );
-      console.log("API Response: ", response);
+      const success = response.data?.success;
+      if (success === true) {
+        dispatch(clearCart());
+        navigate("/order-success");
+      }
+
+      console.log("API Response: ", response.data?.success);
     } catch (error) {
       console.error(
         "Order Error:",
