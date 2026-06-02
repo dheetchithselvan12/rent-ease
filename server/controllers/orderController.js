@@ -40,3 +40,19 @@ export const getOrders = async (req, res) => {
     }
 
 };
+
+export const getOrderById = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const orderDetailes = await Order.findById(orderId)
+
+        res.status(200).json({
+            success: true,
+            data: orderDetailes
+        })
+        
+    } catch (error) {
+        console.error(error);
+    
+    }
+}
