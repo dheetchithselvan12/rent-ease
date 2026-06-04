@@ -1,19 +1,36 @@
+import { MdOutlineEventRepeat } from "react-icons/md";
 const OrderItem = ({ data }) => {
+  console.log("data: ", data);
+
   return (
     <>
-      <div className="flex border border-gray-400 w-1/2 p-2 bg-gray-50 my-2">
+      <div className="flex flex-col border border-gray-300 w-1/2  bg-gray-50 my-2 rounded-md ">
+        <h4 className="bg-blue-100/40 font-medium rounded-t-md p-5">
+          Rental Items
+        </h4>
         {data?.orderItems?.map((item) => (
-          <div key={item._id} className="flex justify-between w-full gap-2">
-            <div>
-              <p className="text-lg font-semibold">{item?.title}</p>
-              <p className="text-gray-500">{item?.tenure} month tenure</p>
-              <p className="font-medium">₹{data?.totalPrice}</p>
-            </div>
+          <div key={item._id} className="flex w-full gap-3 p-5">
             <img
               src={item?.image}
               alt="image"
-              className="border w-20 h-20 cursor-pointer "
+              className="border w-22 h-20 rounded-md cursor-pointer "
             />
+            <div className="flex flex-col w-full">
+              <p className="text-lg font-semibold">{item?.title}</p>
+              <p className="text-sm text-gray-500">
+                Tenure: {item?.tenure} month tenure
+              </p>
+              <div className="flex justify-between w-full mt-2 ">
+                <p className="flex gap-1 items-center text-blue-500">
+                  <MdOutlineEventRepeat />
+                  Monthly Billing
+                </p>
+                <p className="font-medium">
+                  ₹{data?.itemPrice}
+                  <span className="text-xs text-gray-500">/mo</span>
+                </p>
+              </div>
+            </div>
           </div>
         ))}
       </div>

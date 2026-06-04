@@ -2,11 +2,22 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import OrderItem from "../components/orders/OrderItem";
+import OrderStatus from "../components/orders/OrderStatus";
+import { FiDownload } from "react-icons/fi";
+import { BsChatLeftFill } from "react-icons/bs";
 
 const OrderDetailes = () => {
   const { id } = useParams();
   const [orderData, setOrderData] = useState([]);
   // console.log("orderData: ", orderData);
+  const formattedDate = orderData?.createdAt
+    ? new Date(orderData.createdAt).toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "";
+
   useEffect(() => {
     const fetchOrderDetailes = async () => {
       try {
@@ -22,12 +33,26 @@ const OrderDetailes = () => {
     fetchOrderDetailes();
   }, []);
   return (
-    <>
-      <div className="px-20 h-dvh bg-gray-200">
-        <h1>Order Detailes</h1>
-        <OrderItem data={orderData} />
+    <div className="px-20 py-10 h-dvh bg-blue-50/50">
+      <div className="flex justify-between mb-5">
+        <div>
+          <h1 className="text-2xl font-bold">Order Detailes</h1>
+          <p className="text-gray-600">placed on {formattedDate} </p>
+        </div>
+        <div className="flex gap-2 items-center ">
+          <button className=" flex items-center gap-1 border border-gray-400 px-4 py-2 rounded-md cursor-pointer text-sm">
+            <FiDownload />
+            Download Invoice
+          </button>
+          <button className=" flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer text-sm">
+            <BsChatLeftFill size={15} />
+            Contact Support
+          </button>
+        </div>
       </div>
-    </>
+      <OrderStatus data={orderData} />
+      <OrderItem data={orderData} />
+    </div>
   );
 };
 
