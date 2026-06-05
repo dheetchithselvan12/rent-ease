@@ -5,6 +5,8 @@ import OrderItem from "../components/orders/OrderItem";
 import OrderStatus from "../components/orders/OrderStatus";
 import { FiDownload } from "react-icons/fi";
 import { BsChatLeftFill } from "react-icons/bs";
+import { DeliveryDetaile } from "../components/orders/DeliveryDetaile";
+import OrderSummary from "../components/orders/OrderSummary";
 
 const OrderDetailes = () => {
   const { id } = useParams();
@@ -50,8 +52,14 @@ const OrderDetailes = () => {
           </button>
         </div>
       </div>
-      <OrderStatus data={orderData} />
-      <OrderItem data={orderData} />
+      <div>
+        <div>
+          <OrderStatus data={orderData} />
+          <OrderItem data={orderData} />
+          <DeliveryDetaile data={orderData} />
+        </div>
+        <OrderSummary />
+      </div>
     </div>
   );
 };
