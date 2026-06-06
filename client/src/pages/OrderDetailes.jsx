@@ -35,9 +35,9 @@ const OrderDetailes = () => {
     fetchOrderDetailes();
   }, []);
   return (
-    <div className="px-20 py-10 h-dvh bg-blue-50/50">
-      <div className="flex justify-between mb-5">
-        <div>
+    <div className="px-20 py-10 h-fit bg-blue-50/50">
+      <div className="flex justify-between mb-5 ">
+        <div className="mb-8">
           <h1 className="text-2xl font-bold">Order Detailes</h1>
           <p className="text-gray-600">placed on {formattedDate} </p>
         </div>
@@ -52,13 +52,13 @@ const OrderDetailes = () => {
           </button>
         </div>
       </div>
-      <div>
-        <div>
+      <div className="flex gap-10">
+        <div className="w-2/2">
           <OrderStatus data={orderData} />
           <OrderItem data={orderData} />
           <DeliveryDetaile data={orderData} />
         </div>
-        <OrderSummary />
+        <OrderSummary data={orderData} />
       </div>
     </div>
   );
