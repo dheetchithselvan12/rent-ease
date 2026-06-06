@@ -4,7 +4,7 @@ const OrderItem = ({ data }) => {
 
   return (
     <>
-      <div className="flex flex-col border border-gray-300 w-1/2  bg-gray-50 my-2 rounded-md ">
+      <div className="flex flex-col border border-gray-300   bg-gray-50 my-2 rounded-md ">
         <h4 className="bg-blue-100/40 font-medium rounded-t-md p-5">
           Rental Items
         </h4>
