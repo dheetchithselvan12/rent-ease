@@ -9,6 +9,7 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
 import OrderDetailes from "./pages/OrderDetailes";
+import UserAccount from "./pages/UserAccount";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/orders/:id" element={<OrderDetailes />} />
+        <Route path="/my-account" element={<UserAccount />} />
       </Routes>
       <Footer />
     </>
