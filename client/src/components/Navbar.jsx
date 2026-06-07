@@ -84,11 +84,13 @@ const Navbar = () => {
               </span>
             )}
           </Link>
-          <FiUser
-            size={"20px"}
-            color="blue"
-            className="cursor-pointer hover:scale-125 duration-300 "
-          />
+          <Link to="/my-account">
+            <FiUser
+              size={"20px"}
+              color="blue"
+              className="cursor-pointer hover:scale-125 duration-300 "
+            />
+          </Link>
         </div>
       </nav>
     </>
