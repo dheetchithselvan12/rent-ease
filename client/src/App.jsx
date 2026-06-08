@@ -22,9 +22,18 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success" element={<OrderSuccess />} />
-        <Route path="/my-orders" element={<MyOrders />} />
+        {/* <Route path="/my-orders" element={<MyOrders />} /> */}
         <Route path="/orders/:id" element={<OrderDetailes />} />
-        <Route path="/my-account" element={<UserAccount />} />
+        <Route path="/my-account" element={<UserAccount />}>
+          <Route index element={<div>Dashboard overview</div>} />
+          <Route path="orders" element={<MyOrders />} />
+          <Route
+            path="subscriptions"
+            element={<div> active Subscriptions</div>}
+          />
+          <Route path="wishlist" element={<div>Wishlist</div>} />
+          <Route path="settings" element={<div>Settings</div>} />
+        </Route>
       </Routes>
       <Footer />
     </>
