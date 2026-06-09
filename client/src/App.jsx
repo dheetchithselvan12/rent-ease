@@ -26,7 +26,9 @@ const App = () => {
         <Route path="/orders/:id" element={<OrderDetailes />} />
         <Route path="/my-account" element={<UserAccount />}>
           <Route index element={<div>Dashboard overview</div>} />
-          <Route path="orders" element={<MyOrders />} />
+          <Route path="orders" element={<MyOrders />}>
+            <Route path=":id" element={<OrderDetailes />} />
+          </Route>
           <Route
             path="subscriptions"
             element={<div> active Subscriptions</div>}
