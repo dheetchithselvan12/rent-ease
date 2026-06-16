@@ -5,7 +5,7 @@ const UserAccount = () => {
   return (
     <div className="flex gap-5 py-8 px-5 bg-blue-50">
       <UserDashboardNavbar />
-      <div className="w-2/2">
+      <div className="w-full">
         <Outlet />
       </div>
     </div>

@@ -9,7 +9,10 @@ const OrderItem = ({ data }) => {
           Rental Items
         </h4>
         {data?.orderItems?.map((item) => (
-          <div key={item._id} className="flex w-full gap-3 p-5">
+          <div
+            key={item._id}
+            className="flex w-full gap-3 p-5 border-b border-gray-300"
+          >
             <img
               src={item?.image}
               alt="image"
