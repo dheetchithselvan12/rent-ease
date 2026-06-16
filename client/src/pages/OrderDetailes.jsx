@@ -11,7 +11,6 @@ import OrderSummary from "../components/orders/OrderSummary";
 const OrderDetailes = () => {
   const { id } = useParams();
   const [orderData, setOrderData] = useState([]);
-  // console.log("orderData: ", orderData);
   const formattedDate = orderData?.createdAt
     ? new Date(orderData.createdAt).toLocaleString("en-US", {
         year: "numeric",
