@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiHeart } from "react-icons/fi";
 import { CgNotes } from "react-icons/cg";
@@ -14,36 +14,52 @@ const UserDashboardNavbar = () => {
       </p>
 
       <div className="my-10 space-y-4">
-        <Link
+        <NavLink
           to="/my-account"
-          className="flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100/50 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
+          className="flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
         >
           <MdOutlineDashboard to="/my-account" size={20} /> Dashboard
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/my-account/orders"
-          className="flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
+          className={({ isActive }) =>
+            isActive
+              ? "flex gap-2 items-center text-blue-500 bg-blue-100 rounded-md p-2 "
+              : "flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
+          }
         >
           <CgNotes size={19} /> My Orders
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/my-account/subscriptions"
-          className="flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2  "
+          className={({ isActive }) =>
+            isActive
+              ? "flex gap-2 items-center text-blue-500 bg-blue-100 rounded-md p-2 "
+              : "flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
+          }
         >
           <VscArchive size={20} /> Active Subscriptions
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/my-account/wishlist"
-          className="flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
+          className={({ isActive }) =>
+            isActive
+              ? "flex gap-2 items-center text-blue-500 bg-blue-100 rounded-md p-2 "
+              : "flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
+          }
         >
           <FiHeart size={20} /> Wishlist
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/my-account/settings"
-          className="flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
+          className={({ isActive }) =>
+            isActive
+              ? "flex gap-2 items-center text-blue-500 bg-blue-100 rounded-md p-2 "
+              : "flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
+          }
         >
           <CiSettings size={24} /> Settings
-        </Link>
+        </NavLink>
       </div>
     </div>
   );

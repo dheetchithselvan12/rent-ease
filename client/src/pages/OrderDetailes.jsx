@@ -7,6 +7,7 @@ import { FiDownload } from "react-icons/fi";
 import { BsChatLeftFill } from "react-icons/bs";
 import { DeliveryDetaile } from "../components/orders/DeliveryDetaile";
 import OrderSummary from "../components/orders/OrderSummary";
+import BreadCrumbs from "../components/mui/BreadCrumbs.jsx";
 
 const OrderDetailes = () => {
   const { id } = useParams();
@@ -34,9 +35,13 @@ const OrderDetailes = () => {
     fetchOrderDetailes();
   }, []);
   return (
-    <div className="px-20 py-10 h-fit bg-blue-50/50">
+    <div className="px-10  h-fit bg-blue-50/50 ">
       <div className="flex justify-between mb-5 ">
         <div className="mb-8">
+          <BreadCrumbs
+            id={id}
+            links={{ link: "/my-account/orders", name: "My Orders" }}
+          />
           <h1 className="text-2xl font-bold">Order Detailes</h1>
           <p className="text-gray-600">placed on {formattedDate} </p>
         </div>
