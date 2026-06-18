@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import OrderItem from "../components/orders/OrderItem";
-import OrderStatus from "../components/orders/OrderStatus";
+import OrderItem from "../../components/orders/OrderItem";
+import OrderStatus from "../../components/orders/OrderStatus";
 import { FiDownload } from "react-icons/fi";
 import { BsChatLeftFill } from "react-icons/bs";
-import { DeliveryDetaile } from "../components/orders/DeliveryDetaile";
-import OrderSummary from "../components/orders/OrderSummary";
-import BreadCrumbs from "../components/mui/BreadCrumbs.jsx";
+import { DeliveryDetaile } from "../../components/orders/DeliveryDetaile";
+import OrderSummary from "../../components/orders/OrderSummary";
+import BreadCrumbs from "../../components/mui/BreadCrumbs.jsx";
 
 const OrderDetailes = () => {
   const { id } = useParams();
