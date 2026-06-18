@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../features/products/productsSlice";
-import ProductCard from "../components/ProductCard";
-import ProductSkeleton from "../components/ProductSkeleton";
+import ProductCard from "../components/product/ProductCard";
+import ProductSkeleton from "../components/product/ProductSkeleton";
 
 const AllProducts = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const AllProducts = () => {
     loading,
     error,
   } = useSelector((state) => state.products);
-  
+
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [userMaxPrice, setUserMaxPrice] = useState(null);
   const [selectedTenures, setSelectedTenures] = useState([]);
@@ -54,12 +54,12 @@ const AllProducts = () => {
     );
     setPage(1);
   };
-  
+
   const handlePriceChange = (e) => {
     setUserMaxPrice(Number(e.target.value));
     setPage(1);
   };
-  
+
   const clearAllFilters = () => {
     setSelectedCategories([]);
     setUserMaxPrice(null);
@@ -73,9 +73,7 @@ const AllProducts = () => {
       <section className="w-[20%] h-fit p-2 pb-5 bg-gray-100 rounded-lg text-gray-500">
         <div className="mb-3">
           <p className="text-xl font-medium text-black">Filters</p>
-          <p className="text-sm my-1">
-            {totalItems} items available
-          </p>
+          <p className="text-sm my-1">{totalItems} items available</p>
           <hr className="text-gray-300 mt-4" />
         </div>
 
@@ -199,19 +197,16 @@ const AllProducts = () => {
         <div className="grid grid-cols-4 gap-4 ">
           {/* product Items */}
           {product.length > 0 ? (
-            product.map((item) => (
-              <ProductCard key={item._id} product={item} />
-            ))
+            product.map((item) => <ProductCard key={item._id} product={item} />)
           ) : !loading ? (
             <div className="col-span-4 text-xl flex justify-center items-center bg-gray-100 rounded-md h-130 text-gray-500 py-10">
               No products match your filters.
             </div>
           ) : null}
-          {loading && (
+          {loading &&
             [...Array(limit)].map((_, index) => (
               <ProductSkeleton key={`skeleton-${index}`} />
-            ))
-          )}
+            ))}
           {error && (
             <div className="col-span-4 text-center text-red-500 py-10">
               {error}

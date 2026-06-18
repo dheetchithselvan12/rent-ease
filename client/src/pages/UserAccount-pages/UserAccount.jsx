@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import UserDashboardNavbar from "../components/navbar/UserDashboardNavbar";
+import UserDashboardNavbar from "../../components/navbar/UserDashboardNavbar";
 
 const UserAccount = () => {
   return (

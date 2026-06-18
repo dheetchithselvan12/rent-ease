@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../features/products/productsSlice.js";
 import { FiSearch, FiCalendar, FiTruck } from "react-icons/fi";
-import ProductSkeleton from "../components/ProductSkeleton";
+import ProductSkeleton from "../components/product/ProductSkeleton";
 
 import MAINIMG from "../assets/homeImg.png";
 import FURNITURE from "../assets/furniture.png";
 import APPLIANCES from "../assets/appliances.jpg";
-import ProductCard from "../components/ProductCard.jsx";
+import ProductCard from "../components/product/ProductCard";
 import { Link } from "react-router-dom";
 
 const Home = () => {
