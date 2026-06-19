@@ -1,13 +1,15 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IoFilter } from "react-icons/io5";
 import { FiDownload } from "react-icons/fi";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { fetchOrders } from "../../features/order/orderSlice.js";
 
 const MyOrders = () => {
-  const [orders, setOrders] = useState([]);
+  const dispatch = useDispatch();
+  const { orderData: orders = [] } = useSelector((state) => state.orders);
   const [page, setPage] = useState(1);
 
   const itemsPerPage = 5;
@@ -15,23 +17,13 @@ const MyOrders = () => {
     setPage(value);
   };
 
-  const totalPages = Math.ceil(orders.length / itemsPerPage);
+  const totalPages = Math.ceil(orders?.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
-  const selectedItems = orders.slice(startIndex, startIndex + itemsPerPage);
-  console.log("selectedItems : ", selectedItems);
+  const selectedItems = orders?.slice(startIndex, startIndex + itemsPerPage);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5000/api/orders");
-        const datas = data.data;
-        setOrders(datas);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchOrders();
-  }, []);
+    dispatch(fetchOrders());
+  }, [dispatch]);
 
   return (
     <div className="h-full bg-gray-50 border border-gray-300 w-full rounded-xl ">
