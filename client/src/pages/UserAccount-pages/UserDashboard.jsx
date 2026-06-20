@@ -1,9 +1,17 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchOrders } from "../../features/order/orderSlice";
+import { Link } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
 import { LuCalendarFold } from "react-icons/lu";
 const UserDashboard = () => {
-  const { orderData: orders = [] } = useSelector((state) => state.orders);
-  console.log("Orders data : ", orders);
+  const dispatch = useDispatch();
+  const { orderData, loading } = useSelector((state) => state.orders);
+
+  const orders =
+    [...orderData]
+      .sort((start, end) => new Date(end.date) - new Date(start.date))
+      .slice(0, 5) || [];
 
   const totalNumber = [
     {
@@ -14,20 +22,21 @@ const UserDashboard = () => {
       color: "bg-blue-300",
     },
     {
+      id: 2,
       icon: "icon",
       name: "Total Paid",
       total: `₹${152}`,
       color: "bg-green-300",
     },
     {
-      id: 2,
+      id: 3,
       icon: "icon",
       name: "Loyalty Points",
       total: 4,
       color: "bg-red-300",
     },
     {
-      id: 3,
+      id: 4,
       icon: "icon",
       name: "Up Comming Delivery",
       total: 0,
@@ -58,8 +67,14 @@ const UserDashboard = () => {
     },
   ];
 
+  useEffect(() => {
+    if (!orderData && !loading) dispatch(fetchOrders());
+  }, [dispatch]);
+
+  console.log("Orders data : ", orders);
+
   return (
-    <div className="border p-2 border-gray-300 rounded-lg h-full">
+    <div className="p-2  h-full">
       {/* Dashboard Headline */}
       <div className="space-y-2">
         <p className="text-2xl font-bold">Hello, Users</p>
@@ -70,7 +85,7 @@ const UserDashboard = () => {
 
       {/* Indicator */}
       <div className="flex gap-4 my-4">
-        {totalNumber.map((item) => (
+        {totalNumber?.map((item) => (
           <div
             key={item.id}
             className={` flex gap-3 w-4/4 p-5 border border-gray-300 rounded-lg bg-gray-50 }`}
@@ -97,7 +112,7 @@ const UserDashboard = () => {
           </p>
         </div>
         <div className="flex gap-4 ">
-          {ACTIVERENTS.map((item) => (
+          {ACTIVERENTS?.map((item) => (
             <div
               key={item.id}
               className="flex my-4 border w-2/2 border-gray-300 bg-gray-50 rounded-lg shadow-lg "
@@ -139,38 +154,64 @@ const UserDashboard = () => {
       </div>
 
       {/* Rental History */}
-      <div className="my-4">
+      <div className="my-4  ">
         <p className="text-xl font-bold">Rental History</p>
-        <table className="w-full text-left border-collapse whitespace-nowrap">
-          <thead>
-            <tr className="bg-blue-50 border-y border-gray-400 text-gray-600 text-center">
-              <th className="py-4 px-6 font-medium">Product</th>
-              <th className="py-4 px-6 font-medium">Order Date</th>
-              <th className="py-4 px-6 font-medium">Amount</th>
-              <th className="py-4 px-6 font-medium">Status</th>
-              <th className="py-4 px-6 font-medium">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders?.map((item) => (
-              <tr
-                key={item._id}
-                className="border-b border-gray-300 hover:bg-gray-50"
-              >
-                <td className="px-6 py-4 text-center ">{item.price}</td>
-                <td>{item._id}</td>
-                <td>{item.price}</td>
+        <div className="border border-gray-400 rounded-lg overflow-x-auto w-full ">
+          <table className="w-full text-left border-collapse whitespace-nowrap  ">
+            <thead>
+              <tr className="bg-blue-50   text-gray-600 text-center">
+                <th className="py-4 px-6 font-medium">Product</th>
+                <th className="py-4 px-6 font-medium">Order Date</th>
+                <th className="py-4 px-6 font-medium">Amount</th>
+                <th className="py-4 px-6 font-medium">Status</th>
+                <th className="py-4 px-6 font-medium">Action</th>
               </tr>
-            ))}
-            {/* <tr className="border-b border-gray-300 hover:bg-gray-50">
-              <td className="px-6 py-4 text-center ">Product Name</td>
-              <td>Order Date</td>
-              <td>Amount</td>
-              <td>Status</td>
-              <td>Action</td>
-            </tr> */}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {orders?.map((item) => (
+                <tr
+                  key={item._id}
+                  className="border-b border-gray-300 bg-gray-50 hover:bg-gray-100 "
+                >
+                  <td className="px-6 py-4 text-center">
+                    <span className="truncate max-w-25 inline-block">
+                      {item.orderItems
+                        .map((orderItem) => orderItem.title)
+                        .join(", ")}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <span className="truncate max-w-25 inline-block">
+                      {new Date(item.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <span className="truncate max-w-25 inline-block">
+                      ₹{item.itemPrice}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <span className="truncate max-w-25 inline-block">
+                      {item.orderStatus}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <Link
+                      to={`/my-account/orders/${item._id}`}
+                      className="truncate max-w-25 inline-block cursor-pointer text-blue-500 hover:text-blue-600 "
+                    >
+                      Details
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
