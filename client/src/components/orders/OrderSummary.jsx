@@ -2,17 +2,20 @@ import { Link } from "react-router-dom";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { LuArrowRight } from "react-icons/lu";
 const OrderSummary = ({ data }) => {
+  const arrQuantity = data?.orderItems?.map((item) => item.quantity);
+  const totalQuantity = arrQuantity?.reduce((acc, curr) => acc + curr, 0);
+
   return (
     <div className="border border-gray-300 rounded-md bg-gray-50 w-1/2 h-fit p-5 my-2">
       <p className=" font-semibold mb-2">Order Summary</p>
       <div className="border-y border-gray-300 my-2 py-4 space-y-2 text-gray-600">
         <p className="flex justify-between">
-          Total Items{" "}
-          {data?.orderItems?.map((item) => (
-            <span key={item._id} className="font-medium">
-              {item?.quantity}
-            </span>
-          ))}
+          Number of Items
+          <span className="font-medium">{data?.orderItems?.length}</span>
+        </p>
+        <p className="flex justify-between">
+          Total Items
+          <span className="font-medium">{totalQuantity}</span>
         </p>
         <p className="flex justify-between">
           Total Monthly Rent{" "}
