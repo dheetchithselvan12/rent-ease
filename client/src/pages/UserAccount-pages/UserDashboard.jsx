@@ -69,7 +69,7 @@ const UserDashboard = () => {
 
   useEffect(() => {
     if (!orderData && !loading) dispatch(fetchOrders());
-  }, [dispatch]);
+  }, [dispatch, loading, orderData]);
 
   return (
     <div className="p-2  h-full  ">
@@ -86,7 +86,7 @@ const UserDashboard = () => {
         {totalNumber?.map((item) => (
           <div
             key={item.id}
-            className={` flex gap-3 w-4/4 p-5 border border-gray-300 rounded-lg bg-gray-50 }`}
+            className={` flex gap-3 w-4/4 p-5 border border-gray-300 rounded-lg bg-gray-50}`}
           >
             <p
               className={`p-2 rounded-full text-center pt-4 h-15 w-15 ${item.color}`}
