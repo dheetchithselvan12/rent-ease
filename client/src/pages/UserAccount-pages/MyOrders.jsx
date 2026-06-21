@@ -6,6 +6,7 @@ import { FiDownload } from "react-icons/fi";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { fetchOrders } from "../../features/order/orderSlice.js";
+import { formatDate } from "../../utils/dateUtils.js";
 
 const MyOrders = () => {
   const dispatch = useDispatch();
@@ -79,11 +80,7 @@ const MyOrders = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-center">
-                  {new Date(order.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {formatDate(order.createdAt)}
                 </td>
                 <td className="px-6 py-4 text-center">₹{order.totalPrice}</td>
                 <td className="px-6 py-4 text-center">

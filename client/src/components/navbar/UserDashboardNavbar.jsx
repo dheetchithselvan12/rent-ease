@@ -4,6 +4,7 @@ import { FiHeart } from "react-icons/fi";
 import { CgNotes } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
 import { VscArchive } from "react-icons/vsc";
+import { MdOutlineLogout } from "react-icons/md";
 
 const UserDashboardNavbar = () => {
   return (
@@ -13,7 +14,7 @@ const UserDashboardNavbar = () => {
         manage your rentals and profile
       </p>
 
-      <div className="my-10 space-y-4">
+      <div className=" my-10 space-y-4">
         <NavLink
           to="/my-account"
           className="flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
@@ -60,6 +61,10 @@ const UserDashboardNavbar = () => {
         >
           <CiSettings size={24} /> Settings
         </NavLink>
+        <p className="flex gap-2 items-center p-2 hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 rounded-md duration-500 cursor-pointer ">
+          <MdOutlineLogout size={21} />
+          Logout
+        </p>
       </div>
     </div>
   );

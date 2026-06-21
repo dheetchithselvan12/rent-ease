@@ -4,14 +4,14 @@ import { fetchOrders } from "../../features/order/orderSlice";
 import { Link } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
 import { LuCalendarFold } from "react-icons/lu";
+import { formatDate } from "../../utils/dateUtils";
 const UserDashboard = () => {
   const dispatch = useDispatch();
   const { orderData, loading } = useSelector((state) => state.orders);
 
-  const orders =
-    [...orderData]
-      .sort((start, end) => new Date(end.date) - new Date(start.date))
-      .slice(0, 5) || [];
+  const orders = [...(orderData || [])]
+    .sort((start, end) => new Date(end.date) - new Date(start.date))
+    .slice(0, 5);
 
   const totalNumber = [
     {
@@ -71,13 +71,11 @@ const UserDashboard = () => {
     if (!orderData && !loading) dispatch(fetchOrders());
   }, [dispatch]);
 
-  console.log("Orders data : ", orders);
-
   return (
-    <div className="p-2  h-full">
+    <div className="p-2  h-full  ">
       {/* Dashboard Headline */}
       <div className="space-y-2">
-        <p className="text-2xl font-bold">Hello, Users</p>
+        <p className="text-2xl text-gray-700 font-bold">Hello, Users</p>
         <p className=" text-gray-500">
           Here's an overview of your RentEase Account.
         </p>
@@ -106,7 +104,7 @@ const UserDashboard = () => {
       {/* Active Rentals */}
       <div>
         <div className="flex justify-between mt-8 ">
-          <p className="text-xl font-bold">Active Rentals</p>
+          <p className="text-xl text-gray-700 font-bold">Active Rentals</p>
           <p className="text-blue-500 cursor-pointer hover:text-blue-600  ">
             View All
           </p>
@@ -155,11 +153,11 @@ const UserDashboard = () => {
 
       {/* Rental History */}
       <div className="my-4  ">
-        <p className="text-xl font-bold">Rental History</p>
-        <div className="border border-gray-400 rounded-lg overflow-x-auto w-full ">
+        <p className="text-xl text-gray-700 font-bold">Rental History</p>
+        <div className="border my-4 border-gray-400 rounded-lg overflow-x-auto w-full ">
           <table className="w-full text-left border-collapse whitespace-nowrap  ">
             <thead>
-              <tr className="bg-blue-50   text-gray-600 text-center">
+              <tr className="bg-gray-100  text-gray-600 text-center">
                 <th className="py-4 px-6 font-medium">Product</th>
                 <th className="py-4 px-6 font-medium">Order Date</th>
                 <th className="py-4 px-6 font-medium">Amount</th>
@@ -171,7 +169,7 @@ const UserDashboard = () => {
               {orders?.map((item) => (
                 <tr
                   key={item._id}
-                  className="border-b border-gray-300 bg-gray-50 hover:bg-gray-100 "
+                  className="border-t border-gray-300 bg-gray-50 hover:bg-blue-50 transition-colors duration-300 "
                 >
                   <td className="px-6 py-4 text-center">
                     <span className="truncate max-w-25 inline-block">
@@ -182,11 +180,7 @@ const UserDashboard = () => {
                   </td>
                   <td className="px-6 py-4 text-center">
                     <span className="truncate max-w-25 inline-block">
-                      {new Date(item.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
+                      {formatDate(item.createdAt)}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
@@ -195,7 +189,15 @@ const UserDashboard = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="truncate max-w-25 inline-block">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        item.orderStatus === "Delivered"
+                          ? "bg-green-100 text-green-800"
+                          : item.orderStatus === "Processing"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
                       {item.orderStatus}
                     </span>
                   </td>

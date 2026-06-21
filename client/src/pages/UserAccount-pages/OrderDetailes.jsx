@@ -8,17 +8,11 @@ import { BsChatLeftFill } from "react-icons/bs";
 import { DeliveryDetaile } from "../../components/orders/DeliveryDetaile";
 import OrderSummary from "../../components/orders/OrderSummary";
 import BreadCrumbs from "../../components/mui/BreadCrumbs.jsx";
+import { formatDate } from "../../utils/dateUtils.js";
 
 const OrderDetailes = () => {
   const { id } = useParams();
   const [orderData, setOrderData] = useState([]);
-  const formattedDate = orderData?.createdAt
-    ? new Date(orderData.createdAt).toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })
-    : "";
 
   useEffect(() => {
     const fetchOrderDetailes = async () => {
@@ -43,7 +37,9 @@ const OrderDetailes = () => {
             links={{ link: "/my-account/orders", name: "My Orders" }}
           />
           <h1 className="text-2xl font-bold">Order Detailes</h1>
-          <p className="text-gray-600">placed on {formattedDate} </p>
+          <p className="text-gray-600">
+            placed on {formatDate(orderData.createdAt)}{" "}
+          </p>
         </div>
         <div className="flex gap-2 items-center ">
           <button className=" flex items-center gap-1 border border-gray-400 px-4 py-2 rounded-md cursor-pointer text-sm">
