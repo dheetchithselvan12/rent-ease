@@ -1,7 +1,7 @@
 import Footer from "./components/Footer";
 import Navbar from "./components/navbar/Navbar";
 import Home from "./pages/Home.jsx";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import ProductDetailes from "./pages/ProductDetailes";
 import AllProducts from "./pages/AllProducts";
 import Cart from "./pages/Cart";
@@ -11,11 +11,15 @@ import MyOrders from "./pages/UserAccount-pages/MyOrders.jsx";
 import OrderDetailes from "./pages/UserAccount-pages/OrderDetailes.jsx";
 import UserAccount from "./pages/UserAccount-pages/UserAccount.jsx";
 import UserDashboard from "./pages/UserAccount-pages/UserDashboard.jsx";
+import Register from "./pages/Register.jsx";
 
 const App = () => {
+  const location = useLocation();
+  const isRegisterPage = location.pathname === "/register";
+
   return (
     <>
-      <Navbar />
+      {!isRegisterPage && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products/:id" element={<ProductDetailes />} />
@@ -34,8 +38,9 @@ const App = () => {
           <Route path="wishlist" element={<div>Wishlist</div>} />
           <Route path="settings" element={<div>Settings</div>} />
         </Route>
+        <Route path="/register" element={<Register />} />
       </Routes>
-      <Footer />
+      {!isRegisterPage && <Footer />}
     </>
   );
 };
