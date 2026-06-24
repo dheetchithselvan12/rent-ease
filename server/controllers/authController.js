@@ -8,6 +8,13 @@ export const registerUser = async (req, res) => {
         // Destructuring values from request body
         const { firstName, lastName, email, password} = req.body;
 
+        if(!firstName || !lastName || !email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            });
+        };
+
         // check if user is already exist in db
         const userExists = await User.findOne({email});
         if (userExists) {
@@ -28,14 +35,11 @@ export const registerUser = async (req, res) => {
         });
 
         // Send Response to client
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             message: "User registered successfully",
             data: user,
-        })
-
-        console.log(message);
-        
+        });
 
     } catch (error) {
         

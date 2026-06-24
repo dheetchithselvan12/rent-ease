@@ -1,10 +1,52 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState, useRef } from "react";
 import { FaUser } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { IoMdRepeat } from "react-icons/io";
+import { validateRegister } from "../utils/validator";
 
 const Register = () => {
+  const [error, setError] = useState({});
+
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const password2Ref = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = {
+      firstName: firstNameRef.current.value,
+      lastName: lastNameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      password2: password2Ref.current.value,
+    };
+    const validateError = validateRegister(formData);
+
+    setError(validateError);
+
+    if (Object.keys(validateError).length === 0) {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/auth/register",
+          formData,
+        );
+        console.log("response : ", response);
+
+        alert("Registration Successful");
+      } catch (error) {
+        alert(error.response?.data?.message);
+        console.log("Error : ", error.response?.data?.message);
+      }
+    } else {
+      console.log("Validation errors:", validateError);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center bg-blue-50/50 h-dvh ">
       <div className="text-center mb-5">
@@ -12,7 +54,10 @@ const Register = () => {
         <p className="text-gray-700">Premium furniture rental simplified.</p>
       </div>
 
-      <form className="border border-gray-300 shadow-lg bg-gray-50 flex flex-col w-fit rounded-xl p-8 space-y-3">
+      <form
+        onSubmit={handleSubmit}
+        className="border border-gray-300 shadow-lg bg-gray-50 flex flex-col w-fit rounded-xl p-8 space-y-3"
+      >
         <div className="mb-4">
           <p className="text-2xl font-medium ">Create an Acccount</p>
           <p className="text-gray-500 ">
@@ -32,6 +77,7 @@ const Register = () => {
             <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2 ">
               <FaUser />
               <input
+                ref={firstNameRef}
                 type="text"
                 id="firstName"
                 name="firstName"
@@ -39,6 +85,9 @@ const Register = () => {
                 className="outline-none "
               />
             </div>
+            {error.firstName && (
+              <p className="text-red-500">{error.firstName}</p>
+            )}
           </div>
           {/* Last Name */}
           <div className="flex flex-col gap-2 ">
@@ -51,6 +100,7 @@ const Register = () => {
             <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2">
               <FaUser />
               <input
+                ref={lastNameRef}
                 type="text"
                 id="lastName"
                 name="lastName"
@@ -58,6 +108,7 @@ const Register = () => {
                 className="outline-none"
               />
             </div>
+            {error.lastName && <p className="text-red-500">{error.lastName}</p>}
           </div>
         </div>
 
@@ -72,13 +123,15 @@ const Register = () => {
           <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2">
             <MdEmail />
             <input
+              ref={emailRef}
               type="email"
               id="email"
               name="email"
               placeholder="Email"
-              className="outline-none"
+              className="outline-none w-full"
             />
           </div>
+          {error.email && <p className="text-red-500">{error.email}</p>}
         </div>
 
         {/* Password */}
@@ -93,6 +146,7 @@ const Register = () => {
             <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2">
               <RiLockPasswordFill />
               <input
+                ref={passwordRef}
                 type="password"
                 id="password"
                 name="password"
@@ -100,6 +154,7 @@ const Register = () => {
                 className="outline-none"
               />
             </div>
+            {error.password && <p className="text-red-500">{error.password}</p>}
           </div>
 
           {/* Confirm Password */}
@@ -113,6 +168,7 @@ const Register = () => {
             <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2">
               <IoMdRepeat />
               <input
+                ref={password2Ref}
                 type="password"
                 id="password2"
                 name="password2"
@@ -120,6 +176,9 @@ const Register = () => {
                 className="outline-none"
               />
             </div>
+            {error.password2 && (
+              <p className="text-red-500">{error.password2}</p>
+            )}
           </div>
         </div>
 
@@ -129,6 +188,7 @@ const Register = () => {
         >
           Create Account
         </button>
+
         <hr className="my-5 text-gray-400 " />
         <p className="text-center text-gray-500">
           Already have an account?{" "}
