@@ -5,6 +5,7 @@ import { FaUser } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { IoMdRepeat } from "react-icons/io";
+import InputField from "../components/common/InputField";
 import { validateRegister } from "../utils/validator";
 
 const Register = () => {
@@ -66,120 +67,58 @@ const Register = () => {
         </div>
 
         <div className="flex gap-2">
-          {/* First Name */}
-          <div className="flex flex-col gap-2 ">
-            <label
-              htmlFor="firstName"
-              className="text-sm font-semibold text-gray-600 cursor-pointer "
-            >
-              First Name
-            </label>
-            <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2 ">
-              <FaUser />
-              <input
-                ref={firstNameRef}
-                type="text"
-                id="firstName"
-                name="firstName"
-                placeholder="First Name"
-                className="outline-none "
-              />
-            </div>
-            {error.firstName && (
-              <p className="text-red-500">{error.firstName}</p>
-            )}
-          </div>
-          {/* Last Name */}
-          <div className="flex flex-col gap-2 ">
-            <label
-              htmlFor="lastName"
-              className="text-sm font-semibold text-gray-600 cursor-pointer"
-            >
-              Last Name
-            </label>
-            <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2">
-              <FaUser />
-              <input
-                ref={lastNameRef}
-                type="text"
-                id="lastName"
-                name="lastName"
-                placeholder="Last Name"
-                className="outline-none"
-              />
-            </div>
-            {error.lastName && <p className="text-red-500">{error.lastName}</p>}
-          </div>
+          <InputField
+            ref={firstNameRef}
+            label="First Name"
+            id="firstName"
+            name="firstName"
+            placeholder="First Name"
+            icon={FaUser}
+            error={error.firstName}
+          />
+          <InputField
+            ref={lastNameRef}
+            label="Last Name"
+            id="lastName"
+            name="lastName"
+            placeholder="Last Name"
+            icon={FaUser}
+            error={error.lastName}
+          />
         </div>
 
-        {/* Email */}
-        <div className="flex flex-col gap-2 ">
-          <label
-            htmlFor="email"
-            className="text-sm font-semibold text-gray-600 cursor-pointer"
-          >
-            Email
-          </label>
-          <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2">
-            <MdEmail />
-            <input
-              ref={emailRef}
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              className="outline-none w-full"
-            />
-          </div>
-          {error.email && <p className="text-red-500">{error.email}</p>}
-        </div>
+        <InputField
+          ref={emailRef}
+          label="Email"
+          id="email"
+          name="email"
+          type="email"
+          placeholder="Email"
+          icon={MdEmail}
+          error={error.email}
+        />
 
-        {/* Password */}
         <div className="flex gap-3">
-          <div className="flex flex-col gap-2 ">
-            <label
-              htmlFor="password"
-              className="text-sm font-semibold text-gray-600 cursor-pointer"
-            >
-              Password
-            </label>
-            <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2">
-              <RiLockPasswordFill />
-              <input
-                ref={passwordRef}
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Password"
-                className="outline-none"
-              />
-            </div>
-            {error.password && <p className="text-red-500">{error.password}</p>}
-          </div>
-
-          {/* Confirm Password */}
-          <div className="flex flex-col gap-2 ">
-            <label
-              htmlFor="password2"
-              className="text-sm font-semibold text-gray-600 cursor-pointer "
-            >
-              Confirm Password
-            </label>
-            <div className="flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 rounded-md p-2">
-              <IoMdRepeat />
-              <input
-                ref={password2Ref}
-                type="password"
-                id="password2"
-                name="password2"
-                placeholder="Confirm Password"
-                className="outline-none"
-              />
-            </div>
-            {error.password2 && (
-              <p className="text-red-500">{error.password2}</p>
-            )}
-          </div>
+          <InputField
+            ref={passwordRef}
+            label="Password"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Password"
+            icon={RiLockPasswordFill}
+            error={error.password}
+          />
+          <InputField
+            ref={password2Ref}
+            label="Confirm Password"
+            id="password2"
+            name="password2"
+            type="password"
+            placeholder="Confirm Password"
+            icon={IoMdRepeat}
+            error={error.password2}
+          />
         </div>
 
         <button

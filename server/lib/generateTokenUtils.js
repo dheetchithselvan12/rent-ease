@@ -1,0 +1,6 @@
+import jwt from "jsonwebtoken";
+
+export const generateToken = async (user) => {
+    const token = await jwt.sign({userId: user._id, role: user.role}, process.env.JWT_SCREATE, { expiresIn: "7d" });
+    return token;
+}
