@@ -30,3 +30,18 @@ export const validateRegister = (data) => {
     }
     return error;
 }
+
+export const validateLogin = (data) => {
+    const error = {};
+
+    if(!data.email) {
+        error.email = 'Email is required';
+    } else if(!ValidEmail.test(data.email)) {
+        error.email = 'Email is invalid';
+    }
+
+    if (!data.password) {
+        error.password = 'Password is required'
+    }
+    return error;
+}

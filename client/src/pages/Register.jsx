@@ -10,6 +10,8 @@ import { validateRegister } from "../utils/validator";
 
 const Register = () => {
   const [error, setError] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const firstNameRef = useRef();
   const lastNameRef = useRef();
@@ -57,7 +59,7 @@ const Register = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="border border-gray-300 shadow-lg bg-gray-50 flex flex-col w-fit rounded-xl p-8 space-y-3"
+        className="border border-gray-300 shadow-lg bg-gray-50 flex flex-col w-full max-w-2xl rounded-xl p-8 space-y-3"
       >
         <div className="mb-4">
           <p className="text-2xl font-medium ">Create an Acccount</p>
@@ -66,7 +68,7 @@ const Register = () => {
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full">
           <InputField
             ref={firstNameRef}
             label="First Name"
@@ -98,7 +100,7 @@ const Register = () => {
           error={error.email}
         />
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 w-full">
           <InputField
             ref={passwordRef}
             label="Password"
@@ -108,6 +110,8 @@ const Register = () => {
             placeholder="Password"
             icon={RiLockPasswordFill}
             error={error.password}
+            setShowPassword={setShowPassword}
+            showPassword={showPassword}
           />
           <InputField
             ref={password2Ref}
@@ -118,6 +122,8 @@ const Register = () => {
             placeholder="Confirm Password"
             icon={IoMdRepeat}
             error={error.password2}
+            setShowPassword={setShowConfirmPassword}
+            showPassword={showConfirmPassword}
           />
         </div>
 
@@ -131,8 +137,8 @@ const Register = () => {
         <hr className="my-5 text-gray-400 " />
         <p className="text-center text-gray-500">
           Already have an account?{" "}
-          <Link to="#" className="text-blue-600 font-medium ">
-            Sign in
+          <Link to="/login" className="text-blue-600 font-medium ">
+            Log in
           </Link>
         </p>
       </form>
