@@ -12,10 +12,12 @@ import OrderDetailes from "./pages/UserAccount-pages/OrderDetailes.jsx";
 import UserAccount from "./pages/UserAccount-pages/UserAccount.jsx";
 import UserDashboard from "./pages/UserAccount-pages/UserDashboard.jsx";
 import Register from "./pages/Register.jsx";
+import Login from "./pages/Login.jsx";
 
 const App = () => {
   const location = useLocation();
-  const isRegisterPage = location.pathname === "/register";
+  const isRegisterPage =
+    location.pathname === "/register" || location.pathname === "/login";
 
   return (
     <>
@@ -39,6 +41,7 @@ const App = () => {
           <Route path="settings" element={<div>Settings</div>} />
         </Route>
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       {!isRegisterPage && <Footer />}
     </>
