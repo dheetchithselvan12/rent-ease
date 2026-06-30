@@ -46,7 +46,7 @@ const InputField = forwardRef(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-sm font-medium hover:text-gray-700 transition whitespace-nowrap"
+              className="text-sm font-medium hover:text-gray-700 transition whitespace-nowrap cursor-pointer "
             >
               {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
             </button>

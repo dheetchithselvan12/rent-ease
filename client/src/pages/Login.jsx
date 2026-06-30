@@ -1,15 +1,18 @@
 import { useRef, useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import InputField from "../components/common/InputField";
 import { validateLogin } from "../utils/validator";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
+import { loginSuccess } from "../features/auth/authSlice";
 
 const Login = () => {
   const [error, setError] = useState({});
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -23,7 +26,6 @@ const Login = () => {
     };
 
     const validateError = validateLogin(formData);
-
     setError(validateError);
     if (Object.keys(validateError).length === 0) {
       try {
@@ -31,6 +33,7 @@ const Login = () => {
           "http://localhost:5000/api/auth/login",
           formData,
         );
+        dispatch(loginSuccess(response.data));
         console.log("response : ", response);
 
         alert("Login Successful");
