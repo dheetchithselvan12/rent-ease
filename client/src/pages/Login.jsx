@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/common/InputField";
 import { validateLogin } from "../utils/validator";
 import { MdEmail } from "react-icons/md";
@@ -13,6 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -34,8 +35,8 @@ const Login = () => {
           formData,
         );
         dispatch(loginSuccess(response.data));
+        navigate("/");
         console.log("response : ", response);
-
         alert("Login Successful");
       } catch (error) {
         alert(error.response?.data?.message);
