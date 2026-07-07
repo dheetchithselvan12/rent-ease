@@ -100,6 +100,7 @@ export const loginUser = async (req, res) => {
                 lastName: user.lastName,
                 email: user.email,
                 role: user.role,
+                avatar: user.avatar || "",
             }
         })
 
@@ -112,4 +113,15 @@ export const loginUser = async (req, res) => {
          });
          console.log("Error: ", error.message);
     }
-}
+};
+
+export const googleCallback = async (req, res) => {
+    try {
+        const token = await generateToken(req.user);
+        
+        return res.redirect(`${process.env.CLIENT_URI}/login?token=${encodeURIComponent(token)}`);
+    } catch (error) {
+        console.error("Failed to process Google login:", error);
+        return res.redirect(`${process.env.CLIENT_URI}/login?error=google_failed`);
+    }
+};

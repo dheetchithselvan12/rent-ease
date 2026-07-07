@@ -11,6 +11,7 @@ const Navbar = () => {
   ];
 
   const { cartItem } = useSelector((state) => state.cart);
+  const avatar = useSelector((state) => state.auth?.user?.avatar);
   const totalCart = cartItem.length;
 
   const handleChange = (e) => {
@@ -85,11 +86,19 @@ const Navbar = () => {
             )}
           </Link>
           <Link to="/my-account">
-            <FiUser
-              size={"20px"}
-              color="blue"
-              className="cursor-pointer hover:scale-125 duration-300 "
-            />
+            {avatar ? (
+              <img
+                src={avatar}
+                alt=""
+                className="w-6 h-6 hover:scale-125 duration-300 rounded-full "
+              />
+            ) : (
+              <FiUser
+                size={"20px"}
+                color="blue"
+                className="cursor-pointer hover:scale-125 duration-300 "
+              />
+            )}
           </Link>
         </div>
       </nav>

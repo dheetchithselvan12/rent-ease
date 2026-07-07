@@ -1,4 +1,6 @@
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiHeart } from "react-icons/fi";
 import { CgNotes } from "react-icons/cg";
@@ -7,12 +9,38 @@ import { VscArchive } from "react-icons/vsc";
 import { MdOutlineLogout } from "react-icons/md";
 
 const UserDashboardNavbar = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
+  const fullName = [user?.firstName, user?.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  const displayName = fullName || user?.email?.split("@")[0] || "User";
+  const userAvatar = user?.avatar?.trim();
+  const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+    displayName,
+  )}&background=0D8ABC&color=fff&rounded=true&size=128`;
+  const avatarSrc = userAvatar || fallbackAvatar;
+  const userEmail = user?.email;
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
-    <div className="sticky left-0 border border-gray-300 rounded-md w-1/5 h-full p-2">
-      <h1 className="text-xl font-medium">My Account</h1>
-      <p className="text-gray-500 text-sm tracking-tighter">
-        manage your rentals and profile
-      </p>
+    <div className="sticky left-0 top-20 border border-gray-300 rounded-md w-fit h-full p-2">
+      <div className="flex gap-2 my-2 items-center">
+        <img
+          src={avatarSrc}
+          alt={displayName}
+          className="w-12 h-12 rounded-full "
+        />
+        <div>
+          <h1 className="text-sm font-medium">{displayName}</h1>
+          <p className="text-gray-700 text-sm ">{userEmail}</p>
+        </div>
+      </div>
 
       <div className=" my-10 space-y-4">
         <NavLink
@@ -61,7 +89,10 @@ const UserDashboardNavbar = () => {
         >
           <CiSettings size={24} /> Settings
         </NavLink>
-        <p className="flex gap-2 items-center p-2 hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 rounded-md duration-500 cursor-pointer ">
+        <p
+          onClick={handleLogout}
+          className="flex gap-2 items-center p-2 hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 rounded-md duration-500 cursor-pointer "
+        >
           <MdOutlineLogout size={21} />
           Logout
         </p>

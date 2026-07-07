@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 const ProductCard = ({ product }) => {
-  console.log("ProductsId : ", product._id);
-
   // get lowest price;
   const lowestPlan = product.tenurePlans?.[0];
   return (

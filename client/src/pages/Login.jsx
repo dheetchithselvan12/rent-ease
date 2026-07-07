@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { validateLogin } from "../utils/validator";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { loginSuccess } from "../features/auth/authSlice";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const [error, setError] = useState({});
@@ -17,6 +18,37 @@ const Login = () => {
 
   const emailRef = useRef();
   const passwordRef = useRef();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (token) {
+      try {
+        const payload = JSON.parse(
+          atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")),
+        );
+
+        dispatch(
+          loginSuccess({
+            token,
+            user: {
+              _id: payload.userId,
+              role: payload.role,
+              firstName: payload.firstName || "",
+              lastName: payload.lastName || "",
+              avatar: payload.avatar || "",
+              email: payload.email,
+            },
+          }),
+        );
+        window.history.replaceState({}, "", "/login");
+        navigate("/", { replace: true });
+      } catch (err) {
+        console.error("Failed to decode Google auth token", err);
+      }
+    }
+  }, [dispatch, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,6 +123,17 @@ const Login = () => {
             className="bg-blue-500 text-white rounded-md p-2 w-full text-center cursor-pointer hover:bg-blue-600 transition-colors duration-300 mt-5 "
           >
             Login
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              window.location.href = "http://localhost:5000/api/auth/google";
+            }}
+            className=" border border-gray-300 text-black flex gap-2 items-center justify-center hover:text-white rounded-md p-2 w-full text-center cursor-pointer hover:bg-blue-500 transition-colors duration-300 mt-5 "
+          >
+            <FcGoogle size={22} />
+            Login with Google
           </button>
 
           <hr className="my-5 text-gray-400 " />

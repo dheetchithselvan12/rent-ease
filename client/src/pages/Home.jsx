@@ -16,7 +16,6 @@ const Home = () => {
   const { items, loading, error, meta } = useSelector(
     (state) => state.products,
   );
-  console.log("Product Items : ", items);
 
   const [page, setPage] = useState(1);
   const limit = 4;

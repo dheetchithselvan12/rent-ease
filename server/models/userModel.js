@@ -4,12 +4,11 @@ const userSchema = new mongoose.Schema(
     {
         firstName: {
             type: String,
-            required: [true, "First name is required"],
+            required: true,
             trim: true,
         },
         lastName: {
             type: String,
-            required: [true, "Last name is required"],
             trim: true,
         },
         email: {
@@ -20,8 +19,22 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            required: [true, "Password is required"],
             trim: true,
+        },
+        googleId: {
+            type: String,
+            unique: true,
+            sparse: true,
+            default: null,
+        },
+        avatar: {
+            type: String,
+            default: "",
+        },
+        authProvider: {
+            type: String,
+            enum: ["local", "google"],
+            default: "local",
         },
         role: {
             type: String,
