@@ -8,6 +8,13 @@ import { formatDate } from "../../utils/dateUtils";
 const UserDashboard = () => {
   const dispatch = useDispatch();
   const { orderData, loading } = useSelector((state) => state.orders);
+  const { user } = useSelector((state) => state.auth);
+
+  const fullName = [user?.firstName, user?.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  const displayName = fullName || user?.email?.split("@")[0] || "User";
 
   const orders = [...(orderData || [])]
     .sort((start, end) => new Date(end.date) - new Date(start.date))
@@ -74,19 +81,20 @@ const UserDashboard = () => {
   return (
     <div className="p-2  h-full  ">
       {/* Dashboard Headline */}
-      <div className="space-y-2">
-        <p className="text-2xl text-gray-700 font-bold">Hello, Users</p>
-        <p className=" text-gray-500">
+      <div className="flex flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-1">
+        <p className="text-2xl text-gray-700 font-bold">Hello, {displayName}</p>
+        <p className="text-gray-500">
           Here's an overview of your RentEase Account.
         </p>
+        <div className="space-y-1"></div>
       </div>
 
       {/* Indicator */}
-      <div className="flex gap-4 my-4">
+      <div className="flex gap-4 my-4 ">
         {totalNumber?.map((item) => (
           <div
             key={item.id}
-            className={` flex gap-3 w-4/4 p-5 border border-gray-300 rounded-lg bg-gray-50}`}
+            className={` flex gap-3 w-4/4 p-5 bg-white border border-gray-300 rounded-lg shadow-lg`}
           >
             <p
               className={`p-2 rounded-full text-center pt-4 h-15 w-15 ${item.color}`}
