@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const [search, setSearch] = useState("");
   const NAVLINKS = [
-    { name: "Products" },
-    { name: "Carts" },
-    { name: "Dashboard" },
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: "My Orders ", path: "/my-account/orders" },
   ];
 
   const { cartItem } = useSelector((state) => state.cart);
@@ -38,14 +38,15 @@ const Navbar = () => {
 
         {/* Nav links */}
         <div className="flex text-lg font-medium gap-7 cursor-pointer ">
-          {NAVLINKS.map((item, index) => (
-            <a
-              key={index}
+          {NAVLINKS.map((item) => (
+            <Link
+              key={item.name}
+              to={item.path}
               className="relative group hover:text-blue-500 transition duration-300 text-gray-800"
             >
               {item.name}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-500"></span>
-            </a>
+            </Link>
           ))}
         </div>
 
