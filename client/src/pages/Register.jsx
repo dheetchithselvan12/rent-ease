@@ -7,6 +7,7 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { IoMdRepeat } from "react-icons/io";
 import InputField from "../components/common/InputField";
 import { validateRegister } from "../utils/validator";
+import { FcGoogle } from "react-icons/fc";
 
 const Register = () => {
   const [error, setError] = useState({});
@@ -132,6 +133,21 @@ const Register = () => {
           className="bg-blue-500 text-white rounded-md p-2 text-center cursor-pointer hover:bg-blue-600 transition-colors duration-300 mt-5 "
         >
           Create Account
+        </button>
+        <p className="text-center text-xs my-2 text-gray-400  ">
+          ──────────────────────── or continue with Google
+          ────────────────────────
+        </p>
+
+        <button
+          type="button"
+          onClick={() => {
+            window.location.href = "http://localhost:5000/api/auth/google";
+          }}
+          className=" border border-gray-300 text-black flex gap-2 items-center justify-center hover:text-white rounded-md p-2 w-full text-center cursor-pointer hover:bg-blue-500 transition-colors duration-300 mt-5 "
+        >
+          <FcGoogle size={22} />
+          Google
         </button>
 
         <hr className="my-5 text-gray-400 " />
