@@ -124,16 +124,19 @@ const Login = () => {
           >
             Login
           </button>
+          <p className="text-center text-xs my-2 text-gray-400  ">
+            ──────── or continue with Google ────────
+          </p>
 
           <button
             type="button"
             onClick={() => {
               window.location.href = "http://localhost:5000/api/auth/google";
             }}
-            className=" border border-gray-300 text-black flex gap-2 items-center justify-center hover:text-white rounded-md p-2 w-full text-center cursor-pointer hover:bg-blue-500 transition-colors duration-300 mt-5 "
+            className=" border border-gray-300 text-black flex gap-2 items-center justify-center hover:text-white rounded-md p-2 w-full text-center cursor-pointer hover:bg-blue-500 transition-colors duration-300  "
           >
             <FcGoogle size={22} />
-            Login with Google
+            Google
           </button>
 
           <hr className="my-5 text-gray-400 " />
