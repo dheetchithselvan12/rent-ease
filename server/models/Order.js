@@ -2,6 +2,13 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
 {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+
     orderItems: [
       {
         productId: {
@@ -58,10 +65,25 @@ const orderSchema = new mongoose.Schema(
         "Shipped",
         "Out For Delivery",
         "Delivered",
-        "Returned",
         "Cancelled",
       ],
+      default: "Order Confirmed",
+    },
+    rentalStatus: {
+      type: String,
+      enum: [
+        "Pending",
+        "Active",
+        "Expired",
+        "Returned",
+      ],
       default: "Pending",
+    },
+
+    rentalPeriod: {
+      startDate: Date,
+      endDate: Date,
+      durationInMonths: Number,
     },
   },
   {

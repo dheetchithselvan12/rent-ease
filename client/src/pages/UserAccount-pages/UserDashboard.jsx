@@ -1,14 +1,53 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchOrders } from "../../features/order/orderSlice";
+import {
+  fetchOrders,
+  fetchActiveSubscriptions,
+} from "../../features/order/orderSlice";
 import { Link } from "react-router-dom";
-import { CiCalendar } from "react-icons/ci";
-import { LuCalendarFold } from "react-icons/lu";
 import { formatDate } from "../../utils/dateUtils";
+import { CiCalendar, CiDeliveryTruck } from "react-icons/ci";
+import { LuCalendarFold, LuShapes } from "react-icons/lu";
+import { MdOutlinePayments } from "react-icons/md";
+
 const UserDashboard = () => {
   const dispatch = useDispatch();
   const { orderData, loading } = useSelector((state) => state.orders);
   const { user } = useSelector((state) => state.auth);
+  const { activeSubscriptions: subscriptions } = useSelector(
+    (state) => state.orders,
+  );
+
+  const totalNumber = [
+    {
+      id: 1,
+      icon: <LuShapes size={28} />,
+      name: "Active Rentals",
+      total: subscriptions?.length || 0,
+      color: "bg-blue-200",
+      border: "border-blue-300",
+    },
+    {
+      id: 2,
+      icon: <MdOutlinePayments size={28} />,
+      name: "Total Paid",
+      total: `₹${orderData?.reduce((acc, item) => acc + item.totalPrice, 0)}`,
+      color: "bg-green-200",
+      border: "border-green-300",
+    },
+    {
+      id: 4,
+      icon: <CiDeliveryTruck size={28} />,
+      name: "Up Comming Delivery",
+      total: subscriptions?.map((item) => item.orderStatus).length || 0,
+      color: "bg-yellow-200",
+      border: "border-yellow-300",
+    },
+  ];
+
+  useEffect(() => {
+    dispatch(fetchActiveSubscriptions());
+  }, [dispatch]);
 
   const fullName = [user?.firstName, user?.lastName]
     .filter(Boolean)
@@ -19,60 +58,6 @@ const UserDashboard = () => {
   const orders = [...(orderData || [])]
     .sort((start, end) => new Date(end.date) - new Date(start.date))
     .slice(0, 5);
-
-  const totalNumber = [
-    {
-      id: 1,
-      icon: "icon",
-      name: "Active Rentals",
-      total: 3,
-      color: "bg-blue-300",
-    },
-    {
-      id: 2,
-      icon: "icon",
-      name: "Total Paid",
-      total: `₹${152}`,
-      color: "bg-green-300",
-    },
-    {
-      id: 3,
-      icon: "icon",
-      name: "Loyalty Points",
-      total: 4,
-      color: "bg-red-300",
-    },
-    {
-      id: 4,
-      icon: "icon",
-      name: "Up Comming Delivery",
-      total: 0,
-      color: "bg-yellow-300",
-    },
-  ];
-
-  const ACTIVERENTS = [
-    {
-      id: 1,
-      image: " https://picsum.photos/200/300",
-      title: "Title Name",
-      status: "Status",
-      deliveredDate: "dd-mm-yyyy",
-      nextPayment: "dd-mm-yyyy",
-      price: "₹45",
-      button: "Manage Rentals",
-    },
-    {
-      id: 2,
-      image: " https://picsum.photos/200/300",
-      title: "Title Name",
-      status: "Status",
-      deliveredDate: "dd-mm-yyyy",
-      nextPayment: "dd-mm-yyyy",
-      price: "₹85",
-      button: "Manage Rentals",
-    },
-  ];
 
   useEffect(() => {
     if (!orderData && !loading) dispatch(fetchOrders());
@@ -94,10 +79,10 @@ const UserDashboard = () => {
         {totalNumber?.map((item) => (
           <div
             key={item.id}
-            className={` flex gap-3 w-4/4 p-5 bg-white border border-gray-300 rounded-lg shadow-lg`}
+            className={` flex items-center gap-5 w-4/4 p-5 bg-white border ${item.border} rounded-lg shadow-lg`}
           >
             <p
-              className={`p-2 rounded-full text-center pt-4 h-15 w-15 ${item.color}`}
+              className={`p-2 rounded-full flex justify-center items-center h-12 w-12 ${item.color}`}
             >
               {item.icon}
             </p>
@@ -113,50 +98,61 @@ const UserDashboard = () => {
       <div>
         <div className="flex justify-between mt-8 ">
           <p className="text-xl text-gray-700 font-bold">Active Rentals</p>
-          <p className="text-blue-500 cursor-pointer hover:text-blue-600  ">
+          <Link
+            to="subscriptions"
+            className="text-blue-500 cursor-pointer hover:text-blue-600  "
+          >
             View All
-          </p>
+          </Link>
         </div>
-        <div className="flex gap-4 ">
-          {ACTIVERENTS?.map((item) => (
-            <div
-              key={item.id}
-              className="flex my-4 border w-2/2 border-gray-300 bg-gray-50 rounded-lg shadow-lg "
-            >
-              <img
-                src={item.image}
-                alt="img"
-                className="w-1/3 h-40 rounded-l-lg"
-              />
+        {subscriptions?.length === 0 ? (
+          <p className="bg-white border border-gray-300  rounded-md my-2 px-2 py-4">
+            No active subscriptions.
+          </p>
+        ) : (
+          <div className="flex gap-4 ">
+            {subscriptions?.map((item) => (
+              <div
+                key={item._id}
+                className="flex my-4 border w-2/2 border-gray-300 bg-gray-50 rounded-lg shadow-lg "
+              >
+                <img
+                  src={/*item.image*/ "https://picsum.photos/200/300"}
+                  alt="img"
+                  className="w-1/3 h-40 rounded-l-lg"
+                />
 
-              <div className="px-4 py-2 space-y-2 h-fit w-2/3">
-                <p className="font-bold flex justify-between ">
-                  {item.title}
-                  <span className="text-xs font-medium px-2 p-1 rounded-xl bg-green-300">
-                    {item.status}
-                  </span>
-                </p>
-                <p className=" flex gap-1 items-center text-sm text-gray-500">
-                  <CiCalendar />
-                  Started: {item.deliveredDate}
-                </p>
-                <p className=" flex gap-1 items-center text-sm text-gray-500 ">
-                  <LuCalendarFold />
-                  Next Payment:{item.nextPayment}
-                </p>
-                <div className="flex items-center  justify-between mt-4">
-                  <p className=" font-bold text-xl ">{item.price}</p>
-                  <button
-                    className="bg-blue-500 px-3 py-1 hover:bg-blue-600 cursor-pointer transition-colors duration-300
+                <div className="px-4 py-2 space-y-2 h-fit w-2/3">
+                  <p className="font-bold flex justify-between ">
+                    {item?.orderItems?.map((title) => title?.title)}
+                    <span className="text-xs font-medium px-2 p-1 rounded-xl bg-green-300">
+                      {item.orderStatus === "Delivered"
+                        ? "pending"
+                        : item.rentalStatus}
+                    </span>
+                  </p>
+                  <p className=" flex gap-1 items-center text-sm text-gray-500">
+                    <CiCalendar />
+                    Started: {formatDate(item.createdAt)}
+                  </p>
+                  <p className=" flex gap-1 items-center text-sm text-gray-500 ">
+                    <LuCalendarFold />
+                    Next Payment:{item.nextPaymentDate}
+                  </p>
+                  <div className="flex items-center  justify-between mt-4">
+                    <p className=" font-bold text-xl ">₹{item.totalPrice}</p>
+                    <button
+                      className="bg-blue-500 px-3 py-1 hover:bg-blue-600 cursor-pointer transition-colors duration-300
                    text-white rounded-md text-center"
-                  >
-                    {item.button}
-                  </button>
+                    >
+                      {item.button}Manage
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Rental History */}

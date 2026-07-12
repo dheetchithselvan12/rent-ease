@@ -11,6 +11,7 @@ import MyOrders from "./pages/UserAccount-pages/MyOrders.jsx";
 import OrderDetailes from "./pages/UserAccount-pages/OrderDetailes.jsx";
 import UserAccount from "./pages/UserAccount-pages/UserAccount.jsx";
 import UserDashboard from "./pages/UserAccount-pages/UserDashboard.jsx";
+import ActiveSubscriptions from "./pages/UserAccount-pages/ActiveSubscriptions.jsx";
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -39,11 +40,7 @@ const App = () => {
             <Route index element={<UserDashboard />} />
             <Route path="orders" element={<MyOrders />} />
             <Route path="orders/:id" element={<OrderDetailes />} />
-            <Route
-              path="subscriptions"
-              element={<div> active Subscriptions</div>}
-            />
-            <Route path="wishlist" element={<div>Wishlist</div>} />
+            <Route path="subscriptions" element={<ActiveSubscriptions />} />
             <Route path="settings" element={<div>Settings</div>} />
           </Route>
         </Route>

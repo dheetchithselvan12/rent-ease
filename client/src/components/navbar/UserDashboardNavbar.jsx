@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
 import { MdOutlineDashboard } from "react-icons/md";
-import { FiHeart } from "react-icons/fi";
 import { CgNotes } from "react-icons/cg";
 import { CiSettings } from "react-icons/ci";
 import { VscArchive } from "react-icons/vsc";
@@ -68,16 +67,6 @@ const UserDashboardNavbar = () => {
           }
         >
           <VscArchive size={20} /> Active Subscriptions
-        </NavLink>
-        <NavLink
-          to="/my-account/wishlist"
-          className={({ isActive }) =>
-            isActive
-              ? "flex gap-2 items-center text-blue-500 bg-blue-100 rounded-md p-2 "
-              : "flex gap-2 items-center hover:border-gray-100 hover:bg-blue-100 hover:text-blue-500 transition-colors duration-500 rounded-md p-2 "
-          }
-        >
-          <FiHeart size={20} /> Wishlist
         </NavLink>
         <NavLink
           to="/my-account/settings"
