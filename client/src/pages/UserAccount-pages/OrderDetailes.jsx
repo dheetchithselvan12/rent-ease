@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useParams } from "react-router-dom";
 import OrderItem from "../../components/orders/OrderItem";
 import OrderStatus from "../../components/orders/OrderStatus";
@@ -9,6 +9,7 @@ import { DeliveryDetaile } from "../../components/orders/DeliveryDetaile";
 import OrderSummary from "../../components/orders/OrderSummary";
 import BreadCrumbs from "../../components/mui/BreadCrumbs.jsx";
 import { formatDate } from "../../utils/dateUtils.js";
+import { fetchOrderByIdAPI } from "../../features/order/orderAPI.js";
 
 const OrderDetailes = () => {
   const { id } = useParams();
@@ -17,9 +18,7 @@ const OrderDetailes = () => {
   useEffect(() => {
     const fetchOrderDetailes = async () => {
       try {
-        const { data } = await axios.get(
-          `http://localhost:5000/api/orders/${id}`,
-        );
+        const data = await fetchOrderByIdAPI(id);
         const datas = data.data;
         setOrderData(datas);
       } catch (error) {
@@ -27,7 +26,7 @@ const OrderDetailes = () => {
       }
     };
     fetchOrderDetailes();
-  }, []);
+  }, [id]);
   return (
     <div className="px-10  h-fit bg-blue-50/50 ">
       <div className="flex justify-between mb-5 ">

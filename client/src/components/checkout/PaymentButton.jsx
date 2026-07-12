@@ -6,15 +6,23 @@ import { useNavigate } from "react-router-dom";
 import { clearCart } from "../../features/cart/cartSlice";
 const PaymentButton = ({ apiOrderData }) => {
   const { orderData } = useSelector((state) => state.checkout);
+  const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   console.log("oderPayload", orderData);
 
   const handleClick = async () => {
     try {
+      const authToken = token || window.localStorage.getItem("authToken");
+
       const response = await axios.post(
         "http://localhost:5000/api/orders",
         apiOrderData,
+        {
+          headers: authToken
+            ? { Authorization: `Bearer ${authToken}` }
+            : undefined,
+        },
       );
       const success = response.data?.success;
       if (success === true) {
