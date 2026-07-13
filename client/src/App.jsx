@@ -16,6 +16,7 @@ import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
+import Settings from "./pages/UserAccount-pages/Settings.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -41,7 +42,7 @@ const App = () => {
             <Route path="orders" element={<MyOrders />} />
             <Route path="orders/:id" element={<OrderDetailes />} />
             <Route path="subscriptions" element={<ActiveSubscriptions />} />
-            <Route path="settings" element={<div>Settings</div>} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
 
