@@ -39,7 +39,10 @@ const UserDashboard = () => {
       id: 4,
       icon: <CiDeliveryTruck size={28} />,
       name: "Up Comming Delivery",
-      total: subscriptions?.map((item) => item.orderStatus).length || 0,
+      total:
+        orderData
+          ?.filter((item) => item.orderStatus !== "Delivered")
+          .map((item) => item.orderStatus).length || 0,
       color: "bg-yellow-200",
       border: "border-yellow-300",
     },
@@ -137,7 +140,7 @@ const UserDashboard = () => {
                   </p>
                   <p className=" flex gap-1 items-center text-sm text-gray-500 ">
                     <LuCalendarFold />
-                    Next Payment:{item.nextPaymentDate}
+                    End:{item.nextPaymentDate}
                   </p>
                   <div className="flex items-center  justify-between mt-4">
                     <p className=" font-bold text-xl ">₹{item.totalPrice}</p>

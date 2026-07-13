@@ -81,8 +81,7 @@ const ActiveSubscriptions = () => {
                       </p>
                       <p className="flex gap-2 items-center text-sm text-gray-500">
                         <LuCalendarFold />
-                        Next Payment Date:{" "}
-                        {formatDate(subscription.nextPaymentDate)}
+                        End Date: {formatDate(subscription.nextPaymentDate)}
                       </p>
                       <p className="font-semibold text-lg text-gray-900">
                         Monthly Fee: ₹{orderItem.price}
