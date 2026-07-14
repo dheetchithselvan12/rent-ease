@@ -3,6 +3,7 @@ import cors from "cors";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import session from "express-session";
 import passport from "passport";
 import User from "./models/userModel.js";
@@ -34,6 +35,7 @@ passport.deserializeUser(async(id, done) => {
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes)
+app.use("/api/users",userRoutes)
 
 
 

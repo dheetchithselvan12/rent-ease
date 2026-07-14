@@ -7,6 +7,8 @@ const InputField = forwardRef(
       label,
       id,
       name,
+      value,
+      defaultValue,
       type = "text",
       placeholder,
       icon: Icon,
@@ -14,6 +16,7 @@ const InputField = forwardRef(
       className = "w-full",
       showPassword,
       setShowPassword,
+      readOnly,
       ...props
     },
     ref,
@@ -38,8 +41,11 @@ const InputField = forwardRef(
             type={inputType}
             id={id}
             name={name}
+            value={value}
+            defaultValue={defaultValue}
             placeholder={placeholder}
-            className={`outline-none ${className}`}
+            readOnly={readOnly}
+            className={`outline-none ${className} ${readOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
             {...props}
           />
           {isPasswordField && (

@@ -8,7 +8,7 @@ const Settings = () => {
   return (
     <div className="flex flex-col gap-4">
       <Sidebar active={active} setActive={setActive} />
-      <div className="w-3/4 ">
+      <div className="flex flex-col items-center w-3/4 ">
         {active === "Profile" && <UserSettings />}
         {active === "Email Notifications" && <EmailNotifications />}
       </div>
