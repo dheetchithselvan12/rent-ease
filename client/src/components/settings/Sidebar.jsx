@@ -1,7 +1,7 @@
 const Sidebar = ({ active, setActive }) => {
   const links = ["Profile", "Email Notifications"];
   return (
-    <div className="flex  gap-4 border-b border-gray-400 pb-4">
+    <div className="flex sticky top-25  gap-4 border-b border-gray-400 pb-4">
       {links.map((link) => (
         <button
           key={link}
