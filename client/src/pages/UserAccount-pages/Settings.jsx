@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UserSettings from "../../components/settings/UserSettings";
 import Sidebar from "../../components/settings/Sidebar";
-import EmailNotifications from "../../components/settings/EmailNotifications";
+import UserAddressSettings from "../../components/settings/UserAddressSettings";
 
 const Settings = () => {
   const [active, setActive] = useState("Profile");
@@ -10,7 +10,7 @@ const Settings = () => {
       <Sidebar active={active} setActive={setActive} />
       <div className="flex flex-col items-center w-3/4 ">
         {active === "Profile" && <UserSettings />}
-        {active === "Email Notifications" && <EmailNotifications />}
+        {active === "Address" && <UserAddressSettings />}
       </div>
     </div>
   );

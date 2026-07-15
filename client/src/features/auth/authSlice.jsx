@@ -17,6 +17,16 @@ const getStoredAuth = () => {
 
 const initialState = getStoredAuth();
 
+const syncStoredUser = (user) => {
+  if (typeof window === "undefined") return;
+
+  if (user) {
+    window.localStorage.setItem("authUser", JSON.stringify(user));
+  } else {
+    window.localStorage.removeItem("authUser");
+  }
+};
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -28,11 +38,24 @@ const authSlice = createSlice({
 
       if (typeof window !== "undefined") {
         window.localStorage.setItem("authToken", action.payload.token);
-        window.localStorage.setItem(
-          "authUser",
-          JSON.stringify(action.payload.user),
-        );
+        syncStoredUser(action.payload.user);
       }
+    },
+    updateProfile: (state, action) => {
+      state.user = {
+        ...state.user,
+        ...action.payload,
+      };
+
+      syncStoredUser(state.user);
+    },
+    updateAddress: (state, action) => {
+      state.user = {
+        ...(state.user || {}),
+        address: action.payload,
+      };
+
+      syncStoredUser(state.user);
     },
     logout: (state) => {
       state.user = null;
@@ -41,11 +64,12 @@ const authSlice = createSlice({
 
       if (typeof window !== "undefined") {
         window.localStorage.removeItem("authToken");
-        window.localStorage.removeItem("authUser");
+        syncStoredUser(null);
       }
     },
   },
 });
 
-export const { loginSuccess, logout } = authSlice.actions;
+export const { loginSuccess, updateProfile, updateAddress, logout } =
+  authSlice.actions;
 export default authSlice.reducer;
