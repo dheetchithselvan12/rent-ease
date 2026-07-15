@@ -1,22 +1,21 @@
 import { useRef } from "react";
-import axios from "axios";
 import InputField from "../common/InputField";
 import { FaCamera } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FaUser } from "react-icons/fa6";
 import { useSelector } from "react-redux";
+import { updateUserAPI } from "../../features/user/userAPI";
+import { useDispatch } from "react-redux";
+import { updateProfile } from "../../features/auth/authSlice";
 
 const UserSettings = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const firstNameRef = useRef();
   const lastNameRef = useRef();
   const emailRef = useRef();
 
-  const getAuthHeaders = () => {
-    const token = window.localStorage.getItem("authToken");
-
-    return token ? { authorization: `Bearer ${token}` } : {};
-  };
+  console.log("user : ", user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,15 +24,13 @@ const UserSettings = () => {
       lastName: lastNameRef.current.value,
       email: emailRef.current.value,
     };
-    console.log("Profile updated : ", formData, "token", getAuthHeaders());
+    console.log("Profile updated : ", formData);
 
     try {
-      const response = await axios.put(
-        "http://localhost:5000/api/users/profile",
-        formData,
-        { headers: getAuthHeaders() },
-      );
+      const response = await updateUserAPI(formData);
       console.log("response : ", response);
+      // Update local storage
+      dispatch(updateProfile(response.user));
     } catch (error) {
       console.log("error : ", error?.response?.data?.message);
     }
