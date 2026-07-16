@@ -101,6 +101,7 @@ export const loginUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 avatar: user.avatar || "",
+                address: user.address
             }
         })
 

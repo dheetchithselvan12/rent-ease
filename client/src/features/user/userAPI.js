@@ -15,7 +15,5 @@ export const updateUserAPI = async (formData) => {
 
 export const updateUserAddressAPI = async (formData) => {
     const response = await API.put("/address", formData, { headers: getAuthHeaders()});
-    console.log("response : ", response.data);
-    
     return response.data;
 }
