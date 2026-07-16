@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { updateUserAPI } from "../../features/user/userAPI";
 import { useDispatch } from "react-redux";
 import { updateProfile } from "../../features/auth/authSlice";
+import { UserAvatar } from "../common/UserAvatar";
 
 const UserSettings = () => {
   const dispatch = useDispatch();
@@ -45,11 +46,7 @@ const UserSettings = () => {
         </p>
       </div>
       <div className="bg-blue-100 w-fit p-4 rounded-lg my-4 relative">
-        <img
-          src={"https://picsum.photos/200/300"}
-          alt="img"
-          className="w-20 h-20 rounded-full border-3 border-blue-500"
-        />
+        <UserAvatar className="w-20 h-20 rounded-full" />
         <FaCamera
           size={20}
           className="absolute bottom-5 right-5 text-gray-600"
