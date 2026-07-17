@@ -104,7 +104,7 @@ export const createProduct = async (req, res) => {
 // Get /api/products
 export const getProducts = async (req, res) => {
     try{
-        const {category, categories, maxPrice, tenures, page = 1, limit = 10} = req.query;
+        const {category, categories, maxPrice, tenures, search, page = 1, limit = 10} = req.query;
 
         // filter object
         const filter = {}
@@ -127,6 +127,19 @@ export const getProducts = async (req, res) => {
             const tenuresArray = tenures.split(',').filter(Boolean).map(Number);
             if (tenuresArray.length > 0) {
                 filter["tenurePlans.duration"] = { $in: tenuresArray };
+            }
+        }
+
+        if (search) {
+            const searchTerm = search.trim();
+            if (searchTerm) {
+                const searchRegex = new RegExp(searchTerm, "i");
+                filter.$or = [
+                    { name: searchRegex },
+                    { title: searchRegex },
+                    { description: searchRegex },
+                    { category: searchRegex },
+                ];
             }
         }
 
