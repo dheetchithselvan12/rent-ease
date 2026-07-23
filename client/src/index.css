@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@utility custom-scrollbar {
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--color-blue-100); /* Uses Tailwind's theme color variable */
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-blue-300);
+    border-radius: 9999px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--color-blue-600);
+  }
+
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-blue-700) var(--color-blue-100);
+}

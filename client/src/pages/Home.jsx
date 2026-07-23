@@ -1,43 +1,54 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../features/products/productsSlice.js";
 import { FiSearch, FiCalendar, FiTruck } from "react-icons/fi";
+import ProductSkeleton from "../components/product/ProductSkeleton";
 
 import MAINIMG from "../assets/homeImg.png";
 import FURNITURE from "../assets/furniture.png";
 import APPLIANCES from "../assets/appliances.jpg";
+import ProductCard from "../components/product/ProductCard";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-  const category = [
+  const dispatch = useDispatch();
+
+  const { items, loading, error, meta } = useSelector(
+    (state) => state.products,
+  );
+
+  const [page, setPage] = useState(1);
+  const limit = 4;
+
+  const categorys = [
     { imgage: FURNITURE, title: "Furnitures", link: "Explore Collection ➜" },
     { imgage: APPLIANCES, title: "Appliances", link: "View appliances ➜" },
   ];
-  const products = [
-    {
-      imgage: FURNITURE,
-      title: "Noridc Fabric Sofa",
-      description: "Minimalist 3-seater",
-      tag: "Living Room",
-      amount: "$29",
-      tuen: "/mo",
-      tuner: "12 mo tuner",
-    },
-    {
-      imgage: APPLIANCES,
-      title: "Smart Inverter Fridge",
-      description: "320L Frost Free",
-      tag: "Appliance",
-      amount: "$35",
-      tuen: "/mo",
-      tuner: "6 mo tuner",
-    },
-    {
-      imgage: MAINIMG,
-      title: "Queen Storage Bed",
-      description: "With Orthopedic Mattress",
-      tag: "Bedroom",
-      amount: "$42",
-      tuen: "/mo",
-      tuner: "12 mo tuner",
-    },
-  ];
+
+  useEffect(() => {
+    const params = {
+      page,
+      limit,
+    };
+
+    dispatch(fetchProducts(params));
+  }, [dispatch, page]);
+
+  const handlePrev = () => {
+    if (page > 1) setPage((prev) => prev - 1);
+  };
+
+  const handleNext = () => {
+    if (meta?.pages && page < meta.pages) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(fetchProducts({ page: 1, limit: 4 }));
+  }, [dispatch]);
+
+  if (error) return <h2>Error: {error}</h2>;
 
   const guide = [
     {
@@ -91,20 +102,17 @@ const Home = () => {
 
         {/* Category  */}
         <section className="px-15 my-20 ">
-          <h2 className="text-xl font-bold">Shop by Category</h2>
+          <h2 className="text-xl font-bold">Available Category</h2>
 
           {/* Category Links */}
           <div className="flex justify-between gap-4 my-5 p-2 text-white">
-            {category.map((item, index) => (
+            {categorys.map((item, index) => (
               <div
                 key={index}
                 className="w-1/2 relative hover:scale-102  duration-500"
               >
                 <div className="absolute z-1 left-10 bottom-10">
                   <p className="text-3xl mb-2 font-medium">{item.title}</p>
-                  <a className="text-sm text-gray-200 underline cursor-pointer hover:text-blue-300 transition-all">
-                    {item.link}
-                  </a>
                 </div>
                 <img
                   src={item.imgage}
@@ -116,47 +124,52 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Featured Products */}
+        {/* Products */}
         <section className="px-15 my-10">
-          {/* Titel */}
-          <div className="flex justify-between my-5 items-center">
-            <h2 className="text-2xl font-medium">Featured Products</h2>
-            <a className="text-blue-600 cursor-pointer">View All</a>
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold">Products</h1>
+            <Link
+              to="/products"
+              className="text-blue-500 hover:text-blue-600 text-sm font-medium cursor-pointer"
+            >
+              View All
+            </Link>
           </div>
+
           {/* product cards */}
-          <div className="flex mb-30 gap-5 pb-20">
-            {products.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white w-1/3 rounded-xl border border-black/20 relative cursor-pointer"
-              >
-                <img
-                  src={item.imgage}
-                  alt="Image"
-                  className="w-full h-55 rounded-t-xl"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-medium">{item.title}</h3>
-                  <p className="text-sm text-gray-500">{item.description}</p>
-                  <div className="flex justify-between mt-10">
-                    <p className="text-xl font-bold">
-                      {item.amount}
-                      <span className="text-sm text-gray-500 mx-1">
-                        {item.tuen}
-                      </span>
-                    </p>
-                    <div className="px-2 py-1 rounded-sm bg-blue-500/10">
-                      <p className="text-xs font-medium">{item.tuner}</p>
-                    </div>
-                    <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded-full items-center">
-                      <p className="text-xs text-blue-700 font-bold">
-                        {item.tag}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {loading
+              ? [...Array(limit)].map((_, index) => (
+                  <ProductSkeleton key={index} />
+                ))
+              : items.map((product) => (
+                  <ProductCard key={product._id} product={product} />
+                ))}
+          </div>
+
+          {/* page change */}
+          <div className="flex justify-center items-center gap-4 mt-8">
+            <button
+              type="button"
+              onClick={handlePrev}
+              disabled={page === 1}
+              className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+
+            <span className="font-semibold">
+              Page {page} {meta?.pages ? `of ${meta.pages}` : ""}
+            </span>
+
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={meta?.pages ? page >= meta.pages : false}
+              className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+            >
+              Next
+            </button>
           </div>
         </section>
 
