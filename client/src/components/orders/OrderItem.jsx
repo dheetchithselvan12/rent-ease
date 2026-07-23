@@ -1,4 +1,5 @@
 import { MdOutlineEventRepeat } from "react-icons/md";
+import { Link } from "react-router-dom";
 const OrderItem = ({ data }) => {
   console.log("data: ", data);
 
@@ -13,11 +14,13 @@ const OrderItem = ({ data }) => {
             key={item._id}
             className="flex w-full gap-3 p-5 border-b border-gray-300"
           >
-            <img
-              src={item?.image}
-              alt="image"
-              className="border w-22 h-20 rounded-md cursor-pointer "
-            />
+            <Link to={`/products/${item?.productId}`}>
+              <img
+                src={item?.image}
+                alt="image"
+                className="border w-22 h-20 rounded-md cursor-pointer "
+              />
+            </Link>
             <div className="flex flex-col w-full">
               <p className="text-lg font-semibold">{item?.title}</p>
               <p className="text-sm text-gray-500">

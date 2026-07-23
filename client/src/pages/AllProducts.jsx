@@ -253,7 +253,7 @@ const AllProducts = () => {
             ))}
           {error && (
             <div className="col-span-4 text-center text-red-500 py-10">
-              {error}
+              {error.message}
             </div>
           )}
         </div>

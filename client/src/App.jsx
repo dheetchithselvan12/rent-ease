@@ -17,11 +17,18 @@ import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import Settings from "./pages/UserAccount-pages/Settings.jsx";
+import { useSelector } from "react-redux";
+// import AdminNavbar from "./components/navbar/AdminNavbar.jsx";
+import Products from "./admin/Products.jsx";
+import DeveloperMessage from "./components/common/DeveloperMessage.jsx";
 
 const App = () => {
   const location = useLocation();
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
+
+  const role = useSelector((state) => state.auth?.user?.role);
+  console.log("User role : ", role);
 
   return (
     <>
@@ -38,12 +45,29 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/my-account" element={<UserAccount />}>
-            <Route index element={<UserDashboard />} />
-            <Route path="orders" element={<MyOrders />} />
-            <Route path="orders/:id" element={<OrderDetailes />} />
-            <Route path="subscriptions" element={<ActiveSubscriptions />} />
-            <Route path="settings" element={<Settings />} />
+            {role === "admin" ? (
+              <>
+                <Route index element={<DeveloperMessage />} />
+                <Route path="products" element={<Products />} />
+                <Route path="orders" element={<DeveloperMessage />} />
+                <Route path="rentals" element={<DeveloperMessage />} />
+                <Route path="customers" element={<DeveloperMessage />} />
+                <Route path="settings" element={<DeveloperMessage />} />
+              </>
+            ) : (
+              <>
+                <Route index element={<UserDashboard />} />
+                <Route path="orders" element={<MyOrders />} />
+                <Route path="orders/:id" element={<OrderDetailes />} />
+                <Route path="subscriptions" element={<ActiveSubscriptions />} />
+                <Route path="settings" element={<Settings />} />
+              </>
+            )}
           </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route path="/admin/products" element={<Products />} />
         </Route>
 
         {/* Public routes for authentication */}

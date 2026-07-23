@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "../../config/api";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api/users" });
+const API = axios.create({ baseURL: `${API_BASE_URL}/users` });
 
 const getAuthHeaders = () => {
     const token = window.localStorage.getItem("authToken");

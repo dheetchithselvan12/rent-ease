@@ -4,6 +4,7 @@ import { RiLock2Fill } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../../features/cart/cartSlice";
+import { API_BASE_URL } from "../../config/api";
 const PaymentButton = ({ apiOrderData }) => {
   const { orderData } = useSelector((state) => state.checkout);
   const { token } = useSelector((state) => state.auth);
@@ -16,7 +17,7 @@ const PaymentButton = ({ apiOrderData }) => {
       const authToken = token || window.localStorage.getItem("authToken");
 
       const response = await axios.post(
-        "http://localhost:5000/api/orders",
+        `${API_BASE_URL}/orders`,
         apiOrderData,
         {
           headers: authToken
