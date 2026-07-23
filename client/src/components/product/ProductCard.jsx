@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
+import { getFirstProductImageUrl } from "../../utils/productImages";
+
 const ProductCard = ({ product }) => {
   // get lowest price;
   const lowestPlan = product.tenurePlans?.[0];
+  const imageUrl =
+    getFirstProductImageUrl(product.images) || "https://picsum.photos/200/300";
+
   return (
     <Link
       to={`/products/${product._id}`}
@@ -9,7 +14,7 @@ const ProductCard = ({ product }) => {
     >
       {/* Image */}
       <img
-        src={product.images?.[0] || "https://picsum.photos/200/300"}
+        src={imageUrl}
         alt={product.name}
         className="w-full h-40 object-cover rounded-xl"
       />

@@ -23,9 +23,10 @@ const InputField = forwardRef(
   ) => {
     const isPasswordField = type === "password";
     const inputType = isPasswordField && showPassword ? "text" : type;
+    const isFileField = type === "file";
 
     return (
-      <div className="flex flex-col gap-2 flex-1">
+      <div className="flex flex-col gap-1 flex-1">
         <label
           htmlFor={id}
           className="text-sm font-semibold text-gray-600 cursor-pointer"
@@ -33,7 +34,7 @@ const InputField = forwardRef(
           {label}
         </label>
         <div
-          className={`flex gap-3 items-center border border-gray-300 bg-blue-50/40 text-gray-500 w-full rounded-md p-2  ${error && "border-red-500 "}`}
+          className={`flex gap-3 items-center border border-gray-300 bg-white text-gray-500 w-full rounded-md p-2  ${error && "border-red-500 "}`}
         >
           {Icon && <Icon />}
           <input
@@ -41,7 +42,7 @@ const InputField = forwardRef(
             type={inputType}
             id={id}
             name={name}
-            value={value}
+            value={isFileField ? undefined : value}
             defaultValue={defaultValue}
             placeholder={placeholder}
             readOnly={readOnly}

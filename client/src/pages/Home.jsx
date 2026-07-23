@@ -102,7 +102,7 @@ const Home = () => {
 
         {/* Category  */}
         <section className="px-15 my-20 ">
-          <h2 className="text-xl font-bold">Shop by Category</h2>
+          <h2 className="text-xl font-bold">Available Category</h2>
 
           {/* Category Links */}
           <div className="flex justify-between gap-4 my-5 p-2 text-white">
@@ -113,9 +113,6 @@ const Home = () => {
               >
                 <div className="absolute z-1 left-10 bottom-10">
                   <p className="text-3xl mb-2 font-medium">{item.title}</p>
-                  <a className="text-sm text-gray-200 underline cursor-pointer hover:text-blue-300 transition-all">
-                    {item.link}
-                  </a>
                 </div>
                 <img
                   src={item.imgage}

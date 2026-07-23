@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FiShoppingCart, FiInfo } from "react-icons/fi";
 import ProductCard from "../components/product/ProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
+import { setCheckoutData } from "../features/checkout/checkoutSlice";
+import {
+  getFirstProductImageUrl,
+  getProductImageUrl,
+} from "../utils/productImages";
+import { API_BASE_URL } from "../config/api";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cartItem } = useSelector((state) => state.cart);
 
   const [product, setProduct] = useState(null);
@@ -16,6 +23,7 @@ const ProductDetails = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [similarProducts, setSimilarProducts] = useState([]);
+  const [selectedImage, setSelectedImage] = useState();
 
   const isInCart = cartItem.some((item) => item.productId === product?._id);
 
@@ -24,18 +32,19 @@ const ProductDetails = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:5000/api/products/${id}`,
+          `${API_BASE_URL}/products/${id}`,
         );
 
         const fetchedProduct = response.data.data;
         setProduct(fetchedProduct);
-        if (response.data?.tenurePlans?.length > 0) {
-          setSelectedPlan(response.data.data.tenurePlans[0]);
+        setSelectedImage(getFirstProductImageUrl(fetchedProduct.images));
+        if (fetchedProduct.tenurePlans?.length > 0) {
+          setSelectedPlan(fetchedProduct.tenurePlans[0]);
         }
 
         // Fetch similar products based on category
         const similarResponse = await axios.get(
-          `http://localhost:5000/api/products?category=${fetchedProduct.category}&limit=5`,
+          `${API_BASE_URL}/products?category=${fetchedProduct.category}&limit=5`,
         );
         const productsArray = similarResponse.data.data || [];
         const filteredSimilar = productsArray
@@ -53,20 +62,45 @@ const ProductDetails = () => {
   }, [id]);
 
   // Add to cart
+  const buildRentalItem = () => ({
+    productId: product._id,
+    name: product.name,
+    title: product.title,
+    description: product.description,
+    image: getFirstProductImageUrl(product.images),
+    tenure: selectedPlan.duration,
+    price: selectedPlan.totalPrice,
+    securityDeposit: product.securityDeposit,
+  });
+
   const handleAddToCart = () => {
     dispatch(
-      addToCart({
-        productId: product._id,
-        name: product.name,
-        title: product.title,
-        description: product.description,
-        image: product.images[0],
-        tenure: selectedPlan.duration,
-        price: selectedPlan.totalPrice,
-        securityDeposit: product.securityDeposit,
-      }),
+      addToCart(buildRentalItem()),
     );
     console.log("Cart Added");
+  };
+
+  const handleRentNow = () => {
+    if (!product || !selectedPlan) {
+      return;
+    }
+    const rentalItem = { ...buildRentalItem(), quantity: 1 };
+    const monthlyRent = Number(rentalItem.price) || 0;
+    const securityDeposit = Number(rentalItem.securityDeposit) || 0;
+
+    dispatch(
+      setCheckoutData({
+        items: [rentalItem],
+        summary: {
+          totalItems: 1,
+          monthlyRent,
+          securityDeposit,
+          totalPrice: monthlyRent + securityDeposit,
+        },
+      }),
+    );
+
+    navigate("/checkout");
   };
 
   if (loading) {
@@ -84,38 +118,27 @@ const ProductDetails = () => {
           {/* LEFT IMAGE */}
           <div className="relative flex flex-col gap-8 w-[54%] bg-white px-8 py-8 rounded-xl">
             <img
-              src={"https://images.unsplash.com/photo-1551288049-bebda4e38f71"}
+              src={selectedImage || getFirstProductImageUrl(product.images)}
               alt={product.name}
-              className=" rounded-2xl shadow-md"
+              className=" w-full h-full object-cover rounded-2xl shadow-md"
             />
             <p className=" absolute top-10 right-10 bg-blue-500/20 rounded-full px-3 py-1 w-fit text-xs font-bold">
               {product.name}
             </p>
             <div className="flex gap-4 w-full cursor-pointer ">
-              <img
-                className="w-40 h-40 bg-gray-300 rounded-md"
-                src={
-                  "https://images.unsplash.com/photo-1551288049-bebda4e38f71"
-                }
-              />
-              <img
-                className="w-40 h-40 bg-gray-300 rounded-md"
-                src={
-                  "https://images.unsplash.com/photo-1551288049-bebda4e38f71"
-                }
-              />
-              <img
-                className="w-40 h-40 bg-gray-300 rounded-md"
-                src={
-                  "https://images.unsplash.com/photo-1551288049-bebda4e38f71"
-                }
-              />
-              <img
-                className="w-40 h-40 bg-gray-300 rounded-md"
-                src={
-                  "https://images.unsplash.com/photo-1551288049-bebda4e38f71"
-                }
-              />
+              {product.images?.map((image, index) => {
+                const imageUrl = getProductImageUrl(image);
+
+                return imageUrl ? (
+                  <img
+                    key={index}
+                    src={imageUrl}
+                    alt={`${product.name} ${index + 1}`}
+                    onClick={() => setSelectedImage(imageUrl)}
+                    className="w-40 h-40 bg-gray-300 border border-slate-400 rounded-md object-cover"
+                  />
+                ) : null;
+              })}
             </div>
           </div>
 
@@ -233,9 +256,10 @@ const ProductDetails = () => {
             {/* Button */}
             <div className="flex flex-col gap-4 ">
               <button
+                onClick={handleRentNow}
                 className="
-              mt-8
-              w-full
+                mt-8
+                w-full
               bg-blue-500
               text-white
               py-3
@@ -247,6 +271,7 @@ const ProductDetails = () => {
               >
                 Rent Now
               </button>
+
               <button
                 onClick={isInCart ? undefined : handleAddToCart}
                 disabled={isInCart}

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   DeliveryDetailesForm,
   DeliveryScheduleForm,
@@ -10,6 +10,27 @@ import OderSummary from "../components/checkout/OderSummary";
 
 const Checkout = () => {
   const orderData = useSelector((state) => state.checkout.orderData);
+  const authUser = useSelector((state) => state.auth.user);
+
+  const savedDeliveryDetails = useMemo(() => {
+    const savedAddress = authUser?.address || {};
+    return {
+      name: savedAddress.name || [authUser?.firstName, authUser?.lastName].filter(Boolean).join(" "),
+      email: authUser?.email || "",
+      phone: savedAddress.phone || "",
+      address: savedAddress.address || "",
+      city: savedAddress.city || "",
+      state: savedAddress.state || "",
+      pincode: savedAddress.pincode || "",
+    };
+  }, [authUser]);
+
+  const hasSavedAddress = Boolean(
+    savedDeliveryDetails.address &&
+      savedDeliveryDetails.city &&
+      savedDeliveryDetails.state &&
+      savedDeliveryDetails.pincode,
+  );
 
   // Lifted state for delivery forms
   const [deliveryDetails, setDeliveryDetails] = useState({
@@ -19,8 +40,12 @@ const Checkout = () => {
     address: "",
     city: "",
     state: "",
-    zipCode: "",
+    pincode: "",
   });
+  const [addressSource, setAddressSource] = useState("saved");
+  const selectedAddressSource = hasSavedAddress ? addressSource : "manual";
+  const activeDeliveryDetails =
+    selectedAddressSource === "saved" ? savedDeliveryDetails : deliveryDetails;
   const [deliverySchedule, setDeliverySchedule] = useState({
     deliveryDate: "",
     preferredTime: "",
@@ -30,14 +55,18 @@ const Checkout = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    setDeliveryDetails({
-      name: formData.get("name") || "",
-      phone: formData.get("phone") || "",
-      address: formData.get("address") || "",
-      city: formData.get("city") || "",
-      state: formData.get("state") || "",
-      zipCode: formData.get("zipCode") || "",
-    });
+    setDeliveryDetails(
+      selectedAddressSource === "saved"
+        ? savedDeliveryDetails
+        : {
+            name: formData.get("name") || "",
+            phone: formData.get("phone") || "",
+            address: formData.get("address") || "",
+            city: formData.get("city") || "",
+            state: formData.get("state") || "",
+            pincode: formData.get("pincode") || "",
+          },
+    );
     setDeliverySchedule({
       deliveryDate: formData.get("deliveryDate") || "",
       preferredTime: formData.get("preferredTime") || "",
@@ -56,7 +85,7 @@ const Checkout = () => {
   const { items, summary } = orderData;
   const apiOrderData = {
     orderItems: items,
-    deliveryDetails,
+    deliveryDetails: activeDeliveryDetails,
     deliverySchedule,
     paymentMethod: "Cash On Delivery",
     itemPrice: summary.monthlyRent,
@@ -72,18 +101,19 @@ const Checkout = () => {
       <div className="grid grid-cols-3 gap-8">
         <div className="col-span-2">
           {/* Delivery Details */}
-          {isSubmitted ? (
+          {isSubmitted || selectedAddressSource === "saved" ? (
             <div className="my-4 border border-green-200 rounded-lg p-5">
               <h2 className="text-xl font-semibold mb-4">Delivery Details</h2>
               <div className="space-y-2 text-gray-700">
                 <p className="text-lg font-medium">Deliver to : </p>
-                <p>Name : {deliveryDetails.name}</p>
+                <p>Name : {activeDeliveryDetails.name}</p>
                 <p>
-                  Address : {deliveryDetails.address}, {deliveryDetails.city},
-                  {deliveryDetails.state}, {deliveryDetails.zipCode}
+                  Address : {activeDeliveryDetails.address},{" "}
+                  {activeDeliveryDetails.city},
+                  {activeDeliveryDetails.state}, {activeDeliveryDetails.pincode}
                 </p>
                 <p className="text-sm text-gray-500 font-medium">
-                  <span>Phone : </span> {deliveryDetails.phone}
+                  <span>Phone : </span> {activeDeliveryDetails.phone}
                 </p>
               </div>
             </div>
@@ -105,7 +135,55 @@ const Checkout = () => {
             className="flex flex-col gap-4 mt-8"
             onSubmit={handleFormSubmit}
           >
-            <DeliveryDetailesForm />
+            {hasSavedAddress && (
+              <div className="bg-white p-5 border border-gray-200 rounded-xl shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                  Delivery Address
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className="border border-gray-300 rounded-lg p-4 cursor-pointer flex gap-3">
+                    <input
+                      type="radio"
+                      name="addressSource"
+                      value="saved"
+                      checked={selectedAddressSource === "saved"}
+                      onChange={() => {
+                        setAddressSource("saved");
+                        setDeliveryDetails(savedDeliveryDetails);
+                        setIsSubmitted(true);
+                      }}
+                    />
+                    <span>
+                      <span className="block font-medium text-gray-800">
+                        Saved Address
+                      </span>
+                      <span className="block text-sm text-gray-500 mt-1">
+                        {savedDeliveryDetails.address}, {savedDeliveryDetails.city}
+                      </span>
+                    </span>
+                  </label>
+                  <label className="border border-gray-300 rounded-lg p-4 cursor-pointer flex gap-3">
+                    <input
+                      type="radio"
+                      name="addressSource"
+                      value="manual"
+                      checked={selectedAddressSource === "manual"}
+                      onChange={() => {
+                        setAddressSource("manual");
+                        setIsSubmitted(false);
+                      }}
+                    />
+                    <span className="font-medium text-gray-800">
+                      Manual Address
+                    </span>
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {selectedAddressSource === "manual" && (
+              <DeliveryDetailesForm key="manual-address" />
+            )}
             <DeliveryScheduleForm />
             <button
               type="submit"

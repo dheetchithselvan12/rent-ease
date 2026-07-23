@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { FiShoppingCart, FiUser, FiSearch, FiXCircle } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const Navbar = () => {
-  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [search, setSearch] = useState(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get("search") || "";
+  });
   const NAVLINKS = [
     { name: "Home", path: "/" },
     { name: "Products", path: "/products" },
@@ -18,8 +23,20 @@ const Navbar = () => {
     setSearch(e.target.value);
   };
 
+  const handleSearch = (event) => {
+    if (event.type === "keydown" && event.key !== "Enter") return;
+
+    const trimmed = search.trim();
+    const targetPath = trimmed
+      ? `/products?search=${encodeURIComponent(trimmed)}`
+      : "/products";
+
+    navigate(targetPath);
+  };
+
   const handleRemove = () => {
     setSearch("");
+    navigate("/products");
   };
 
   return (
@@ -51,15 +68,22 @@ const Navbar = () => {
         </div>
 
         {/* Search */}
-        <div className="flex items-center  gap-4 bg-white/10 shadow-md py-1 px-2 w-80  rounded-lg relative">
-          <FiSearch color="blue" />
+        <div className="flex items-center gap-4 bg-white/10 shadow-md py-1 px-2 w-80 rounded-lg relative">
+          <button
+            type="button"
+            onClick={handleSearch}
+            className="cursor-pointer"
+          >
+            <FiSearch color="blue" />
+          </button>
           <input
             type="text"
             name="Search"
             value={search}
             placeholder="Search"
-            className="outline-none "
+            className="outline-none w-full"
             onChange={handleChange}
+            onKeyDown={handleSearch}
           />
 
           {/* Search Input remove logic */}

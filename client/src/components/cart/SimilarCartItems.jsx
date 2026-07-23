@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { addToCart } from "../../features/cart/cartSlice";
 
 const SimilarCartItems = () => {
-  const { cartItem } = useSelector((state) => state.cart);
+  // const { cartItem } = useSelector((state) => state.cart);
   const { items: product } = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
@@ -14,21 +14,13 @@ const SimilarCartItems = () => {
         name: item.name,
         title: item.title,
         description: item.description,
-        image: item.images?.[0] || item.images,
+        image: item.images?.[0]?.url,
         tenure: item.tenurePlans?.[0]?.duration,
         price: item.tenurePlans?.[0]?.pricePerMonth,
         securityDeposit: item?.securityDeposit,
       }),
     );
   };
-
-  console.log("SimilarCartItems: ", cartItem);
-  console.log("CartItems category: ", cartItem[0]?.price);
-  console.log("SimilarCartProducts: ", product);
-  console.log(
-    "SimilarCart category: ",
-    product.map((user) => user.category),
-  );
 
   return (
     <div className="my-20 bg-gray-50 px-7 pt-5 rounded-lg shadow-md">
@@ -37,11 +29,11 @@ const SimilarCartItems = () => {
         {product?.slice(0, 4).map((items) => (
           <div
             key={items._id}
-            className="border bg-gray-100 w-45 my-10 rounded-md"
+            className="border border-slate-300 bg-gray-100 w-45 my-10 rounded-md"
           >
             <Link to={`/products/${items._id}`}>
               <img
-                src={items?.images}
+                src={items?.images[0]?.url}
                 alt="img"
                 className="w-full h-25  bg-gray-50 rounded-t-lg"
               />

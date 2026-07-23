@@ -8,6 +8,7 @@ import { IoMdRepeat } from "react-icons/io";
 import InputField from "../components/common/InputField";
 import { validateRegister } from "../utils/validator";
 import { FcGoogle } from "react-icons/fc";
+import { API_BASE_URL, API_ORIGIN } from "../config/api";
 
 const Register = () => {
   const [error, setError] = useState({});
@@ -36,7 +37,7 @@ const Register = () => {
     if (Object.keys(validateError).length === 0) {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/auth/register",
+          `${API_BASE_URL}/auth/register`,
           formData,
         );
         console.log("response : ", response);
@@ -142,7 +143,7 @@ const Register = () => {
         <button
           type="button"
           onClick={() => {
-            window.location.href = "http://localhost:5000/api/auth/google";
+            window.location.href = `${API_ORIGIN}/api/auth/google`;
           }}
           className=" border border-gray-300 text-black flex gap-2 items-center justify-center hover:text-white rounded-md p-2 w-full text-center cursor-pointer hover:bg-blue-500 transition-colors duration-300 mt-5 "
         >

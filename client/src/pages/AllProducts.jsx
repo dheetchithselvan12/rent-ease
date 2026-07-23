@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { fetchProducts } from "../features/products/productsSlice";
 import ProductCard from "../components/product/ProductCard";
 import ProductSkeleton from "../components/product/ProductSkeleton";
 
 const AllProducts = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const {
     items: product,
     meta,
@@ -16,8 +19,21 @@ const AllProducts = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [userMaxPrice, setUserMaxPrice] = useState(null);
   const [selectedTenures, setSelectedTenures] = useState([]);
-  const [page, setPage] = useState(1);
   const limit = 8;
+  const searchQuery = searchParams.get("search")?.trim() || "";
+  const page = Number(searchParams.get("page")) || 1;
+
+  const updatePage = (nextPage) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (nextPage <= 1) {
+      params.delete("page");
+    } else {
+      params.set("page", String(nextPage));
+    }
+
+    setSearchParams(params, { replace: true });
+  };
 
   useEffect(() => {
     const params = {
@@ -30,8 +46,18 @@ const AllProducts = () => {
     if (userMaxPrice !== null) {
       params.maxPrice = userMaxPrice;
     }
+    if (searchQuery) {
+      params.search = searchQuery;
+    }
     dispatch(fetchProducts(params));
-  }, [dispatch, page, selectedCategories, selectedTenures, userMaxPrice]);
+  }, [
+    dispatch,
+    page,
+    selectedCategories,
+    selectedTenures,
+    userMaxPrice,
+    searchQuery,
+  ]);
 
   const allCategories = meta?.allCategories || ["furniture", "appliance"];
   const highestPrice = meta?.highestPrice || 10000;
@@ -43,7 +69,7 @@ const AllProducts = () => {
     setSelectedCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
     );
-    setPage(1);
+    updatePage(1);
   };
 
   const toggleTenure = (tenure) => {
@@ -52,19 +78,24 @@ const AllProducts = () => {
         ? prev.filter((t) => t !== tenure)
         : [...prev, tenure],
     );
-    setPage(1);
+    updatePage(1);
   };
 
   const handlePriceChange = (e) => {
     setUserMaxPrice(Number(e.target.value));
-    setPage(1);
+    updatePage(1);
   };
 
   const clearAllFilters = () => {
     setSelectedCategories([]);
     setUserMaxPrice(null);
     setSelectedTenures([]);
-    setPage(1);
+    updatePage(1);
+    navigate(
+      searchQuery
+        ? `/products?search=${encodeURIComponent(searchQuery)}`
+        : "/products",
+    );
   };
 
   return (
@@ -140,6 +171,17 @@ const AllProducts = () => {
         {/*Filters views*/}
         <div className="mb-5 flex flex-wrap items-center gap-2">
           <p className="text-gray-700 font-medium">Active filters: </p>
+          {searchQuery && (
+            <span className="px-2 py-1 bg-white border border-gray-300 rounded-full text-xs flex items-center gap-1 shadow-sm">
+              Search: {searchQuery}
+              <button
+                onClick={() => navigate("/products")}
+                className="text-blue-500 font-bold ml-1 cursor-pointer hover:text-blue-600"
+              >
+                ×
+              </button>
+            </span>
+          )}
           {selectedCategories.map((cat) => (
             <span
               key={cat}
@@ -160,7 +202,7 @@ const AllProducts = () => {
               <button
                 onClick={() => {
                   setUserMaxPrice(null);
-                  setPage(1);
+                  updatePage(1);
                 }}
                 className="text-blue-500 font-bold ml-1 cursor-pointer hover:text-blue-600"
               >
@@ -200,7 +242,9 @@ const AllProducts = () => {
             product.map((item) => <ProductCard key={item._id} product={item} />)
           ) : !loading ? (
             <div className="col-span-4 text-xl flex justify-center items-center bg-gray-100 rounded-md h-130 text-gray-500 py-10">
-              No products match your filters.
+              {searchQuery
+                ? `No products found for "${searchQuery}".`
+                : "No products match your filters."}
             </div>
           ) : null}
           {loading &&
@@ -209,14 +253,14 @@ const AllProducts = () => {
             ))}
           {error && (
             <div className="col-span-4 text-center text-red-500 py-10">
-              {error}
+              {error.message}
             </div>
           )}
         </div>
         {!loading && !error && hasMore && (
           <div className="flex justify-center">
             <button
-              onClick={() => setPage((prev) => prev + 1)}
+              onClick={() => updatePage(page + 1)}
               className=" mt-10 px-3 py-2 bg-blue-500 hover:bg-blue-600 transition-colors cursor-pointer rounded-md text-center text-white"
             >
               Load More

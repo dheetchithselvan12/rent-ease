@@ -1,4 +1,4 @@
-export const DeliveryDetailesForm = () => {
+export const DeliveryDetailesForm = ({ defaultValues = {} }) => {
   return (
     <div className="flex flex-col gap-4 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
       <h3 className="text-lg font-semibold text-gray-800 ">Delivery Details</h3>
@@ -13,6 +13,7 @@ export const DeliveryDetailesForm = () => {
             id="name"
             name="name"
             placeholder="John Doe"
+            defaultValue={defaultValues.name || ""}
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
           />
@@ -27,6 +28,7 @@ export const DeliveryDetailesForm = () => {
             name="phone"
             id="phone"
             placeholder="123-456-7890"
+            defaultValue={defaultValues.phone || ""}
             className=" border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             minLength={10}
             maxLength={10}
@@ -44,6 +46,7 @@ export const DeliveryDetailesForm = () => {
           id="address"
           name="address"
           placeholder="123 Main St"
+          defaultValue={defaultValues.address || ""}
           className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
           required
         />
@@ -59,6 +62,7 @@ export const DeliveryDetailesForm = () => {
             id="city"
             name="city"
             placeholder="City"
+            defaultValue={defaultValues.city || ""}
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
           />
@@ -72,6 +76,7 @@ export const DeliveryDetailesForm = () => {
             id="state"
             name="state"
             placeholder="State"
+            defaultValue={defaultValues.state || ""}
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
           />
@@ -81,16 +86,17 @@ export const DeliveryDetailesForm = () => {
       <div className="flex gap-4">
         <div className="flex flex-col gap-1 w-1/2">
           <label
-            htmlFor="zipCode"
+            htmlFor="pincode"
             className="text-sm font-medium text-gray-700"
           >
-            Zip Code
+            Pincode
           </label>
           <input
             type="text"
-            id="zipCode"
-            name="zipCode"
-            placeholder="Zip Code"
+            id="pincode"
+            name="pincode"
+            placeholder="Pincode"
+            defaultValue={defaultValues.pincode || ""}
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition-colors"
             required
           />
