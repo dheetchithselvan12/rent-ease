@@ -21,8 +21,8 @@ const Home = () => {
   const limit = 4;
 
   const categorys = [
-    { imgage: FURNITURE, title: "Furnitures", link: "Explore Collection ➜" },
-    { imgage: APPLIANCES, title: "Appliances", link: "View appliances ➜" },
+    { imgage: FURNITURE, title: "Furnitures", link: "Explore Collection" },
+    { imgage: APPLIANCES, title: "Appliances", link: "View appliances" },
   ];
 
   useEffect(() => {
@@ -72,60 +72,72 @@ const Home = () => {
     <>
       <main className="bg-gray-200">
         {/* Hero */}
-        <section className="px-15 flex justify-between items-center h-dvh">
-          <div className="flex flex-col gap-5 w-1/2">
-            <h1 className="text-6xl font-medium w-[70%]">
+        <section className="mx-auto flex min-h-[calc(100dvh-72px)] w-full max-w-7xl flex-col-reverse items-center justify-center gap-10 px-4 py-12 sm:px-6 lg:flex-row lg:justify-between lg:px-8 xl:px-0">
+          <div className="flex w-full flex-col gap-5 text-center lg:w-1/2 lg:text-left">
+            <h1 className="mx-auto max-w-2xl text-4xl font-medium leading-tight sm:text-5xl lg:mx-0 lg:text-6xl">
               Rent Furniture & Appliances Easily
             </h1>
-            <p className="w-[80%] text-lg text-gray-600">
+            <p className="mx-auto max-w-2xl text-base leading-7 text-gray-600 sm:text-lg lg:mx-0">
               Transform your space without the commitment. Access premium,
               modern furniture and state-of-the-art appliances with flexible
               monthly plans tailored to your lifestyle.
             </p>
-            <div className="flex gap-5 text-white">
-              <a className="bg-blue-500 hover:bg-blue-600 transition-all px-4 py-2 rounded-md cursor-pointer">
+            <div className="flex flex-col gap-3 text-white sm:flex-row sm:justify-center lg:justify-start">
+              <Link
+                to="/products?category=furniture"
+                className="rounded-md bg-blue-500 px-4 py-3 text-center transition-all hover:bg-blue-600"
+              >
                 Browse Furniture
-              </a>
-              <a className="bg-gray-500 hover:bg-gray-600 transition-all px-4 py-2 rounded-md cursor-pointer">
+              </Link>
+              <Link
+                to="/products?category=appliances"
+                className="rounded-md bg-gray-500 px-4 py-3 text-center transition-all hover:bg-gray-600"
+              >
                 Explore Appliances
-              </a>
+              </Link>
             </div>
           </div>
-          <div className="w-150 h-84  bg-blue-500 rounded-xl relative">
+          <div className="relative aspect-[16/10] w-full max-w-xl rounded-xl bg-blue-500 sm:aspect-[16/9] lg:w-[46%]">
             <img
               src={MAINIMG}
               alt="main Image"
-              className="absolute -left-10 top-10 w-150 rounded-md"
+              className="absolute left-1/2 top-1/2 w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-md object-cover shadow-xl sm:w-[95%] lg:-left-8 lg:top-10 lg:w-full lg:translate-x-0 lg:translate-y-0"
             />
           </div>
         </section>
 
         {/* Category  */}
-        <section className="px-15 my-20 ">
+        <section className="mx-auto my-12 w-full max-w-7xl px-4 sm:px-6 lg:my-20 lg:px-8 xl:px-0">
           <h2 className="text-xl font-bold">Available Category</h2>
 
           {/* Category Links */}
-          <div className="flex justify-between gap-4 my-5 p-2 text-white">
+          <div className="my-5 grid gap-4 text-white md:grid-cols-2">
             {categorys.map((item, index) => (
-              <div
+              <Link
                 key={index}
-                className="w-1/2 relative hover:scale-102  duration-500"
+                to="/products"
+                className="group relative overflow-hidden rounded-xl duration-500 hover:scale-[1.01]"
               >
-                <div className="absolute z-1 left-10 bottom-10">
-                  <p className="text-3xl mb-2 font-medium">{item.title}</p>
+                <div className="absolute bottom-6 left-6 z-10 sm:bottom-10 sm:left-10">
+                  <p className="mb-2 text-2xl font-medium sm:text-3xl">
+                    {item.title}
+                  </p>
+                  <p className="text-sm font-medium text-white/90">
+                    {item.link}
+                  </p>
                 </div>
                 <img
                   src={item.imgage}
-                  alt="Furniture"
-                  className="w-full h-85 rounded-xl brightness-60 hover:brightness-40 transition-all"
+                  alt={item.title}
+                  className="h-64 w-full object-cover brightness-60 transition-all group-hover:brightness-40 sm:h-80 lg:h-85"
                 />
-              </div>
+              </Link>
             ))}
           </div>
         </section>
 
         {/* Products */}
-        <section className="px-15 my-10">
+        <section className="mx-auto my-10 w-full max-w-7xl px-4 sm:px-6 lg:px-8 xl:px-0">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">Products</h1>
             <Link
@@ -148,7 +160,7 @@ const Home = () => {
           </div>
 
           {/* page change */}
-          <div className="flex justify-center items-center gap-4 mt-8">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <button
               type="button"
               onClick={handlePrev}
@@ -174,26 +186,26 @@ const Home = () => {
         </section>
 
         {/* Guidence */}
-        <section className="flex flex-col items-center bg-blue-300/10 py-20">
+        <section className="flex flex-col items-center bg-blue-300/10 px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-20">
           <h2 className="text-2xl font-medium">How it Works</h2>
-          <p className="text-gray-500 leading-9">
+          <p className="mt-3 max-w-2xl text-gray-500 leading-7">
             Getting your desired furniture and appliances is just a few clicks
             away. Experience hassle-free renting.
           </p>
-          <div className="flex mt-10 gap-15 relative">
+          <div className="relative mt-10 grid w-full max-w-5xl gap-8 md:grid-cols-3 md:gap-10">
             {guide.map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center justify-between "
+                className="flex flex-col items-center justify-between"
               >
-                <div className="z-10 bg-white w-25 h-25 rounded-full flex justify-center items-center shadow-olive-200 shadow-lg">
+                <div className="z-10 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-blue-200/60 sm:h-24 sm:w-24">
                   <item.icon size={30} />
                 </div>
                 <h5 className="text-xl font-medium mt-5 mb-2">{item.title}</h5>
-                <p className="text-gray-500">{item.des}</p>
+                <p className="max-w-xs text-gray-500">{item.des}</p>
               </div>
             ))}
-            <div className="absolute left-50 top-13  w-200 h-0.5 bg-gray-300"></div>
+            <div className="absolute left-[16%] right-[16%] top-12 hidden h-0.5 bg-gray-300 md:block"></div>
           </div>
         </section>
       </main>
