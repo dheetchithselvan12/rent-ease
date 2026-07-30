@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { getFirstProductImageUrl } from "../../utils/productImages";
 
 const ProductCard = ({ product }) => {
-  // get lowest price;
   const lowestPlan = product.tenurePlans?.[0];
   const imageUrl =
     getFirstProductImageUrl(product.images) || "https://picsum.photos/200/300";
@@ -10,28 +9,26 @@ const ProductCard = ({ product }) => {
   return (
     <Link
       to={`/products/${product._id}`}
-      className="bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition"
+      className="flex h-full flex-col rounded-lg bg-white p-3 shadow-md transition hover:shadow-lg sm:p-4"
     >
-      {/* Image */}
       <img
         src={imageUrl}
         alt={product.name}
-        className="w-full h-40 object-cover rounded-xl"
+        className="h-40 w-full rounded-md object-cover sm:h-44 lg:h-40"
       />
 
-      {/* Content */}
-      <div className="mt-3">
-        <h2 className="text-lg font-semibold">{product.name}</h2>
+      <div className="mt-3 flex flex-1 flex-col">
+        <h2 className="line-clamp-2 text-base font-semibold text-gray-950 sm:text-lg">
+          {product.name}
+        </h2>
 
         <p className="text-sm text-gray-500 capitalize">{product.category}</p>
 
-        {/* Price */}
-        <p className="text-green-600 font-bold mt-2">
-          ₹{lowestPlan?.pricePerMonth}/month
+        <p className="mt-2 font-bold text-green-600">
+          Rs.{lowestPlan?.pricePerMonth}/month
         </p>
 
-        {/* Button */}
-        <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition">
+        <button className="mt-auto w-full rounded-md bg-blue-600 py-2 text-white transition hover:bg-blue-700">
           Rent Now
         </button>
       </div>
