@@ -31,9 +31,7 @@ const ProductDetails = () => {
     const fetchProductAndSimilar = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${API_BASE_URL}/products/${id}`,
-        );
+        const response = await axios.get(`${API_BASE_URL}/products/${id}`);
 
         const fetchedProduct = response.data.data;
         setProduct(fetchedProduct);
@@ -42,7 +40,6 @@ const ProductDetails = () => {
           setSelectedPlan(fetchedProduct.tenurePlans[0]);
         }
 
-        // Fetch similar products based on category
         const similarResponse = await axios.get(
           `${API_BASE_URL}/products?category=${fetchedProduct.category}&limit=5`,
         );
@@ -61,7 +58,6 @@ const ProductDetails = () => {
     fetchProductAndSimilar();
   }, [id]);
 
-  // Add to cart
   const buildRentalItem = () => ({
     productId: product._id,
     name: product.name,
@@ -74,9 +70,7 @@ const ProductDetails = () => {
   });
 
   const handleAddToCart = () => {
-    dispatch(
-      addToCart(buildRentalItem()),
-    );
+    dispatch(addToCart(buildRentalItem()));
     console.log("Cart Added");
   };
 
@@ -104,28 +98,27 @@ const ProductDetails = () => {
   };
 
   if (loading) {
-    return <h2 className="p-6">Loading...</h2>;
+    return <h2 className="bg-gray-100 p-6">Loading...</h2>;
   }
 
   if (!product) {
-    return <h2 className="p-6">Product not found</h2>;
+    return <h2 className="bg-gray-100 p-6">Product not found</h2>;
   }
 
   return (
     <>
-      <section className="px-15 py-10 bg-gray-100">
-        <div className="flex justify-between  ">
-          {/* LEFT IMAGE */}
-          <div className="relative flex flex-col gap-8 w-[54%] bg-white px-8 py-8 rounded-xl">
+      <section className="bg-gray-100 px-4 py-6 sm:px-6 lg:px-10 xl:px-15">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="relative flex w-full flex-col gap-4 rounded-lg bg-white p-4 sm:gap-6 sm:p-6 lg:w-[54%] lg:p-8">
             <img
               src={selectedImage || getFirstProductImageUrl(product.images)}
               alt={product.name}
-              className=" w-full h-full object-cover rounded-2xl shadow-md"
+              className="aspect-4/3 w-full rounded-lg object-cover shadow-md sm:aspect-16/10 lg:aspect-4/3"
             />
-            <p className=" absolute top-10 right-10 bg-blue-500/20 rounded-full px-3 py-1 w-fit text-xs font-bold">
+            <p className="absolute right-6 top-6 w-fit max-w-[calc(100%-3rem)] rounded-full bg-blue-500/20 px-3 py-1 text-xs font-bold sm:right-10 sm:top-10">
               {product.name}
             </p>
-            <div className="flex gap-4 w-full cursor-pointer ">
+            <div className="custom-scrollbar flex w-full cursor-pointer gap-3 overflow-x-auto pb-1 sm:gap-4">
               {product.images?.map((image, index) => {
                 const imageUrl = getProductImageUrl(image);
 
@@ -135,89 +128,90 @@ const ProductDetails = () => {
                     src={imageUrl}
                     alt={`${product.name} ${index + 1}`}
                     onClick={() => setSelectedImage(imageUrl)}
-                    className="w-40 h-40 bg-gray-300 border border-slate-400 rounded-md object-cover"
+                    className={`h-20 w-20 shrink-0 rounded-md border bg-gray-300 object-cover sm:h-28 sm:w-28 lg:h-32 lg:w-32 xl:h-40 xl:w-40 ${
+                      selectedImage === imageUrl
+                        ? "border-blue-500 ring-2 ring-blue-200"
+                        : "border-slate-300"
+                    }`}
                   />
                 ) : null;
               })}
             </div>
           </div>
 
-          {/* RIGHT CONTENT */}
-          <div className="bg-white  rounded-xl px-8 py-6 w-[42%]  h-fit ">
-            <div className="h-130 overflow-y-auto custom-scrollbar ">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <p className="text-black mb-4 capitalize bg-blue-400/20 inline px-3 py-1 text-sm rounded-full">
+          <div className="h-fit w-full rounded-lg bg-white p-4 sm:p-6 lg:w-[42%] lg:px-8">
+            <div className="custom-scrollbar lg:max-h-130 lg:overflow-y-auto lg:pr-1">
+              <div className="rounded-lg bg-gray-100 p-4">
+                <p className="mb-4 inline rounded-full bg-blue-400/20 px-3 py-1 text-sm text-black capitalize">
                   {product.category}
                 </p>
-                <h1 className="text-4xl font-medium">{product.title}</h1>
+                <h1 className="text-2xl font-medium text-gray-950 sm:text-3xl xl:text-4xl">
+                  {product.title}
+                </h1>
                 <p className="mt-3 text-gray-700">{product.description}</p>
               </div>
 
-              {/* Deposit */}
-              <div className="mt-5 bg-gray-100 p-4 rounded-lg">
+              <div className="mt-5 rounded-lg bg-gray-100 p-4">
                 <h3 className="font-semibold">Security Deposit</h3>
-                <div className="flex justify-between bg-gray-50 p-2 rounded-lg mt-3">
-                  <p className="flex gap-1 items-center text-gray-600 ">
+                <div className="mt-3 flex flex-col gap-2 rounded-lg bg-gray-50 p-2 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="flex items-center gap-1 text-gray-600">
                     <FiInfo />
                     Refund after rent expired.
                   </p>
-                  <p className="text-lg mt-3 text-green-600  ">
-                    ₹{product.securityDeposit}
+                  <p className="text-lg text-green-600">
+                    Rs.{product.securityDeposit}
                   </p>
                 </div>
               </div>
 
-              {/* Tenure Plans */}
-              <div className="mt-5 bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-semibold mb-3">Rental Plans</h3>
+              <div className="mt-5 rounded-lg bg-gray-100 p-4">
+                <h3 className="mb-3 font-semibold">Rental Plans</h3>
 
                 <div className="relative">
-                  {/* Dropdown Trigger */}
                   <div
-                    className="w-full bg-white p-3 rounded-lg flex justify-between items-center cursor-pointer border border-gray-200 hover:border-blue-400 transition-all shadow-sm"
+                    className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm transition-all hover:border-blue-400"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
                     {selectedPlan ? (
                       <span className="font-medium">
-                        {selectedPlan.duration} Months - ₹
+                        {selectedPlan.duration} Months - Rs.
                         {selectedPlan.pricePerMonth}/month
                       </span>
                     ) : (
                       <span className="text-gray-400">Select a plan</span>
                     )}
                     <span
-                      className={`text-gray-500 text-xs transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                      className={`text-xs text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
                     >
-                      ▼
+                      v
                     </span>
                   </div>
 
-                  {/* Dropdown Menu */}
                   {isDropdownOpen && (
-                    <div className="absolute w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10 overflow-hidden">
+                    <div className="absolute z-10 mt-2 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
                       {product.tenurePlans?.map((plan) => (
                         <div
                           key={plan.duration}
-                          className={`p-3 cursor-pointer hover:bg-blue-50 transition-colors border-b last:border-b-0 ${
+                          className={`cursor-pointer border-b border-l-4 p-3 transition-colors last:border-b-0 hover:bg-blue-50 ${
                             selectedPlan?.duration === plan.duration
-                              ? "bg-blue-50 border-l-4 border-l-blue-500"
-                              : "border-l-4 border-l-transparent"
+                              ? "border-l-blue-500 bg-blue-50"
+                              : "border-l-transparent"
                           }`}
                           onClick={() => {
                             setSelectedPlan(plan);
                             setIsDropdownOpen(false);
                           }}
                         >
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium ">
+                          <div className="flex items-center justify-between gap-3">
+                            <span className="font-medium">
                               {plan.duration} Months
                             </span>
-                            <span className="text-blue-600 font-bold">
-                              ₹{plan.totalPrice}
+                            <span className="font-bold text-blue-600">
+                              Rs.{plan.totalPrice}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-500 mt-1">
-                            ₹{plan.pricePerMonth}/month
+                          <p className="mt-1 text-sm text-gray-500">
+                            Rs.{plan.pricePerMonth}/month
                           </p>
                         </div>
                       ))}
@@ -226,26 +220,25 @@ const ProductDetails = () => {
                 </div>
               </div>
 
-              {/* Total Summary */}
               {selectedPlan && (
-                <div className="bg-gray-100 p-4 mt-4 rounded-lg">
+                <div className="mt-4 rounded-lg bg-gray-100 p-4">
                   <p className="font-medium">Summary</p>
-                  <div className="flex flex-col text-gray-700 mt-2 gap-2">
-                    <p className="flex justify-between">
+                  <div className="mt-2 flex flex-col gap-2 text-gray-700">
+                    <p className="flex justify-between gap-3">
                       Duration <span>{selectedPlan.duration} Months</span>
                     </p>
-                    <p className="flex justify-between">
-                      Security Deposit <span>₹{product.securityDeposit}</span>
+                    <p className="flex justify-between gap-3">
+                      Security Deposit <span>Rs.{product.securityDeposit}</span>
                     </p>
-                    <p className="flex justify-between">
-                      Selected Plan<span>₹{selectedPlan.totalPrice}</span>
+                    <p className="flex justify-between gap-3">
+                      Selected Plan<span>Rs.{selectedPlan.totalPrice}</span>
                     </p>
 
                     <hr />
-                    <p className="flex text-lg justify-between ">
+                    <p className="flex flex-col justify-between gap-1 text-lg min-[420px]:flex-row">
                       Total Amount
-                      <span className="text-green-500 text-xl font-bold">
-                        ₹{product.securityDeposit + selectedPlan.totalPrice}
+                      <span className="text-xl font-bold text-green-500">
+                        Rs.{product.securityDeposit + selectedPlan.totalPrice}
                       </span>
                     </p>
                   </div>
@@ -253,21 +246,10 @@ const ProductDetails = () => {
               )}
             </div>
 
-            {/* Button */}
-            <div className="flex flex-col gap-4 ">
+            <div className="flex flex-col gap-4">
               <button
                 onClick={handleRentNow}
-                className="
-                mt-8
-                w-full
-              bg-blue-500
-              text-white
-              py-3
-              rounded-lg
-              hover:bg-blue-600
-              transition
-              cursor-pointer
-              "
+                className="mt-6 w-full cursor-pointer rounded-lg bg-blue-500 py-3 text-white transition hover:bg-blue-600 lg:mt-8"
               >
                 Rent Now
               </button>
@@ -275,9 +257,9 @@ const ProductDetails = () => {
               <button
                 onClick={isInCart ? undefined : handleAddToCart}
                 disabled={isInCart}
-                className={`flex items-center gap-3 justify-center w-full text-white px-4 py-2 rounded-lg transition ${isInCart ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 cursor-pointer"}`}
+                className={`flex w-full items-center justify-center gap-3 rounded-lg px-4 py-2 text-white transition ${isInCart ? "cursor-not-allowed bg-gray-400" : "cursor-pointer bg-blue-500 hover:bg-blue-600"}`}
               >
-                <FiShoppingCart size={20} />{" "}
+                <FiShoppingCart size={20} />
                 {isInCart ? "Already in Cart" : "Add to Cart"}
               </button>
             </div>
@@ -285,20 +267,19 @@ const ProductDetails = () => {
         </div>
       </section>
 
-      {/* Similar items */}
-      <section className="px-15 py-10 bg-gray-50">
+      <section className="bg-gray-50 px-4 py-8 sm:px-6 lg:px-10 xl:px-15">
         <div>
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold mb-6">Similar Items</h1>
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="mb-6 text-2xl font-bold">Similar Items</h1>
             <Link
               to="/products"
-              className="text-blue-500 hover:text-blue-600 cursor-pointer"
+              className="cursor-pointer text-blue-500 hover:text-blue-600"
             >
               View All
             </Link>
           </div>
           {similarProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
               {similarProducts.map((item) => (
                 <ProductCard key={item._id} product={item} />
               ))}

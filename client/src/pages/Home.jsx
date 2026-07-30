@@ -97,7 +97,7 @@ const Home = () => {
               </Link>
             </div>
           </div>
-          <div className="relative aspect-[16/10] w-full max-w-xl rounded-xl bg-blue-500 sm:aspect-[16/9] lg:w-[46%]">
+          <div className="relative aspect-16/10 w-full max-w-xl rounded-xl bg-blue-500 sm:aspect-video lg:w-[46%]">
             <img
               src={MAINIMG}
               alt="main Image"

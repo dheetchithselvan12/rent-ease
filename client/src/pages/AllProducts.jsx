@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { FiFilter, FiX } from "react-icons/fi";
 import { fetchProducts } from "../features/products/productsSlice";
 import ProductCard from "../components/product/ProductCard";
 import ProductSkeleton from "../components/product/ProductSkeleton";
@@ -19,6 +20,7 @@ const AllProducts = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [userMaxPrice, setUserMaxPrice] = useState(null);
   const [selectedTenures, setSelectedTenures] = useState([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const limit = 8;
   const searchQuery = searchParams.get("search")?.trim() || "";
   const page = Number(searchParams.get("page")) || 1;
@@ -64,6 +66,11 @@ const AllProducts = () => {
   const maxPrice = userMaxPrice !== null ? userMaxPrice : highestPrice;
   const totalItems = meta?.total || 0;
   const hasMore = meta?.pages ? page < meta.pages : false;
+  const activeFilterCount =
+    selectedCategories.length +
+    selectedTenures.length +
+    (searchQuery ? 1 : 0) +
+    (userMaxPrice !== null && userMaxPrice < highestPrice ? 1 : 0);
 
   const toggleCategory = (cat) => {
     setSelectedCategories((prev) =>
@@ -99,22 +106,52 @@ const AllProducts = () => {
   };
 
   return (
-    <div className="flex gap-5 w-full min-h-screen px-15 pt-10 bg-gray-200">
-      {/* Filter Section */}
-      <section className="w-[20%] h-fit p-2 pb-5 bg-gray-100 rounded-lg text-gray-500">
-        <div className="mb-3">
-          <p className="text-xl font-medium text-black">Filters</p>
-          <p className="text-sm my-1">{totalItems} items available</p>
-          <hr className="text-gray-300 mt-4" />
+    <div className="flex min-h-screen w-full flex-col gap-5 bg-gray-200 px-4 py-6 sm:px-6 lg:flex-row lg:px-10 xl:px-15">
+      <div className="sticky top-0 z-30 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setIsFilterOpen((open) => !open)}
+          aria-expanded={isFilterOpen}
+          className="flex w-full items-center justify-between rounded-lg bg-white px-4 py-3 font-medium text-gray-900 shadow-sm"
+        >
+          <span className="flex items-center gap-2">
+            {isFilterOpen ? <FiX /> : <FiFilter />}
+            {isFilterOpen ? "Close filters" : "Show filters"}
+          </span>
+          {activeFilterCount > 0 && (
+            <span className="rounded-full bg-blue-500 px-2 py-0.5 text-xs text-white">
+              {activeFilterCount}
+            </span>
+          )}
+        </button>
+      </div>
+
+      <section
+        className={`${isFilterOpen ? "block" : "hidden"} sticky top-16 z-20 max-h-[calc(100vh-5rem)] w-full overflow-y-auto rounded-lg bg-gray-100 p-4 pb-5 text-gray-500 shadow-sm lg:top-5 lg:block lg:max-h-[calc(100vh-2.5rem)] lg:w-64 lg:shrink-0`}
+      >
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div>
+            <p className="text-xl font-medium text-black">Filters</p>
+            <p className="my-1 text-sm">{totalItems} items available</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsFilterOpen(false)}
+            className="rounded-md p-2 text-gray-600 hover:bg-gray-200 lg:hidden"
+            aria-label="Close filters"
+          >
+            <FiX />
+          </button>
         </div>
+        <hr className="mb-3 mt-4 text-gray-300" />
 
         <div className="mb-3">
           <p className="text-sm font-medium">CATEGORIES</p>
-          <div className="flex flex-col gap-2 mt-2">
+          <div className="mt-2 flex flex-col gap-2">
             {allCategories.map((cat) => (
               <label
                 key={cat}
-                className="flex items-center gap-2 cursor-pointer capitalize hover:text-blue-500"
+                className="flex cursor-pointer items-center gap-2 capitalize hover:text-blue-500"
               >
                 <input
                   type="checkbox"
@@ -125,38 +162,38 @@ const AllProducts = () => {
                 {cat}
               </label>
             ))}
-            <hr className="text-gray-300 mt-4" />
+            <hr className="mt-4 text-gray-300" />
           </div>
         </div>
 
         <div className="mb-3">
-          <p className="text-sm font-medium mb-2">PRICE RANGE (/mo)</p>
+          <p className="mb-2 text-sm font-medium">PRICE RANGE (/mo)</p>
           <input
             type="range"
             min="0"
             max={highestPrice}
             value={maxPrice}
             onChange={handlePriceChange}
-            className="w-full  mt-2 cursor-pointer accent-blue-500"
+            className="mt-2 w-full cursor-pointer accent-blue-500"
           />
-          <div className="flex justify-between text-xs mt-1">
-            <span>₹0</span>
-            <span>₹{maxPrice}</span>
+          <div className="mt-1 flex justify-between text-xs">
+            <span>Rs.0</span>
+            <span>Rs.{maxPrice}</span>
           </div>
-          <hr className="text-gray-300 mt-4" />
+          <hr className="mt-4 text-gray-300" />
         </div>
 
         <div>
-          <p className="text-sm font-medium mb-2">RENTAL TENURE</p>
+          <p className="mb-2 text-sm font-medium">RENTAL TENURE</p>
           <div className="flex flex-wrap gap-2">
             {[1, 3, 6, 12].map((months) => (
               <span
                 key={months}
                 onClick={() => toggleTenure(months)}
-                className={`cursor-pointer px-2 py-1 text-sm rounded-full border transition-colors ${
+                className={`cursor-pointer rounded-full border px-2 py-1 text-sm transition-colors ${
                   selectedTenures.includes(months)
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-blue-400"
+                    ? "border-blue-500 bg-blue-500 text-white"
+                    : "border-gray-300 bg-white text-gray-700 hover:border-blue-400"
                 }`}
               >
                 {months} Months
@@ -166,61 +203,59 @@ const AllProducts = () => {
         </div>
       </section>
 
-      {/* Product List */}
-      <section className=" w-[80%] h-fit pb-5 ">
-        {/*Filters views*/}
+      <section className="h-fit w-full pb-5 lg:min-w-0 lg:flex-1">
         <div className="mb-5 flex flex-wrap items-center gap-2">
-          <p className="text-gray-700 font-medium">Active filters: </p>
+          <p className="font-medium text-gray-700">Active filters: </p>
           {searchQuery && (
-            <span className="px-2 py-1 bg-white border border-gray-300 rounded-full text-xs flex items-center gap-1 shadow-sm">
+            <span className="flex items-center gap-1 rounded-full border border-gray-300 bg-white px-2 py-1 text-xs shadow-sm">
               Search: {searchQuery}
               <button
                 onClick={() => navigate("/products")}
-                className="text-blue-500 font-bold ml-1 cursor-pointer hover:text-blue-600"
+                className="ml-1 cursor-pointer font-bold text-blue-500 hover:text-blue-600"
               >
-                ×
+                x
               </button>
             </span>
           )}
           {selectedCategories.map((cat) => (
             <span
               key={cat}
-              className="px-2 py-1 bg-white border border-gray-300 rounded-full text-xs capitalize flex items-center gap-1 shadow-sm"
+              className="flex items-center gap-1 rounded-full border border-gray-300 bg-white px-2 py-1 text-xs capitalize shadow-sm"
             >
               {cat}{" "}
               <button
                 onClick={() => toggleCategory(cat)}
-                className="text-blue-500 font-bold ml-1 cursor-pointer hover:text-blue-600"
+                className="ml-1 cursor-pointer font-bold text-blue-500 hover:text-blue-600"
               >
-                ×
+                x
               </button>
             </span>
           ))}
           {userMaxPrice !== null && userMaxPrice < highestPrice && (
-            <span className="px-2 py-1 bg-white border border-gray-300 rounded-full text-xs flex items-center gap-1 shadow-sm">
-              Up to ₹{maxPrice}{" "}
+            <span className="flex items-center gap-1 rounded-full border border-gray-300 bg-white px-2 py-1 text-xs shadow-sm">
+              Up to Rs.{maxPrice}{" "}
               <button
                 onClick={() => {
                   setUserMaxPrice(null);
                   updatePage(1);
                 }}
-                className="text-blue-500 font-bold ml-1 cursor-pointer hover:text-blue-600"
+                className="ml-1 cursor-pointer font-bold text-blue-500 hover:text-blue-600"
               >
-                ×
+                x
               </button>
             </span>
           )}
           {selectedTenures.map((t) => (
             <span
               key={t}
-              className="px-2 py-1 bg-white border border-gray-300 rounded-full text-xs flex items-center gap-1 shadow-sm"
+              className="flex items-center gap-1 rounded-full border border-gray-300 bg-white px-2 py-1 text-xs shadow-sm"
             >
               {t} Months{" "}
               <button
                 onClick={() => toggleTenure(t)}
-                className="text-blue-500 font-bold ml-1 cursor-pointer hover:text-blue-600"
+                className="ml-1 cursor-pointer font-bold text-blue-500 hover:text-blue-600"
               >
-                ×
+                x
               </button>
             </span>
           ))}
@@ -229,19 +264,18 @@ const AllProducts = () => {
             selectedTenures.length > 0) && (
             <button
               onClick={clearAllFilters}
-              className="text-sm text-blue-500 hover:text-blue-600 hover:underline cursor-pointer"
+              className="cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline"
             >
               Clear All
             </button>
           )}
         </div>
 
-        <div className="grid grid-cols-4 gap-4 ">
-          {/* product Items */}
+        <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {product.length > 0 ? (
             product.map((item) => <ProductCard key={item._id} product={item} />)
           ) : !loading ? (
-            <div className="col-span-4 text-xl flex justify-center items-center bg-gray-100 rounded-md h-130 text-gray-500 py-10">
+            <div className="col-span-full flex min-h-80 items-center justify-center rounded-md bg-gray-100 px-4 py-10 text-center text-lg text-gray-500 sm:text-xl lg:min-h-130">
               {searchQuery
                 ? `No products found for "${searchQuery}".`
                 : "No products match your filters."}
@@ -252,7 +286,7 @@ const AllProducts = () => {
               <ProductSkeleton key={`skeleton-${index}`} />
             ))}
           {error && (
-            <div className="col-span-4 text-center text-red-500 py-10">
+            <div className="col-span-full py-10 text-center text-red-500">
               {error.message}
             </div>
           )}
@@ -261,7 +295,7 @@ const AllProducts = () => {
           <div className="flex justify-center">
             <button
               onClick={() => updatePage(page + 1)}
-              className=" mt-10 px-3 py-2 bg-blue-500 hover:bg-blue-600 transition-colors cursor-pointer rounded-md text-center text-white"
+              className="mt-10 cursor-pointer rounded-md bg-blue-500 px-3 py-2 text-center text-white transition-colors hover:bg-blue-600"
             >
               Load More
             </button>
