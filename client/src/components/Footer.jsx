@@ -1,5 +1,5 @@
 const Footer = () => {
-  const FooterList = [
+  const footerList = [
     { list: "Privacy Policy" },
     { list: "Terms of Service" },
     { list: "FAQ" },
@@ -8,22 +8,21 @@ const Footer = () => {
   ];
 
   return (
-    <div className="flex justify-between px-15 py-10 items-center">
+    <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 text-center sm:px-6 md:flex-row md:items-center md:justify-between md:text-left lg:px-8 xl:px-0">
       <div>
-        <a className="text-2xl font-medium cursor-pointer">RentEase</a>
-        <p className="text-gray-500">
+        <a className="cursor-pointer text-2xl font-medium">RentEase</a>
+        <p className="mt-2 text-sm text-gray-500 sm:text-base">
           © 2026 RentEase Furniture & Appliances. All rights reserved.
         </p>
       </div>
-      <div>
-        <ul className="flex gap-5 cursor-pointer">
-          {FooterList.map((item, index) => (
-            <li key={index} className="hover:text-gray-400 transition-all">
-              <a>{item.list}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
+
+      <ul className="flex flex-wrap justify-center gap-4 text-sm sm:gap-5 sm:text-base md:justify-end">
+        {footerList.map((item, index) => (
+          <li key={index} className="transition-all hover:text-gray-400">
+            <a>{item.list}</a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
