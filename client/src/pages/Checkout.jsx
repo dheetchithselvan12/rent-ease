@@ -15,7 +15,9 @@ const Checkout = () => {
   const savedDeliveryDetails = useMemo(() => {
     const savedAddress = authUser?.address || {};
     return {
-      name: savedAddress.name || [authUser?.firstName, authUser?.lastName].filter(Boolean).join(" "),
+      name:
+        savedAddress.name ||
+        [authUser?.firstName, authUser?.lastName].filter(Boolean).join(" "),
       email: authUser?.email || "",
       phone: savedAddress.phone || "",
       address: savedAddress.address || "",
@@ -27,9 +29,9 @@ const Checkout = () => {
 
   const hasSavedAddress = Boolean(
     savedDeliveryDetails.address &&
-      savedDeliveryDetails.city &&
-      savedDeliveryDetails.state &&
-      savedDeliveryDetails.pincode,
+    savedDeliveryDetails.city &&
+    savedDeliveryDetails.state &&
+    savedDeliveryDetails.pincode,
   );
 
   // Lifted state for delivery forms
@@ -95,22 +97,24 @@ const Checkout = () => {
   console.log("API call is redady: ", apiOrderData);
 
   return (
-    <div className="p-10">
-      <h1 className="text-3xl font-bold mb-3">Checkout</h1>
+    <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 lg:px-10">
+      <h1 className="mb-3 text-2xl font-bold text-gray-900 sm:text-3xl">
+        Checkout
+      </h1>
 
-      <div className="grid grid-cols-3 gap-8">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
+        <div className="lg:col-span-2">
           {/* Delivery Details */}
           {isSubmitted || selectedAddressSource === "saved" ? (
-            <div className="my-4 border border-green-200 rounded-lg p-5">
+            <div className="my-4 rounded-lg border border-green-200 bg-white p-4 sm:p-5">
               <h2 className="text-xl font-semibold mb-4">Delivery Details</h2>
-              <div className="space-y-2 text-gray-700">
+              <div className="space-y-2 wrap-break-words text-gray-700">
                 <p className="text-lg font-medium">Deliver to : </p>
                 <p>Name : {activeDeliveryDetails.name}</p>
                 <p>
                   Address : {activeDeliveryDetails.address},{" "}
-                  {activeDeliveryDetails.city},
-                  {activeDeliveryDetails.state}, {activeDeliveryDetails.pincode}
+                  {activeDeliveryDetails.city},{activeDeliveryDetails.state},{" "}
+                  {activeDeliveryDetails.pincode}
                 </p>
                 <p className="text-sm text-gray-500 font-medium">
                   <span>Phone : </span> {activeDeliveryDetails.phone}
@@ -118,7 +122,7 @@ const Checkout = () => {
               </div>
             </div>
           ) : (
-            <div className="text-center my-4 border border-red-300 rounded-lg p-5">
+            <div className="my-4 rounded-lg border border-red-300 bg-white p-4 text-center sm:p-5">
               <p className="text-lg font-medium mb-2 text-red-500">
                 No delivery details found.
               </p>
@@ -132,16 +136,16 @@ const Checkout = () => {
 
           {/* DeliveryDetail Form */}
           <form
-            className="flex flex-col gap-4 mt-8"
+            className="mt-6 flex flex-col gap-4 sm:mt-8"
             onSubmit={handleFormSubmit}
           >
             {hasSavedAddress && (
-              <div className="bg-white p-5 border border-gray-200 rounded-xl shadow-sm">
+              <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">
                   Delivery Address
                 </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <label className="border border-gray-300 rounded-lg p-4 cursor-pointer flex gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <label className="flex cursor-pointer gap-3 rounded-lg border border-gray-300 p-4">
                     <input
                       type="radio"
                       name="addressSource"
@@ -158,11 +162,12 @@ const Checkout = () => {
                         Saved Address
                       </span>
                       <span className="block text-sm text-gray-500 mt-1">
-                        {savedDeliveryDetails.address}, {savedDeliveryDetails.city}
+                        {savedDeliveryDetails.address},{" "}
+                        {savedDeliveryDetails.city}
                       </span>
                     </span>
                   </label>
-                  <label className="border border-gray-300 rounded-lg p-4 cursor-pointer flex gap-3">
+                  <label className="flex cursor-pointer gap-3 rounded-lg border border-gray-300 p-4">
                     <input
                       type="radio"
                       name="addressSource"
@@ -187,7 +192,7 @@ const Checkout = () => {
             <DeliveryScheduleForm />
             <button
               type="submit"
-              className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition-colors self-end font-semibold shadow-sm cursor-pointer"
+              className="w-full cursor-pointer rounded-md bg-blue-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 sm:w-auto sm:self-end sm:py-2"
             >
               submmit
             </button>

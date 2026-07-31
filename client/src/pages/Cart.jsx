@@ -17,27 +17,29 @@ const Cart = () => {
   };
 
   return (
-    <div className="px-15 py-10 bg-gray-100 min-h-screen">
-      <div className="mb-8">
-        <h2 className="text-3xl font-medium text-gray-800">Your Cart</h2>
-        <p className="text-gray-500 mt-2 text-lg">
+    <div className="min-h-screen bg-gray-100 px-4 py-6 sm:px-6 lg:px-12 xl:px-15 lg:py-10">
+      <div className="mb-6 sm:mb-8">
+        <h2 className="text-2xl font-medium text-gray-800 sm:text-3xl">
+          Your Cart
+        </h2>
+        <p className="mt-2 text-base text-gray-500 sm:text-lg">
           Review your rental items and complete your order.
         </p>
       </div>
-      <section className="flex justify-between gap-10">
+      <section className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
         {/* left side */}
-        <div className="w-[60%] flex flex-col gap-6">
-          <div className="border border-gray-200 rounded-xl p-6 bg-white shadow-sm">
+        <div className="flex w-full flex-col gap-6 lg:w-[60%]">
+          <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
             {/* cart */}
             <h3 className="text-xl font-semibold text-gray-800 mb-6">
               Cart Items
             </h3>
             {cartItem?.length === 0 ? (
-              <div className="text-center text-gray-500 py-10">
-                Your cart is empty.
+              <div className="flex flex-col items-center justify-center gap-4 py-10 text-center text-gray-500 sm:flex-row">
+                <span>Your cart is empty.</span>
                 <Link
                   to="/products"
-                  className="text-blue-500 mx-1 px-3 py-2 text-sm  bg-gray-200 rounded-md hover:bg-gray-100 transition-colors"
+                  className="rounded-md bg-gray-200 px-3 py-2 text-sm text-blue-500 transition-colors hover:bg-gray-100"
                 >
                   Continue Shopping
                 </Link>

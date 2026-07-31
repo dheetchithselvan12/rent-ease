@@ -46,23 +46,23 @@ const CartPayment = () => {
   };
 
   return (
-    <div className="border border-gray-200 rounded-xl h-fit p-10 w-[40%] bg-white shadow-sm flex flex-col gap-6 sticky top-20">
-      <h2 className="text-2xl font-medium text-gray-800 border-b border-gray-300 pb-5">
+    <div className="flex h-fit w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6 lg:sticky lg:top-20 lg:w-[40%] xl:p-10">
+      <h2 className="border-b border-gray-300 pb-5 text-xl font-medium text-gray-800 sm:text-2xl">
         Order Summary
       </h2>
 
       <div className="flex flex-col gap-4 text-gray-600 border-b border-gray-300 pb-5">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between gap-4">
           <p>Total Items</p>
           <span className="font-medium text-gray-800">{totalItems}</span>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between gap-4">
           <p>Monthly Rent</p>
           <span className="font-medium text-gray-800">
             ₹{monthlyRent.toFixed(2)}
           </span>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex items-start justify-between gap-4">
           <p>
             Security Deposit
             <span className="text-xs text-gray-400"> (Refundable)</span>
@@ -71,21 +71,21 @@ const CartPayment = () => {
             ₹{securityDeposit.toFixed(2)}
           </span>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between gap-4">
           <p>Delivery Charges</p>
           <span className="text-green-600 font-medium">Free</span>
         </div>
       </div>
 
       <div className="flex flex-col gap-5">
-        <div className="flex justify-between items-end">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-lg font-semibold text-gray-800">Due Today</p>
             <p className="text-xs text-gray-400 mt-1">
               Includes first month rent + deposit
             </p>
           </div>
-          <p className="text-2xl font-medium text-green-600">
+          <p className="text-2xl font-medium text-green-600 sm:text-right">
             ₹{dueToday.toFixed(2)}
           </p>
         </div>
