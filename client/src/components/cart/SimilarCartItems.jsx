@@ -23,19 +23,19 @@ const SimilarCartItems = () => {
   };
 
   return (
-    <div className="my-20 bg-gray-50 px-7 pt-5 rounded-lg shadow-md">
+    <div className="my-10 rounded-lg bg-gray-50 px-4 py-5 shadow-md sm:my-20 sm:px-7">
       <h1 className="text-xl font-medium">similar Items</h1>
-      <div className="grid grid-cols-4 overflow-x-auto gap-2">
+      <div className="grid grid-cols-1 gap-4 py-6 sm:grid-cols-2 xl:grid-cols-4">
         {product?.slice(0, 4).map((items) => (
           <div
             key={items._id}
-            className="border border-slate-300 bg-gray-100 w-45 my-10 rounded-md"
+            className="w-full rounded-md border border-slate-300 bg-gray-100"
           >
             <Link to={`/products/${items._id}`}>
               <img
                 src={items?.images[0]?.url}
                 alt="img"
-                className="w-full h-25  bg-gray-50 rounded-t-lg"
+                className="h-32 w-full rounded-t-lg bg-gray-50 object-cover"
               />
             </Link>
             <div className="my-2 text-sm px-2">

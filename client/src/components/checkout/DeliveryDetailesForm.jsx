@@ -1,10 +1,10 @@
 export const DeliveryDetailesForm = ({ defaultValues = {} }) => {
   return (
-    <div className="flex flex-col gap-4 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
+    <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
       <h3 className="text-lg font-semibold text-gray-800 ">Delivery Details</h3>
 
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-1 w-1/2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-sm font-medium text-gray-700">
             Your Name
           </label>
@@ -19,7 +19,7 @@ export const DeliveryDetailesForm = ({ defaultValues = {} }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-1 w-1/2">
+        <div className="flex flex-col gap-1">
           <label htmlFor="phone" className="text-sm font-medium text-gray-700">
             Phone Number
           </label>
@@ -52,8 +52,8 @@ export const DeliveryDetailesForm = ({ defaultValues = {} }) => {
         />
       </div>
 
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-1 w-1/2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1">
           <label htmlFor="city" className="text-sm font-medium text-gray-700">
             City
           </label>
@@ -67,7 +67,7 @@ export const DeliveryDetailesForm = ({ defaultValues = {} }) => {
             required
           />
         </div>
-        <div className="flex flex-col gap-1 w-1/2">
+        <div className="flex flex-col gap-1">
           <label htmlFor="state" className="text-sm font-medium text-gray-700">
             State
           </label>
@@ -83,8 +83,8 @@ export const DeliveryDetailesForm = ({ defaultValues = {} }) => {
         </div>
       </div>
 
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-1 w-1/2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1">
           <label
             htmlFor="pincode"
             className="text-sm font-medium text-gray-700"
@@ -108,11 +108,11 @@ export const DeliveryDetailesForm = ({ defaultValues = {} }) => {
 
 export const DeliveryScheduleForm = () => {
   return (
-    <div className="flex flex-col gap-4 mt-2 bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
+    <div className="mt-2 flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
       <h3 className="text-lg font-semibold text-gray-800">Delivery Schedule</h3>
 
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-1 w-1/2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1">
           <label
             htmlFor="deliveryDate"
             className="text-sm font-medium text-gray-700"
@@ -127,7 +127,7 @@ export const DeliveryScheduleForm = () => {
             required
           />
         </div>
-        <div className="flex flex-col gap-1 w-1/2">
+        <div className="flex flex-col gap-1">
           <label
             htmlFor="preferredTime"
             className="text-sm font-medium text-gray-700"

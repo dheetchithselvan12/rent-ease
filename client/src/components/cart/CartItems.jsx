@@ -13,9 +13,9 @@ const CartCard = ({ item, handleRemoveCart }) => {
   console.log("cartItem Name: ", item);
 
   return (
-    <div className="flex justify-between border-b border-gray-300 last:border-b-0 pb-6 last:pb-0">
-      <div className="flex w-full gap-4">
-        <div className="flex flex-col items-center w-fit">
+    <div className="border-b border-gray-300 pb-6 last:border-b-0 last:pb-0">
+      <div className="flex w-full flex-col gap-4 sm:flex-row">
+        <div className="flex w-full items-center justify-between gap-4 sm:w-28 sm:flex-col sm:justify-start">
           <Link to={`/products/${item.productId}`}>
             <img
               src={
@@ -23,11 +23,11 @@ const CartCard = ({ item, handleRemoveCart }) => {
                 "https://images.unsplash.com/photo-1551288049-bebda4e38f71"
               }
               alt={item.name}
-              className="object-cover w-25 h-25 rounded-lg border border-gray-200 hover:scale-105 duration-200 hover:bg-gray-100"
+              className="h-24 w-24 rounded-lg border border-gray-200 object-cover duration-200 hover:scale-105 hover:bg-gray-100"
             />
           </Link>
           {/* Quantity Counter */}
-          <div className="mt-4 font-medium">
+          <div className="font-medium sm:mt-4">
             <button
               disabled={item.quantity > 1 ? false : true}
               onClick={() => dispatch(decrementQuantity(item.productId))}
@@ -46,9 +46,9 @@ const CartCard = ({ item, handleRemoveCart }) => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col justify-between w-full">
-          <div className="flex justify-between">
-            <div>
+        <div className="flex w-full flex-col justify-between gap-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
               <h6 className="text-lg font-medium text-gray-800">
                 {item.title}
               </h6>
@@ -65,11 +65,11 @@ const CartCard = ({ item, handleRemoveCart }) => {
               <RiDeleteBinLine size={20} />
             </button>
           </div>
-          <div className="flex justify-between">
-            <p className="flex items-center gap-2 text-gray-500 text-sm mt-auto">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <p className="mt-auto flex items-center gap-2 text-sm text-gray-500">
               <FaRegCalendarAlt /> {item.tenure} Months Tenure
             </p>
-            <div>
+            <div className="sm:text-right">
               <p className="text-2xl font-bold text-gray-800">
                 ₹{item.price * item.quantity}
               </p>
