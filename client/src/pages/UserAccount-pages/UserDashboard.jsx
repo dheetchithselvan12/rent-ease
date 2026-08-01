@@ -18,6 +18,9 @@ const UserDashboard = () => {
     (state) => state.orders,
   );
 
+  const totalPaid =
+    orderData?.reduce((acc, item) => acc + (item.totalPrice || 0), 0) || 0;
+
   const totalNumber = [
     {
       id: 1,
@@ -31,14 +34,14 @@ const UserDashboard = () => {
       id: 2,
       icon: <MdOutlinePayments size={28} />,
       name: "Total Paid",
-      total: `₹${orderData?.reduce((acc, item) => acc + item.totalPrice, 0)}`,
+      total: `Rs. ${totalPaid}`,
       color: "bg-green-200",
       border: "border-green-300",
     },
     {
       id: 4,
       icon: <CiDeliveryTruck size={28} />,
-      name: "Up Comming Delivery",
+      name: "Upcoming Delivery",
       total:
         orderData
           ?.filter((item) => item.orderStatus !== "Delivered")
@@ -67,10 +70,12 @@ const UserDashboard = () => {
   }, [dispatch, loading, orderData]);
 
   return (
-    <div className="p-2  h-full  ">
+    <div className="h-full p-1 sm:p-2">
       {/* Dashboard Headline */}
-      <div className="flex flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-1">
-        <p className="text-2xl text-gray-700 font-bold">Hello, {displayName}</p>
+      <div className="flex flex-col space-y-1 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
+        <p className="text-xl font-bold text-gray-700 sm:text-2xl">
+          Hello, {displayName}
+        </p>
         <p className="text-gray-500">
           Here's an overview of your RentEase Account.
         </p>
@@ -78,20 +83,20 @@ const UserDashboard = () => {
       </div>
 
       {/* Indicator */}
-      <div className="flex gap-4 my-4 ">
+      <div className="my-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {totalNumber?.map((item) => (
           <div
             key={item.id}
-            className={` flex items-center gap-5 w-4/4 p-5 bg-white border ${item.border} rounded-lg shadow-lg`}
+            className={`flex min-w-0 items-center gap-4 rounded-lg border bg-white p-4 shadow-sm sm:p-5 ${item.border}`}
           >
             <p
-              className={`p-2 rounded-full flex justify-center items-center h-12 w-12 ${item.color}`}
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-2 ${item.color}`}
             >
               {item.icon}
             </p>
-            <div className="space-y-3">
-              <p className=" font-semibold ">{item.name}</p>
-              <p className="font-bold text-xl ">{item.total}</p>
+            <div className="min-w-0 space-y-2">
+              <p className="font-semibold text-gray-700">{item.name}</p>
+              <p className="break-words text-xl font-bold">{item.total}</p>
             </div>
           </div>
         ))}
@@ -99,54 +104,55 @@ const UserDashboard = () => {
 
       {/* Active Rentals */}
       <div>
-        <div className="flex justify-between mt-8 ">
-          <p className="text-xl text-gray-700 font-bold">Active Rentals</p>
+        <div className="mt-8 flex items-center justify-between gap-3">
+          <p className="text-xl font-bold text-gray-700">Active Rentals</p>
           <Link
             to="subscriptions"
-            className="text-blue-500 cursor-pointer hover:text-blue-600  "
+            className="shrink-0 cursor-pointer text-blue-500 hover:text-blue-600"
           >
             View All
           </Link>
         </div>
         {subscriptions?.length === 0 ? (
-          <p className="bg-white border border-gray-300  rounded-md my-2 px-2 py-4">
+          <p className="my-2 rounded-md border border-gray-300 bg-white px-2 py-4">
             No active subscriptions.
           </p>
         ) : (
-          <div className="flex gap-4 ">
+          <div className="grid grid-cols-1 gap-4 py-4 xl:grid-cols-2">
             {subscriptions?.map((item) => (
               <div
                 key={item._id}
-                className="flex my-4 border w-2/2 border-gray-300 bg-gray-50 rounded-lg shadow-lg "
+                className="flex min-w-0 flex-col overflow-hidden rounded-lg border border-gray-300 bg-gray-50 shadow-sm sm:flex-row"
               >
                 <img
                   src={/*item.image*/ "https://picsum.photos/200/300"}
                   alt="img"
-                  className="w-1/3 h-40 rounded-l-lg"
+                  className="h-44 w-full object-cover sm:h-auto sm:w-36 md:w-44"
                 />
 
-                <div className="px-4 py-2 space-y-2 h-fit w-2/3">
-                  <p className="font-bold flex justify-between ">
-                    {item?.orderItems?.map((title) => title?.title)}
-                    <span className="text-xs font-medium px-2 p-1 rounded-xl bg-green-300">
+                <div className="min-w-0 flex-1 space-y-2 px-4 py-3">
+                  <div className="flex flex-col gap-2 font-bold sm:flex-row sm:items-start sm:justify-between">
+                    <p className="min-w-0 truncate">
+                      {item?.orderItems?.map((title) => title?.title).join(", ")}
+                    </p>
+                    <span className="w-fit shrink-0 rounded-xl bg-green-300 px-2 py-1 text-xs font-medium">
                       {item.orderStatus === "Delivered"
                         ? "pending"
                         : item.rentalStatus}
                     </span>
-                  </p>
-                  <p className=" flex gap-1 items-center text-sm text-gray-500">
+                  </div>
+                  <p className="flex items-center gap-1 text-sm text-gray-500">
                     <CiCalendar />
                     Started: {formatDate(item.createdAt)}
                   </p>
-                  <p className=" flex gap-1 items-center text-sm text-gray-500 ">
+                  <p className="flex items-center gap-1 text-sm text-gray-500">
                     <LuCalendarFold />
-                    End:{item.nextPaymentDate}
+                    End: {item.nextPaymentDate}
                   </p>
-                  <div className="flex items-center  justify-between mt-4">
-                    <p className=" font-bold text-xl ">₹{item.totalPrice}</p>
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-xl font-bold">Rs. {item.totalPrice}</p>
                     <button
-                      className="bg-blue-500 px-3 py-1 hover:bg-blue-600 cursor-pointer transition-colors duration-300
-                   text-white rounded-md text-center"
+                      className="cursor-pointer rounded-md bg-blue-500 px-3 py-2 text-center text-white transition-colors duration-300 hover:bg-blue-600 sm:py-1"
                     >
                       {item.button}Manage
                     </button>
@@ -159,45 +165,45 @@ const UserDashboard = () => {
       </div>
 
       {/* Rental History */}
-      <div className="my-4  ">
-        <p className="text-xl text-gray-700 font-bold">Rental History</p>
-        <div className="border my-4 border-gray-400 rounded-lg overflow-x-auto w-full ">
-          <table className="w-full text-left border-collapse whitespace-nowrap  ">
+      <div className="my-4">
+        <p className="text-xl font-bold text-gray-700">Rental History</p>
+        <div className="my-4 w-full overflow-x-auto rounded-lg border border-gray-400">
+          <table className="w-full min-w-175 border-collapse whitespace-nowrap text-left">
             <thead>
-              <tr className="bg-gray-100  text-gray-600 text-center">
-                <th className="py-4 px-6 font-medium">Product</th>
-                <th className="py-4 px-6 font-medium">Order Date</th>
-                <th className="py-4 px-6 font-medium">Amount</th>
-                <th className="py-4 px-6 font-medium">Status</th>
-                <th className="py-4 px-6 font-medium">Action</th>
+              <tr className="bg-gray-100 text-center text-gray-600">
+                <th className="px-4 py-4 font-medium sm:px-6">Product</th>
+                <th className="px-4 py-4 font-medium sm:px-6">Order Date</th>
+                <th className="px-4 py-4 font-medium sm:px-6">Amount</th>
+                <th className="px-4 py-4 font-medium sm:px-6">Status</th>
+                <th className="px-4 py-4 font-medium sm:px-6">Action</th>
               </tr>
             </thead>
             <tbody>
               {orders?.map((item) => (
                 <tr
                   key={item._id}
-                  className="border-t border-gray-300 bg-gray-50 hover:bg-blue-50 transition-colors duration-300 "
+                  className="border-t border-gray-300 bg-gray-50 transition-colors duration-300 hover:bg-blue-50"
                 >
-                  <td className="px-6 py-4 text-center">
-                    <span className="truncate max-w-25 inline-block">
+                  <td className="px-4 py-4 text-center sm:px-6">
+                    <span className="inline-block max-w-25 truncate">
                       {item.orderItems
                         .map((orderItem) => orderItem.title)
                         .join(", ")}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-center">
-                    <span className="truncate max-w-25 inline-block">
+                  <td className="px-4 py-4 text-center sm:px-6">
+                    <span className="inline-block max-w-25 truncate">
                       {formatDate(item.createdAt)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-center">
-                    <span className="truncate max-w-25 inline-block">
-                      ₹{item.itemPrice}
+                  <td className="px-4 py-4 text-center sm:px-6">
+                    <span className="inline-block max-w-25 truncate">
+                      Rs. {item.itemPrice}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-center">
+                  <td className="px-4 py-4 text-center sm:px-6">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${
                         item.orderStatus === "Delivered"
                           ? "bg-green-100 text-green-800"
                           : item.orderStatus === "Processing"
@@ -208,10 +214,10 @@ const UserDashboard = () => {
                       {item.orderStatus}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-center">
+                  <td className="px-4 py-4 text-center sm:px-6">
                     <Link
                       to={`/my-account/orders/${item._id}`}
-                      className="truncate max-w-25 inline-block cursor-pointer text-blue-500 hover:text-blue-600 "
+                      className="inline-block max-w-25 cursor-pointer truncate text-blue-500 hover:text-blue-600"
                     >
                       Details
                     </Link>
