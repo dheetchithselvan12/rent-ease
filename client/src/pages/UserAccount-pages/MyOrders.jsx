@@ -26,31 +26,100 @@ const MyOrders = () => {
     dispatch(fetchOrders());
   }, [dispatch]);
 
+  const renderStatus = (status) => (
+    <span
+      className={`rounded-full px-3 py-1 text-xs font-medium ${
+        status === "Delivered"
+          ? "bg-green-100 text-green-800"
+          : status === "Processing"
+            ? "bg-yellow-100 text-yellow-800"
+            : "bg-gray-100 text-gray-800"
+      }`}
+    >
+      {status || "Processing"}
+    </span>
+  );
+
   return (
-    <div className="h-full bg-gray-50 border border-gray-300 w-full rounded-xl ">
-      <div className="flex items-center justify-between p-5">
-        <h1 className="mb-2 text-2xl font-medium">Orders History</h1>
-        <div className="flex gap-2">
-          <button className="flex gap-1 items-center border border-gray-400 hover:border-blue-500 transition-colors duration-300 hover:text-blue-500 px-2 py-1 rounded-md text-sm cursor-pointer">
+    <div className="h-full w-full rounded-lg border border-gray-300 bg-gray-50">
+      <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+        <h1 className="text-xl font-medium text-gray-800 sm:text-2xl">
+          Orders History
+        </h1>
+        <div className="flex flex-wrap gap-2">
+          <button className="flex cursor-pointer items-center gap-1 rounded-md border border-gray-400 px-2 py-1 text-sm transition-colors duration-300 hover:border-blue-500 hover:text-blue-500">
             <IoFilter />
             Filter
           </button>
-          <button className="flex gap-1 items-center border border-gray-400 hover:border-blue-500 transition-colors duration-300 hover:text-blue-500 px-2 py-1 rounded-md text-sm cursor-pointer">
+          <button className="flex cursor-pointer items-center gap-1 rounded-md border border-gray-400 px-2 py-1 text-sm transition-colors duration-300 hover:border-blue-500 hover:text-blue-500">
             <FiDownload />
             Export
           </button>
         </div>
       </div>
-      <div className="overflow-x-auto w-full">
-        <table className="w-full text-left border-collapse whitespace-nowrap">
+
+      <div className="space-y-3 px-4 pb-4 md:hidden">
+        {selectedItems?.map((order) => {
+          const itemLabel =
+            order.orderItems?.length > 1
+              ? `${order.orderItems[0].title} + ${order.orderItems.length - 1} more`
+              : order.orderItems?.[0]?.title || "-";
+
+          return (
+            <article
+              key={order._id}
+              className="rounded-lg border border-gray-300 bg-white p-4 shadow-sm"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-xs font-medium uppercase text-gray-500">
+                    Order ID
+                  </p>
+                  <p className="truncate text-sm font-semibold" title={order._id}>
+                    {order._id}
+                  </p>
+                </div>
+                <div className="shrink-0">{renderStatus(order.orderStatus)}</div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                <div className="min-w-0">
+                  <p className="text-gray-500">Items</p>
+                  <p className="truncate font-medium" title={itemLabel}>
+                    {itemLabel}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Date</p>
+                  <p className="font-medium">{formatDate(order.createdAt)}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Total Price</p>
+                  <p className="font-medium">Rs. {order.totalPrice}</p>
+                </div>
+              </div>
+
+              <Link
+                to={`/my-account/orders/${order._id}`}
+                className="mt-4 inline-flex w-full justify-center rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-600"
+              >
+                View Details
+              </Link>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="hidden w-full overflow-x-auto md:block">
+        <table className="w-full min-w-190 border-collapse whitespace-nowrap text-left">
           <thead>
-            <tr className="bg-blue-50 border-y border-gray-400 text-gray-600 text-center">
-              <th className="py-4 px-6 font-medium">Order ID</th>
-              <th className="py-4 px-6 font-medium">Items</th>
-              <th className="py-4 px-6 font-medium">Date</th>
-              <th className="py-4 px-6 font-medium">Total Price</th>
-              <th className="py-4 px-6 font-medium">Status</th>
-              <th className="py-4 px-6 font-medium">Action</th>
+            <tr className="border-y border-gray-400 bg-blue-50 text-center text-gray-600">
+              <th className="px-4 py-4 font-medium lg:px-6">Order ID</th>
+              <th className="px-4 py-4 font-medium lg:px-6">Items</th>
+              <th className="px-4 py-4 font-medium lg:px-6">Date</th>
+              <th className="px-4 py-4 font-medium lg:px-6">Total Price</th>
+              <th className="px-4 py-4 font-medium lg:px-6">Status</th>
+              <th className="px-4 py-4 font-medium lg:px-6">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -59,17 +128,17 @@ const MyOrders = () => {
                 key={order._id}
                 className="border-b border-gray-300 hover:bg-gray-50"
               >
-                <td className="px-6 py-4 text-center">
+                <td className="px-4 py-4 text-center lg:px-6">
                   <span
-                    className="truncate max-w-25 inline-block"
+                    className="inline-block max-w-25 truncate"
                     title={order._id}
                   >
                     {order._id}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-center">
+                <td className="px-4 py-4 text-center lg:px-6">
                   <span
-                    className="truncate max-w-35.7 inline-block"
+                    className="inline-block max-w-36 truncate"
                     title={order.orderItems
                       ?.map((item) => item.title)
                       .join(", ")}
@@ -79,27 +148,19 @@ const MyOrders = () => {
                       : order.orderItems?.[0]?.title || "-"}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-center">
+                <td className="px-4 py-4 text-center lg:px-6">
                   {formatDate(order.createdAt)}
                 </td>
-                <td className="px-6 py-4 text-center">₹{order.totalPrice}</td>
-                <td className="px-6 py-4 text-center">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      order.orderStatus === "Delivered"
-                        ? "bg-green-100 text-green-800"
-                        : order.orderStatus === "Processing"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {order.orderStatus || "Processing"}
-                  </span>
+                <td className="px-4 py-4 text-center lg:px-6">
+                  Rs. {order.totalPrice}
                 </td>
-                <td className="px-6 py-4 text-center">
+                <td className="px-4 py-4 text-center lg:px-6">
+                  {renderStatus(order.orderStatus)}
+                </td>
+                <td className="px-4 py-4 text-center lg:px-6">
                   <Link
                     to={`/my-account/orders/${order._id}`}
-                    className="inline-block bg-blue-500 rounded-md px-4 py-1 cursor-pointer hover:bg-blue-600 text-white transition-colors"
+                    className="inline-block cursor-pointer rounded-md bg-blue-500 px-4 py-1 text-white transition-colors hover:bg-blue-600"
                   >
                     View Details
                   </Link>
@@ -109,15 +170,19 @@ const MyOrders = () => {
           </tbody>
         </table>
       </div>
-      <Stack spacing={2} className="my-5 mx-6 items-end">
-        <Pagination
-          count={totalPages}
-          page={page}
-          variant="outlined"
-          shape="rounded"
-          onChange={handlePageChange}
-        />
-      </Stack>
+
+      {totalPages > 1 && (
+        <Stack spacing={2} className="mx-4 my-5 items-center sm:mx-6 sm:items-end">
+          <Pagination
+            count={totalPages}
+            page={page}
+            variant="outlined"
+            shape="rounded"
+            onChange={handlePageChange}
+            siblingCount={0}
+          />
+        </Stack>
+      )}
     </div>
   );
 };
