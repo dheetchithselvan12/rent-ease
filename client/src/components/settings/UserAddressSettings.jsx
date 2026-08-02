@@ -63,8 +63,8 @@ const UserAddressSettings = () => {
   };
 
   return (
-    <div className=" bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">
+    <div className="w-full max-w-3xl rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
+      <h3 className="mb-4 text-lg font-semibold text-gray-800">
         Your Address Details
       </h3>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -99,7 +99,7 @@ const UserAddressSettings = () => {
           required
         />
 
-        <div className="flex gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <InputField
             ref={cityRef}
             label="City"
@@ -135,7 +135,7 @@ const UserAddressSettings = () => {
 
         <button
           type="submit"
-          className="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors self-start"
+          className="mt-2 w-full rounded-md bg-blue-600 px-6 py-2 font-semibold text-white transition-colors hover:bg-blue-700 sm:mt-4 sm:w-fit sm:self-start"
         >
           Save Address
         </button>
