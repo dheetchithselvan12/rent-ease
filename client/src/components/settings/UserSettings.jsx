@@ -38,14 +38,16 @@ const UserSettings = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-white px-4 py-4 rounded-lg border border-gray-300 shadow-sm ">
+    <div className="flex w-full max-w-3xl flex-col gap-4 rounded-lg border border-gray-300 bg-white px-4 py-4 shadow-sm sm:px-6">
       <div className="flex flex-col gap-1 border-b border-gray-300 pb-4">
-        <h1 className="text-xl font-semibold">Profile Information</h1>
+        <h1 className="text-lg font-semibold text-gray-800 sm:text-xl">
+          Profile Information
+        </h1>
         <p className="text-gray-500 text-sm">
           Update your profile details and how we can reach you.
         </p>
       </div>
-      <div className="bg-blue-100 w-fit p-4 rounded-lg my-4 relative">
+      <div className="relative my-2 w-fit rounded-lg bg-blue-100 p-4 sm:my-4">
         <UserAvatar className="w-20 h-20 rounded-full" />
         <FaCamera
           size={20}
@@ -53,7 +55,7 @@ const UserSettings = () => {
         />
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <InputField
             ref={firstNameRef}
             label={"First Name"}
@@ -82,7 +84,7 @@ const UserSettings = () => {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white rounded-md p-2 w-fit"
+          className="w-full rounded-md bg-blue-500 p-2 font-medium text-white transition-colors hover:bg-blue-600 sm:w-fit"
         >
           Save Changes
         </button>

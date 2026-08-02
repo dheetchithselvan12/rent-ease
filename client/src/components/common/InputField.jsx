@@ -26,7 +26,7 @@ const InputField = forwardRef(
     const isFileField = type === "file";
 
     return (
-      <div className="flex flex-col gap-1 flex-1">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
         <label
           htmlFor={id}
           className="text-sm font-semibold text-gray-600 cursor-pointer"
@@ -34,9 +34,9 @@ const InputField = forwardRef(
           {label}
         </label>
         <div
-          className={`flex gap-3 items-center border border-gray-300 bg-white text-gray-500 w-full rounded-md p-2  ${error && "border-red-500 "}`}
+          className={`flex w-full min-w-0 items-center gap-3 rounded-md border border-gray-300 bg-white p-2 text-gray-500 ${error && "border-red-500 "}`}
         >
-          {Icon && <Icon />}
+          {Icon && <Icon className="shrink-0" />}
           <input
             ref={ref}
             type={inputType}
@@ -46,7 +46,7 @@ const InputField = forwardRef(
             defaultValue={defaultValue}
             placeholder={placeholder}
             readOnly={readOnly}
-            className={`outline-none ${className} ${readOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+            className={`min-w-0 outline-none ${className} ${readOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
             {...props}
           />
           {isPasswordField && (
